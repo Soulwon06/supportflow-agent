@@ -1,0 +1,261 @@
+{
+  "phase": "SupportFlow V1.2.8",
+  "offline_hf": true,
+  "query_count": 3,
+  "operation_call_counts": {
+    "intent_classification": 3,
+    "answerability_judge": 3,
+    "grounded_generation": 3
+  },
+  "records": [
+    {
+      "case": "clearly_supported",
+      "query": "支付失败后，重新付款前应检查银行卡余额、支付限额和网络状态吗？",
+      "intent": "knowledge",
+      "routing_source": "llm",
+      "answerability_status": "SUPPORTED",
+      "rag_source": "llm",
+      "generation_skipped": false,
+      "result": "是的。支付失败时请先确认银行卡余额、支付限额和网络状态，再重新发起支付；如遇重复扣款，需联系支付渠道核查。\n来源：payment_failed_01",
+      "safe_fallback_reason": "",
+      "trace_id": "1ca6c1eba0574e1f91c9ae810d027414",
+      "spans": [
+        {
+          "name": "node",
+          "operation": null,
+          "latency_ms": 1005.89,
+          "success": true,
+          "usage": null
+        },
+        {
+          "name": "llm",
+          "operation": "intent_classification",
+          "latency_ms": 1005.63,
+          "success": true,
+          "usage": {
+            "input_tokens": 206,
+            "output_tokens": 113,
+            "total_tokens": 319
+          }
+        },
+        {
+          "name": "node",
+          "operation": null,
+          "latency_ms": 24023.73,
+          "success": true,
+          "usage": null
+        },
+        {
+          "name": "retrieval",
+          "operation": null,
+          "latency_ms": 2611.02,
+          "success": true,
+          "usage": null
+        },
+        {
+          "name": "rerank",
+          "operation": null,
+          "latency_ms": 719.14,
+          "success": true,
+          "usage": null
+        },
+        {
+          "name": "llm",
+          "operation": "answerability_judge",
+          "latency_ms": 2715.82,
+          "success": true,
+          "usage": {
+            "input_tokens": 320,
+            "output_tokens": 166,
+            "total_tokens": 486
+          }
+        },
+        {
+          "name": "llm",
+          "operation": "grounded_generation",
+          "latency_ms": 1044.72,
+          "success": true,
+          "usage": {
+            "input_tokens": 394,
+            "output_tokens": 87,
+            "total_tokens": 481
+          }
+        }
+      ],
+      "llm_usage": {
+        "llm_calls": 3,
+        "input_tokens": 920,
+        "output_tokens": 366,
+        "total_tokens": 1286,
+        "cost_usd": null
+      },
+      "total_latency_ms": 25040.55
+    },
+    {
+      "case": "clearly_partial",
+      "query": "同一订单拆成多个包裹，分别查询物流时能知道它们是否同一天送达吗？",
+      "intent": "knowledge",
+      "routing_source": "llm",
+      "answerability_status": "PARTIAL",
+      "rag_source": "llm",
+      "generation_skipped": false,
+      "result": "同一订单包含不同仓库商品时可能拆分为多个包裹，用户需要分别查看各包裹的物流单号和状态。但当前 Evidence 未说明各包裹是否在同一天送达，也未说明各包裹物流状态中是否包含送达日期信息，或能否据此判断多个包裹的送达日期是否一致；这些请求细节不在当前知识库/Evidence 中。\n来源：shipping_split_01",
+      "safe_fallback_reason": "",
+      "trace_id": "1452d61e559a41d4ae902e7e1ce3b83b",
+      "spans": [
+        {
+          "name": "node",
+          "operation": null,
+          "latency_ms": 7980.24,
+          "success": true,
+          "usage": null
+        },
+        {
+          "name": "llm",
+          "operation": "intent_classification",
+          "latency_ms": 7980.13,
+          "success": true,
+          "usage": {
+            "input_tokens": 207,
+            "output_tokens": 1532,
+            "total_tokens": 1739
+          }
+        },
+        {
+          "name": "node",
+          "operation": null,
+          "latency_ms": 4460.42,
+          "success": true,
+          "usage": null
+        },
+        {
+          "name": "retrieval",
+          "operation": null,
+          "latency_ms": 41.87,
+          "success": true,
+          "usage": null
+        },
+        {
+          "name": "rerank",
+          "operation": null,
+          "latency_ms": 479.94,
+          "success": true,
+          "usage": null
+        },
+        {
+          "name": "llm",
+          "operation": "answerability_judge",
+          "latency_ms": 2165.45,
+          "success": true,
+          "usage": {
+            "input_tokens": 317,
+            "output_tokens": 375,
+            "total_tokens": 692
+          }
+        },
+        {
+          "name": "llm",
+          "operation": "grounded_generation",
+          "latency_ms": 1772.68,
+          "success": true,
+          "usage": {
+            "input_tokens": 417,
+            "output_tokens": 228,
+            "total_tokens": 645
+          }
+        }
+      ],
+      "llm_usage": {
+        "llm_calls": 3,
+        "input_tokens": 941,
+        "output_tokens": 2135,
+        "total_tokens": 3076,
+        "cost_usd": null
+      },
+      "total_latency_ms": 12444.96
+    },
+    {
+      "case": "clearly_unsupported",
+      "query": "银行卡已经扣款但支付失败，知识库是否说明自动解冻时间？",
+      "intent": "knowledge",
+      "routing_source": "llm",
+      "answerability_status": "PARTIAL",
+      "rag_source": "llm",
+      "generation_skipped": false,
+      "result": "当前知识库/Evidence 未说明银行卡已扣款但支付失败后的自动解冻时间，也未说明是否会自动解冻。Evidence 仅说明：支付失败时应先确认银行卡余额、支付限额和网络状态，再重新发起支付；重复扣款需联系支付渠道核查。\n来源：payment_failed_01",
+      "safe_fallback_reason": "",
+      "trace_id": "a1c5e9bce18d41ad831f686f504f5a71",
+      "spans": [
+        {
+          "name": "node",
+          "operation": null,
+          "latency_ms": 742.02,
+          "success": true,
+          "usage": null
+        },
+        {
+          "name": "llm",
+          "operation": "intent_classification",
+          "latency_ms": 741.9,
+          "success": true,
+          "usage": {
+            "input_tokens": 204,
+            "output_tokens": 98,
+            "total_tokens": 302
+          }
+        },
+        {
+          "name": "node",
+          "operation": null,
+          "latency_ms": 13497.53,
+          "success": true,
+          "usage": null
+        },
+        {
+          "name": "retrieval",
+          "operation": null,
+          "latency_ms": 28.46,
+          "success": true,
+          "usage": null
+        },
+        {
+          "name": "rerank",
+          "operation": null,
+          "latency_ms": 461.61,
+          "success": true,
+          "usage": null
+        },
+        {
+          "name": "llm",
+          "operation": "answerability_judge",
+          "latency_ms": 11378.89,
+          "success": true,
+          "usage": {
+            "input_tokens": 318,
+            "output_tokens": 2246,
+            "total_tokens": 2564
+          }
+        },
+        {
+          "name": "llm",
+          "operation": "grounded_generation",
+          "latency_ms": 1627.93,
+          "success": true,
+          "usage": {
+            "input_tokens": 412,
+            "output_tokens": 232,
+            "total_tokens": 644
+          }
+        }
+      ],
+      "llm_usage": {
+        "llm_calls": 3,
+        "input_tokens": 934,
+        "output_tokens": 2576,
+        "total_tokens": 3510,
+        "cost_usd": null
+      },
+      "total_latency_ms": 14243.83
+    }
+  ]
+}

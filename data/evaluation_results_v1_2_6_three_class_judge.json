@@ -1,0 +1,1010 @@
+{
+  "experiment_result_frozen": true,
+  "dataset": "data\\evaluation_unseen_v1_2_6.json",
+  "pipeline": "BM25 + Dense -> RRF -> Candidate K=5 -> local BGE reranker",
+  "judge_contract": "SUPPORTED | PARTIAL | UNSUPPORTED",
+  "judge_prompt_version": "answerability-v2-general-principles-only",
+  "judge_input_contract": "QUESTION + actual Top-1 EVIDENCE text only",
+  "total_judge_calls": 30,
+  "judge_only_metrics": {
+    "eligible_cases": 26,
+    "accuracy": 0.7692,
+    "macro_precision": 0.8571,
+    "macro_recall": 0.7833,
+    "macro_f1": 0.7781
+  },
+  "judge_only_per_class_metrics": {
+    "SUPPORTED": {
+      "precision": 1.0,
+      "recall": 0.6,
+      "f1": 0.75,
+      "support": 10
+    },
+    "PARTIAL": {
+      "precision": 0.5714,
+      "recall": 1.0,
+      "f1": 0.7273,
+      "support": 8
+    },
+    "UNSUPPORTED": {
+      "precision": 1.0,
+      "recall": 0.75,
+      "f1": 0.8571,
+      "support": 8
+    }
+  },
+  "judge_only_confusion_matrix": {
+    "SUPPORTED": {
+      "SUPPORTED": 6,
+      "PARTIAL": 4,
+      "UNSUPPORTED": 0
+    },
+    "PARTIAL": {
+      "SUPPORTED": 0,
+      "PARTIAL": 8,
+      "UNSUPPORTED": 0
+    },
+    "UNSUPPORTED": {
+      "SUPPORTED": 0,
+      "PARTIAL": 2,
+      "UNSUPPORTED": 6
+    }
+  },
+  "end_to_end_metrics": {
+    "eligible_cases": 30,
+    "accuracy": 0.8,
+    "macro_precision": 0.875,
+    "macro_recall": 0.8,
+    "macro_f1": 0.8027
+  },
+  "end_to_end_per_class_metrics": {
+    "SUPPORTED": {
+      "precision": 1.0,
+      "recall": 0.6,
+      "f1": 0.75,
+      "support": 10
+    },
+    "PARTIAL": {
+      "precision": 0.625,
+      "recall": 1.0,
+      "f1": 0.7692,
+      "support": 10
+    },
+    "UNSUPPORTED": {
+      "precision": 1.0,
+      "recall": 0.8,
+      "f1": 0.8889,
+      "support": 10
+    }
+  },
+  "end_to_end_confusion_matrix": {
+    "SUPPORTED": {
+      "SUPPORTED": 6,
+      "PARTIAL": 4,
+      "UNSUPPORTED": 0
+    },
+    "PARTIAL": {
+      "SUPPORTED": 0,
+      "PARTIAL": 10,
+      "UNSUPPORTED": 0
+    },
+    "UNSUPPORTED": {
+      "SUPPORTED": 0,
+      "PARTIAL": 2,
+      "UNSUPPORTED": 8
+    }
+  },
+  "retrieval_mediated_failures": [
+    "unseen_partial_001",
+    "unseen_partial_010",
+    "unseen_unsupported_003",
+    "unseen_unsupported_009"
+  ],
+  "safety_critical_errors": {
+    "UNSUPPORTED_TO_SUPPORTED": [],
+    "UNSUPPORTED_TO_PARTIAL": [
+      {
+        "id": "unseen_unsupported_004",
+        "query": "商品有质量问题，能否安排上门取件且不收费用？",
+        "expected": "UNSUPPORTED",
+        "predicted": "PARTIAL",
+        "evidence_id": "quality_policy_01",
+        "rerank_score": 0.2310798168182373,
+        "judge_reason": "证据仅说明质量问题可提交照片、问题描述和订单信息申请售后，未提及上门取件安排及是否收取费用，故核心问询的取件与费用细节缺失。",
+        "retrieval_mediated_failure": false,
+        "why_label_is_wrong": "主题接近质量售后和退货运费，但知识库没有上门取件及免费服务承诺。"
+      },
+      {
+        "id": "unseen_unsupported_006",
+        "query": "订单还没发货，修改收货人后能否保证当天同步到仓库？",
+        "expected": "UNSUPPORTED",
+        "predicted": "PARTIAL",
+        "evidence_id": "order_modify_01",
+        "rerank_score": 0.963660717010498,
+        "judge_reason": "证据仅说明未发货时可尝试联系客服修改且能否修改取决于仓库处理进度，未提及任何关于当天同步到仓库的保证，因此核心问句中的当天同步承诺无依据。",
+        "retrieval_mediated_failure": false,
+        "why_label_is_wrong": "主题接近未发货修改信息，但知识库没有修改后当天同步的时效保证。"
+      }
+    ],
+    "SUPPORTED_TO_UNSUPPORTED": [],
+    "PARTIAL_TO_SUPPORTED": [],
+    "PARTIAL_TO_UNSUPPORTED": []
+  },
+  "all_misclassifications": [
+    {
+      "id": "unseen_supported_002",
+      "query": "如果是商家责任造成退货，寄回包裹的费用按什么规则承担？",
+      "expected": "SUPPORTED",
+      "predicted": "PARTIAL",
+      "evidence_id": "return_shipping_fee_01",
+      "rerank_score": 0.9817422032356262,
+      "judge_reason": "证据仅说明商家责任退货经审核后可按规则承担寄回运费，但未给出该规则的具体内容，因此只能部分回答。",
+      "retrieval_mediated_failure": false,
+      "why_label_is_wrong": "问题询问商家责任退货的寄回运费，证据明确覆盖该责任情形。"
+    },
+    {
+      "id": "unseen_supported_004",
+      "query": "包裹已经发出后想换收货地址，应先联系谁确认？",
+      "expected": "SUPPORTED",
+      "predicted": "PARTIAL",
+      "evidence_id": "shipping_address_change_01",
+      "rerank_score": 0.9916307330131531,
+      "judge_reason": "证据说明可联系承运商或客服确认，但没有说明应先联系哪一方，因此无法完整回答“应先联系谁”。",
+      "retrieval_mediated_failure": false,
+      "why_label_is_wrong": "问题询问发货后修改地址的联系对象，证据直接说明联系承运商或客服确认。"
+    },
+    {
+      "id": "unseen_supported_005",
+      "query": "质量售后上传的图片或视频要达到什么程度才有用？",
+      "expected": "SUPPORTED",
+      "predicted": "PARTIAL",
+      "evidence_id": "quality_photo_01",
+      "rerank_score": 0.8959388136863708,
+      "judge_reason": "证据只给出定性要求——照片或视频需能清晰展示问题，且凭证不足时可能被要求补充；未说明图片/视频在分辨率、时长、格式、数量等方面的具体标准，故只能支持核心要求的一部分。",
+      "retrieval_mediated_failure": false,
+      "why_label_is_wrong": "问题询问质量售后凭证的清晰程度，证据明确要求能够清晰展示问题。"
+    },
+    {
+      "id": "unseen_supported_010",
+      "query": "订单完成后积分一般什么时候到账，退款会不会影响已经拿到的积分？",
+      "expected": "SUPPORTED",
+      "predicted": "PARTIAL",
+      "evidence_id": "membership_points_01",
+      "rerank_score": 0.9942144751548767,
+      "judge_reason": "证据说明了积分在系统结算后到账，并说明退款或取消可能扣回积分，但没有给出具体到账时间或明确已到账积分的处理细节。",
+      "retrieval_mediated_failure": false,
+      "why_label_is_wrong": "问题询问积分到账时点和退款影响，证据覆盖系统结算后到账及退款/取消可能扣回。"
+    },
+    {
+      "id": "unseen_unsupported_004",
+      "query": "商品有质量问题，能否安排上门取件且不收费用？",
+      "expected": "UNSUPPORTED",
+      "predicted": "PARTIAL",
+      "evidence_id": "quality_policy_01",
+      "rerank_score": 0.2310798168182373,
+      "judge_reason": "证据仅说明质量问题可提交照片、问题描述和订单信息申请售后，未提及上门取件安排及是否收取费用，故核心问询的取件与费用细节缺失。",
+      "retrieval_mediated_failure": false,
+      "why_label_is_wrong": "主题接近质量售后和退货运费，但知识库没有上门取件及免费服务承诺。"
+    },
+    {
+      "id": "unseen_unsupported_006",
+      "query": "订单还没发货，修改收货人后能否保证当天同步到仓库？",
+      "expected": "UNSUPPORTED",
+      "predicted": "PARTIAL",
+      "evidence_id": "order_modify_01",
+      "rerank_score": 0.963660717010498,
+      "judge_reason": "证据仅说明未发货时可尝试联系客服修改且能否修改取决于仓库处理进度，未提及任何关于当天同步到仓库的保证，因此核心问句中的当天同步承诺无依据。",
+      "retrieval_mediated_failure": false,
+      "why_label_is_wrong": "主题接近未发货修改信息，但知识库没有修改后当天同步的时效保证。"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 9303,
+    "completion_tokens": 10376,
+    "total_tokens": 19679
+  },
+  "latency": {
+    "count": 30,
+    "mean_seconds": 2.0655,
+    "median_seconds": 1.7713,
+    "min_seconds": 0.9821,
+    "max_seconds": 5.7535
+  },
+  "cost": null,
+  "provider_or_validation_failures": [],
+  "reranker_status": {
+    "loaded": true,
+    "model_path": "D:\\models\\bge-reranker-v2-m3",
+    "device": "cpu",
+    "initialization_seconds": 1.7022325000725687
+  },
+  "case_by_case_results": [
+    {
+      "id": "unseen_supported_001",
+      "query": "审核通过的普通退款通常几天能回到原支付渠道？",
+      "expected_status": "SUPPORTED",
+      "predicted_status": "SUPPORTED",
+      "top1_evidence_id": "refund_general_01",
+      "rerank_score": 0.9939761161804199,
+      "supported_facts": [
+        "退款审核通过后，通常会在3个工作日内原路退回。",
+        "具体到账时间以支付渠道处理速度为准。"
+      ],
+      "missing_facts": [],
+      "reason": "证据直接说明审核通过后的普通退款通常会在3个工作日内原路退回，并补充到账时间受支付渠道处理速度影响，足以回答核心问题。",
+      "correct": true,
+      "retrieval_mediated_failure": false,
+      "judge_failure": null,
+      "label_rationale": "问题询问普通退款审核通过后的原路到账时间，证据直接给出通常3个工作日及支付渠道因素。",
+      "usage": {
+        "input_tokens": 309,
+        "output_tokens": 175,
+        "total_tokens": 484
+      },
+      "latency_seconds": 1.035106
+    },
+    {
+      "id": "unseen_supported_002",
+      "query": "如果是商家责任造成退货，寄回包裹的费用按什么规则承担？",
+      "expected_status": "SUPPORTED",
+      "predicted_status": "PARTIAL",
+      "top1_evidence_id": "return_shipping_fee_01",
+      "rerank_score": 0.9817422032356262,
+      "supported_facts": [
+        "商品质量问题或商家责任导致的退货，经审核后可按规则承担寄回运费。"
+      ],
+      "missing_facts": [
+        "具体按什么规则承担（例如承担范围、比例、审核标准或由谁承担）未在证据中说明。"
+      ],
+      "reason": "证据仅说明商家责任退货经审核后可按规则承担寄回运费，但未给出该规则的具体内容，因此只能部分回答。",
+      "correct": false,
+      "retrieval_mediated_failure": false,
+      "judge_failure": null,
+      "label_rationale": "问题询问商家责任退货的寄回运费，证据明确覆盖该责任情形。",
+      "usage": {
+        "input_tokens": 317,
+        "output_tokens": 596,
+        "total_tokens": 913
+      },
+      "latency_seconds": 2.739782
+    },
+    {
+      "id": "unseen_supported_003",
+      "query": "想查看承运商和单号，我应该去订单的哪个位置？",
+      "expected_status": "SUPPORTED",
+      "predicted_status": "SUPPORTED",
+      "top1_evidence_id": "shipping_tracking_01",
+      "rerank_score": 0.9757587909698486,
+      "supported_facts": [
+        "用户可以在订单详情页查看物流状态、承运商名称和物流单号。"
+      ],
+      "missing_facts": [],
+      "reason": "证据明确说明承运商名称和物流单号可在订单详情页查看，直接回答了询问的位置。",
+      "correct": true,
+      "retrieval_mediated_failure": false,
+      "judge_failure": null,
+      "label_rationale": "问题用‘去哪个位置’询问物流信息入口，证据明确指定订单详情页。",
+      "usage": {
+        "input_tokens": 304,
+        "output_tokens": 101,
+        "total_tokens": 405
+      },
+      "latency_seconds": 0.982105
+    },
+    {
+      "id": "unseen_supported_004",
+      "query": "包裹已经发出后想换收货地址，应先联系谁确认？",
+      "expected_status": "SUPPORTED",
+      "predicted_status": "PARTIAL",
+      "top1_evidence_id": "shipping_address_change_01",
+      "rerank_score": 0.9916307330131531,
+      "supported_facts": [
+        "订单发货后通常不能直接修改收货地址。",
+        "用户可以联系承运商或客服确认是否仍有修改可能。"
+      ],
+      "missing_facts": [
+        "具体应先联系承运商还是客服（优先顺序或首选对象）。"
+      ],
+      "reason": "证据说明可联系承运商或客服确认，但没有说明应先联系哪一方，因此无法完整回答“应先联系谁”。",
+      "correct": false,
+      "retrieval_mediated_failure": false,
+      "judge_failure": null,
+      "label_rationale": "问题询问发货后修改地址的联系对象，证据直接说明联系承运商或客服确认。",
+      "usage": {
+        "input_tokens": 308,
+        "output_tokens": 403,
+        "total_tokens": 711
+      },
+      "latency_seconds": 2.40252
+    },
+    {
+      "id": "unseen_supported_005",
+      "query": "质量售后上传的图片或视频要达到什么程度才有用？",
+      "expected_status": "SUPPORTED",
+      "predicted_status": "PARTIAL",
+      "top1_evidence_id": "quality_photo_01",
+      "rerank_score": 0.8959388136863708,
+      "supported_facts": [
+        "质量问题售后通常需要提供能清晰展示问题的照片或视频",
+        "凭证不足时，客服可能要求补充材料"
+      ],
+      "missing_facts": [
+        "对图片或视频的具体量化标准（如分辨率、时长、格式、数量、拍摄角度等）",
+        "判断“清晰展示问题”的具体门槛或判定规则"
+      ],
+      "reason": "证据只给出定性要求——照片或视频需能清晰展示问题，且凭证不足时可能被要求补充；未说明图片/视频在分辨率、时长、格式、数量等方面的具体标准，故只能支持核心要求的一部分。",
+      "correct": false,
+      "retrieval_mediated_failure": false,
+      "judge_failure": null,
+      "label_rationale": "问题询问质量售后凭证的清晰程度，证据明确要求能够清晰展示问题。",
+      "usage": {
+        "input_tokens": 307,
+        "output_tokens": 1059,
+        "total_tokens": 1366
+      },
+      "latency_seconds": 5.753519
+    },
+    {
+      "id": "unseen_supported_006",
+      "query": "仓库还没发货时，订单能从哪里申请取消？",
+      "expected_status": "SUPPORTED",
+      "predicted_status": "SUPPORTED",
+      "top1_evidence_id": "order_cancel_01",
+      "rerank_score": 0.9890971183776855,
+      "supported_facts": [
+        "订单尚未发货时，用户可以在订单页面申请取消",
+        "是否立即取消成功以订单当前状态为准"
+      ],
+      "missing_facts": [],
+      "reason": "证据明确说明未发货时可在订单页面申请取消，并说明是否立即成功取决于订单当前状态，足以回答申请取消的位置。",
+      "correct": true,
+      "retrieval_mediated_failure": false,
+      "judge_failure": null,
+      "label_rationale": "问题询问未发货订单的取消入口，证据直接指向订单页面。",
+      "usage": {
+        "input_tokens": 305,
+        "output_tokens": 212,
+        "total_tokens": 517
+      },
+      "latency_seconds": 1.479012
+    },
+    {
+      "id": "unseen_supported_007",
+      "query": "支付没成功后，重新付款前应先检查哪些方面？",
+      "expected_status": "SUPPORTED",
+      "predicted_status": "SUPPORTED",
+      "top1_evidence_id": "payment_failed_01",
+      "rerank_score": 0.9685237407684326,
+      "supported_facts": [
+        "银行卡余额",
+        "支付限额",
+        "网络状态"
+      ],
+      "missing_facts": [],
+      "reason": "证据明确说明支付失败时应先确认银行卡余额、支付限额和网络状态，再重新发起支付。",
+      "correct": true,
+      "retrieval_mediated_failure": false,
+      "judge_failure": null,
+      "label_rationale": "问题询问支付失败后的检查事项，证据明确列出余额、支付限额和网络状态。",
+      "usage": {
+        "input_tokens": 313,
+        "output_tokens": 240,
+        "total_tokens": 553
+      },
+      "latency_seconds": 1.379534
+    },
+    {
+      "id": "unseen_supported_008",
+      "query": "一张优惠券要能用，通常要同时满足哪些条件？",
+      "expected_status": "SUPPORTED",
+      "predicted_status": "SUPPORTED",
+      "top1_evidence_id": "coupon_usage_01",
+      "rerank_score": 0.9717230200767517,
+      "supported_facts": [
+        "需要在有效期内",
+        "需要满足适用商品条件",
+        "需要满足使用门槛",
+        "需要满足使用渠道条件",
+        "具体限制以券面说明为准"
+      ],
+      "missing_facts": [],
+      "reason": "证据明确说明优惠券需在有效期内，并同时满足适用商品、使用门槛和使用渠道等条件，足以回答核心问题。",
+      "correct": true,
+      "retrieval_mediated_failure": false,
+      "judge_failure": null,
+      "label_rationale": "问题询问优惠券使用条件，证据列出了有效期、适用商品、门槛和渠道。",
+      "usage": {
+        "input_tokens": 310,
+        "output_tokens": 213,
+        "total_tokens": 523
+      },
+      "latency_seconds": 1.678188
+    },
+    {
+      "id": "unseen_supported_009",
+      "query": "订单完成并符合开票条件后，电子发票从哪里拿？",
+      "expected_status": "SUPPORTED",
+      "predicted_status": "SUPPORTED",
+      "top1_evidence_id": "invoice_download_01",
+      "rerank_score": 0.998060405254364,
+      "supported_facts": [
+        "订单完成并满足开票条件后，用户可以在订单详情页申请或下载电子发票。"
+      ],
+      "missing_facts": [],
+      "reason": "证据直接说明订单完成并满足开票条件后，电子发票可从订单详情页申请或下载。",
+      "correct": true,
+      "retrieval_mediated_failure": false,
+      "judge_failure": null,
+      "label_rationale": "问题询问符合条件后的电子发票入口，证据明确指向订单详情页申请或下载。",
+      "usage": {
+        "input_tokens": 306,
+        "output_tokens": 168,
+        "total_tokens": 474
+      },
+      "latency_seconds": 1.3018
+    },
+    {
+      "id": "unseen_supported_010",
+      "query": "订单完成后积分一般什么时候到账，退款会不会影响已经拿到的积分？",
+      "expected_status": "SUPPORTED",
+      "predicted_status": "PARTIAL",
+      "top1_evidence_id": "membership_points_01",
+      "rerank_score": 0.9942144751548767,
+      "supported_facts": [
+        "符合规则的订单完成后积分通常会在系统结算后到账",
+        "退款或取消订单可能扣回相应积分"
+      ],
+      "missing_facts": [
+        "系统结算后具体多久到账",
+        "退款是否会影响已经到账的积分，以及具体扣回规则"
+      ],
+      "reason": "证据说明了积分在系统结算后到账，并说明退款或取消可能扣回积分，但没有给出具体到账时间或明确已到账积分的处理细节。",
+      "correct": false,
+      "retrieval_mediated_failure": false,
+      "judge_failure": null,
+      "label_rationale": "问题询问积分到账时点和退款影响，证据覆盖系统结算后到账及退款/取消可能扣回。",
+      "usage": {
+        "input_tokens": 311,
+        "output_tokens": 545,
+        "total_tokens": 856
+      },
+      "latency_seconds": 3.341973
+    },
+    {
+      "id": "unseen_partial_001",
+      "query": "退款审核通过后，普通订单和信用卡订单分别要多久到账，逾期能找谁处理？",
+      "expected_status": "PARTIAL",
+      "predicted_status": "PARTIAL",
+      "top1_evidence_id": "refund_credit_card_01",
+      "rerank_score": 0.9668702483177185,
+      "supported_facts": [
+        "使用信用卡支付的订单退款审核通过后，通常需要5到10个工作日入账，具体以发卡行账单为准。"
+      ],
+      "missing_facts": [
+        "普通订单退款审核通过后的到账时间。",
+        "退款逾期后可以找谁处理或通过什么渠道处理。"
+      ],
+      "reason": "证据仅说明了信用卡订单退款审核通过后的到账时间，未提及普通订单的到账时间，也未提供逾期处理的联系人/渠道信息。",
+      "correct": true,
+      "retrieval_mediated_failure": true,
+      "judge_failure": null,
+      "label_rationale": "普通退款的通常到账时间有证据，但该证据不覆盖信用卡专属时间，也没有逾期联系对象。",
+      "usage": {
+        "input_tokens": 321,
+        "output_tokens": 297,
+        "total_tokens": 618
+      },
+      "latency_seconds": 1.784571
+    },
+    {
+      "id": "unseen_partial_002",
+      "query": "退货时商品包装少了一个配件，但外观完好，还能按七天无理由退吗？",
+      "expected_status": "PARTIAL",
+      "predicted_status": "PARTIAL",
+      "top1_evidence_id": "return_general_01",
+      "rerank_score": 0.9878379106521606,
+      "supported_facts": [
+        "签收后7天内支持无理由退货，前提是商品完好、包装和配件齐全且不影响二次销售。"
+      ],
+      "missing_facts": [
+        "配件缺失（少一个配件）但外观完好时是否仍可按七天无理由退货，证据未说明。",
+        "配件缺失是否构成'影响二次销售'或不符合'配件齐全'条件的具体判定。"
+      ],
+      "reason": "证据只说明了配件齐全且不影响二次销售时的七天无理由退货政策，未涉及配件缺失情形下的处理，故无法完整回答该具体情况。",
+      "correct": true,
+      "retrieval_mediated_failure": false,
+      "judge_failure": null,
+      "label_rationale": "证据说明无理由退货要求包装和配件齐全，但没有明确缺少一个配件时的最终处理结论。",
+      "usage": {
+        "input_tokens": 315,
+        "output_tokens": 355,
+        "total_tokens": 670
+      },
+      "latency_seconds": 2.380792
+    },
+    {
+      "id": "unseen_partial_003",
+      "query": "同一订单拆成多个包裹，能分别查物流，而且会不会同一天送到？",
+      "expected_status": "PARTIAL",
+      "predicted_status": "PARTIAL",
+      "top1_evidence_id": "shipping_split_01",
+      "rerank_score": 0.9901490211486816,
+      "supported_facts": [
+        "同一订单包含不同仓库商品时可能拆分为多个包裹",
+        "用户需要分别查看各包裹的物流单号和状态"
+      ],
+      "missing_facts": [
+        "多个包裹是否会在同一天送达",
+        "拆分包裹的配送时间安排"
+      ],
+      "reason": "证据说明订单可能拆分为多个包裹且需分别查看各包裹物流单号和状态，支持了分别查询物流的部分；但未提及各包裹是否同日送达或配送时间，故该部分缺失。",
+      "correct": true,
+      "retrieval_mediated_failure": false,
+      "judge_failure": null,
+      "label_rationale": "证据支持多个包裹分别查看物流，但没有说明这些包裹是否会同一天送达。",
+      "usage": {
+        "input_tokens": 315,
+        "output_tokens": 264,
+        "total_tokens": 579
+      },
+      "latency_seconds": 1.640303
+    },
+    {
+      "id": "unseen_partial_004",
+      "query": "质量问题上传照片或视频后，多久能安排维修？",
+      "expected_status": "PARTIAL",
+      "predicted_status": "PARTIAL",
+      "top1_evidence_id": "quality_repair_01",
+      "rerank_score": 0.6361635327339172,
+      "supported_facts": [
+        "符合维修条件的质量问题可安排检测和维修。",
+        "维修周期以检测结果和配件供应情况为准。"
+      ],
+      "missing_facts": [
+        "上传照片或视频后多久能安排维修的具体时间。",
+        "上传照片或视频与安排维修之间的时间关系或流程说明。"
+      ],
+      "reason": "证据仅说明符合条件可安排检测维修，维修周期取决于检测结果和配件供应，未提供上传照片或视频后多久能安排维修的具体时限。",
+      "correct": true,
+      "retrieval_mediated_failure": false,
+      "judge_failure": null,
+      "label_rationale": "证据支持符合条件的质量问题可检测和维修，并说明周期取决于检测和配件，但没有上传材料后的具体时长。",
+      "usage": {
+        "input_tokens": 305,
+        "output_tokens": 413,
+        "total_tokens": 718
+      },
+      "latency_seconds": 2.666471
+    },
+    {
+      "id": "unseen_partial_005",
+      "query": "订单还没发货时可以改电话吗，改了以后多久生效？",
+      "expected_status": "PARTIAL",
+      "predicted_status": "PARTIAL",
+      "top1_evidence_id": "order_modify_01",
+      "rerank_score": 0.9800911545753479,
+      "supported_facts": [
+        "订单未发货时，可尝试联系客服修改收货人或联系方式。",
+        "能否修改取决于仓库处理进度。"
+      ],
+      "missing_facts": [
+        "修改电话号码后多久生效。",
+        "电话号码是否一定能修改成功。"
+      ],
+      "reason": "证据说明未发货时可尝试联系客服修改联系方式，且能否修改取决于仓库处理进度，但没有说明修改后多久生效，也没有明确保证电话号码一定能改成功。",
+      "correct": true,
+      "retrieval_mediated_failure": false,
+      "judge_failure": null,
+      "label_rationale": "证据支持未发货时可尝试修改联系方式，但没有修改生效时间。",
+      "usage": {
+        "input_tokens": 304,
+        "output_tokens": 326,
+        "total_tokens": 630
+      },
+      "latency_seconds": 2.114466
+    },
+    {
+      "id": "unseen_partial_006",
+      "query": "支付状态卡在处理中，等多久才算失败，什么时候可以再付款？",
+      "expected_status": "PARTIAL",
+      "predicted_status": "PARTIAL",
+      "top1_evidence_id": "payment_pending_01",
+      "rerank_score": 0.7869582176208496,
+      "supported_facts": [
+        "支付页面显示处理中时不要重复提交订单",
+        "建议等待支付渠道返回最终结果后再确认订单状态"
+      ],
+      "missing_facts": [
+        "处理中状态持续多久才算失败的具体时间",
+        "什么时候可以再次付款或重新提交订单"
+      ],
+      "reason": "证据只说明处理中不要重复提交，并建议等待支付渠道返回最终结果后确认订单状态；未提供失败判定时限或再次付款的时间条件。",
+      "correct": true,
+      "retrieval_mediated_failure": false,
+      "judge_failure": null,
+      "label_rationale": "证据支持不要重复提交并等待渠道最终结果，但没有失败判定时限或再次付款时点。",
+      "usage": {
+        "input_tokens": 311,
+        "output_tokens": 340,
+        "total_tokens": 651
+      },
+      "latency_seconds": 1.757957
+    },
+    {
+      "id": "unseen_partial_007",
+      "query": "优惠券过期不能补发，那还能转给别的账号继续用吗？",
+      "expected_status": "PARTIAL",
+      "predicted_status": "PARTIAL",
+      "top1_evidence_id": "coupon_expired_01",
+      "rerank_score": 0.9656211733818054,
+      "supported_facts": [
+        "优惠券超过有效期后通常无法恢复或补发",
+        "用户应在有效期内使用优惠券"
+      ],
+      "missing_facts": [
+        "优惠券过期后能否转移给其他账号继续使用"
+      ],
+      "reason": "证据确认了过期优惠券无法恢复或补发，以及应在有效期内使用，但完全没有提及能否将过期优惠券转给其他账号使用这一核心问题。",
+      "correct": true,
+      "retrieval_mediated_failure": false,
+      "judge_failure": null,
+      "label_rationale": "证据支持过期券通常无法恢复或补发，但不涉及账号转让或转移使用。",
+      "usage": {
+        "input_tokens": 307,
+        "output_tokens": 372,
+        "total_tokens": 679
+      },
+      "latency_seconds": 1.998493
+    },
+    {
+      "id": "unseen_partial_008",
+      "query": "发票开具前可以改抬头，那已经开出后能不能自己撤回重开？",
+      "expected_status": "PARTIAL",
+      "predicted_status": "PARTIAL",
+      "top1_evidence_id": "invoice_modify_01",
+      "rerank_score": 0.9858270287513733,
+      "supported_facts": [
+        "发票开具前可以尝试修改抬头信息",
+        "发票开具后能否更正需要联系客服按开票规则处理"
+      ],
+      "missing_facts": [
+        "已开出的发票是否可以由用户自行撤回",
+        "已开出的发票是否可以由用户自行重开",
+        "联系客服后更正的具体结果或规则"
+      ],
+      "reason": "证据仅说明开具前可尝试修改抬头、开具后能否更正需联系客服按开票规则处理，未说明用户能否自行撤回并重开，因此核心问题只能得到部分支持。",
+      "correct": true,
+      "retrieval_mediated_failure": false,
+      "judge_failure": null,
+      "label_rationale": "证据支持开具前可尝试修改、开具后需联系客服按规则处理，但没有说明用户能否自行撤回重开。",
+      "usage": {
+        "input_tokens": 312,
+        "output_tokens": 243,
+        "total_tokens": 555
+      },
+      "latency_seconds": 1.656933
+    },
+    {
+      "id": "unseen_partial_009",
+      "query": "会员积分到账要多久，取消订单后已经到账的积分会怎么处理？",
+      "expected_status": "PARTIAL",
+      "predicted_status": "PARTIAL",
+      "top1_evidence_id": "membership_points_01",
+      "rerank_score": 0.9053964018821716,
+      "supported_facts": [
+        "符合规则的订单完成后积分通常会在系统结算后到账",
+        "退款或取消订单可能扣回相应积分"
+      ],
+      "missing_facts": [
+        "积分到账的具体时长/时间范围（如几个工作日或多少天）",
+        "取消订单后积分扣回的具体规则细节（如扣回时点、积分已使用时的处理方式）"
+      ],
+      "reason": "证据说明了积分在系统结算后到账，以及退款或取消订单可能扣回积分，但没有给出到账所需的具体时间，也未说明扣回的具体操作细节，因此仅部分支持该问题。",
+      "correct": true,
+      "retrieval_mediated_failure": false,
+      "judge_failure": null,
+      "label_rationale": "证据支持订单完成后积分在系统结算后到账，也支持退款或取消可能扣回，但没有具体到账时长。",
+      "usage": {
+        "input_tokens": 314,
+        "output_tokens": 246,
+        "total_tokens": 560
+      },
+      "latency_seconds": 1.545349
+    },
+    {
+      "id": "unseen_partial_010",
+      "query": "商品保修期内出现问题可以维修，那用户要承担来回运费吗？",
+      "expected_status": "PARTIAL",
+      "predicted_status": "PARTIAL",
+      "top1_evidence_id": "return_shipping_fee_01",
+      "rerank_score": 0.8533969521522522,
+      "supported_facts": [
+        "无理由退货的寄回运费通常由用户承担",
+        "商品质量问题或商家责任导致的退货，经审核后可按规则承担寄回运费"
+      ],
+      "missing_facts": [
+        "保修期内维修场景下来回运费（含寄回给用户的运费）由谁承担",
+        "保修维修是否被认定为商家责任从而适用承担运费的规则",
+        "‘经审核后可按规则承担’的具体规则内容"
+      ],
+      "reason": "证据仅涉及退货的寄回运费承担规则，未提及保修期内的维修场景，也未说明来回运费（尤其是寄回给用户的运费）的承担方，故只能支持部分相关内容。",
+      "correct": true,
+      "retrieval_mediated_failure": true,
+      "judge_failure": null,
+      "label_rationale": "证据支持符合条件的质量问题可检测维修并说明维修周期，但未说明维修寄送运费由谁承担。",
+      "usage": {
+        "input_tokens": 317,
+        "output_tokens": 433,
+        "total_tokens": 750
+      },
+      "latency_seconds": 2.955978
+    },
+    {
+      "id": "unseen_unsupported_001",
+      "query": "退款审核通过后，如果收款账户被冻结会改用什么方式入账？",
+      "expected_status": "UNSUPPORTED",
+      "predicted_status": "UNSUPPORTED",
+      "top1_evidence_id": "refund_general_01",
+      "rerank_score": 0.5509233474731445,
+      "supported_facts": [
+        "退款审核通过后，通常会在3个工作日内原路退回。",
+        "具体到账时间以支付渠道处理速度为准。"
+      ],
+      "missing_facts": [
+        "收款账户被冻结时是否会改入账方式",
+        "如果会改，具体改用哪种方式入账",
+        "冻结情况下到账时间或处理规则"
+      ],
+      "reason": "证据只说明退款审核通过后通常原路退回及到账时间以支付渠道为准，未提及收款账户被冻结后是否改用其他方式入账，因此无法回答该核心问题。",
+      "correct": true,
+      "retrieval_mediated_failure": false,
+      "judge_failure": null,
+      "label_rationale": "主题接近普通退款，但知识库没有账户冻结后的替代入账方式。",
+      "usage": {
+        "input_tokens": 314,
+        "output_tokens": 341,
+        "total_tokens": 655
+      },
+      "latency_seconds": 1.972523
+    },
+    {
+      "id": "unseen_unsupported_002",
+      "query": "退货包裹仓库签收后如果验收不通过，具体会退回几天内处理？",
+      "expected_status": "UNSUPPORTED",
+      "predicted_status": "UNSUPPORTED",
+      "top1_evidence_id": "refund_return_01",
+      "rerank_score": 0.9398714303970337,
+      "supported_facts": [
+        "退货退款的处理时间从仓库签收退回商品并完成验收后开始计算，不以寄出时间作为退款起点。"
+      ],
+      "missing_facts": [
+        "验收不通过后，退回商品会在几天内处理的具体时限。",
+        "验收不通过后的处理流程或相关规则。"
+      ],
+      "reason": "证据仅说明退款处理从仓库签收并完成验收后开始计算，未提及验收不通过时具体会在几天内处理。",
+      "correct": true,
+      "retrieval_mediated_failure": false,
+      "judge_failure": null,
+      "label_rationale": "主题接近退货退款起算，但知识库没有验收不通过后的处理时限或退回规则。",
+      "usage": {
+        "input_tokens": 315,
+        "output_tokens": 279,
+        "total_tokens": 594
+      },
+      "latency_seconds": 1.721223
+    },
+    {
+      "id": "unseen_unsupported_003",
+      "query": "包裹显示签收但我没收到，平台多久会自动赔付？",
+      "expected_status": "UNSUPPORTED",
+      "predicted_status": "UNSUPPORTED",
+      "top1_evidence_id": "refund_return_01",
+      "rerank_score": 0.06078845262527466,
+      "supported_facts": [
+        "退货退款的处理时间从仓库签收退回商品并完成验收后开始计算，不以寄出时间作为退款起点"
+      ],
+      "missing_facts": [
+        "包裹显示签收但未收到时的处理规则",
+        "平台自动赔付的触发条件",
+        "自动赔付的时间期限"
+      ],
+      "reason": "证据仅说明退货退款的处理起算时间（仓库签收退回商品并完成验收后），未涉及包裹显示签收但未收到的情况，也未提供任何关于平台自动赔付条件或时限的信息。",
+      "correct": true,
+      "retrieval_mediated_failure": true,
+      "judge_failure": null,
+      "label_rationale": "主题接近物流查询和延误，但知识库没有签收未收到场景的自动赔付时限。",
+      "usage": {
+        "input_tokens": 310,
+        "output_tokens": 185,
+        "total_tokens": 495
+      },
+      "latency_seconds": 1.120744
+    },
+    {
+      "id": "unseen_unsupported_004",
+      "query": "商品有质量问题，能否安排上门取件且不收费用？",
+      "expected_status": "UNSUPPORTED",
+      "predicted_status": "PARTIAL",
+      "top1_evidence_id": "quality_policy_01",
+      "rerank_score": 0.2310798168182373,
+      "supported_facts": [
+        "商品存在质量问题时，用户可以提交商品照片、问题描述和订单信息申请售后处理。"
+      ],
+      "missing_facts": [
+        "是否支持上门取件",
+        "上门取件是否收费（免费）"
+      ],
+      "reason": "证据仅说明质量问题可提交照片、问题描述和订单信息申请售后，未提及上门取件安排及是否收取费用，故核心问询的取件与费用细节缺失。",
+      "correct": false,
+      "retrieval_mediated_failure": false,
+      "judge_failure": null,
+      "label_rationale": "主题接近质量售后和退货运费，但知识库没有上门取件及免费服务承诺。",
+      "usage": {
+        "input_tokens": 304,
+        "output_tokens": 589,
+        "total_tokens": 893
+      },
+      "latency_seconds": 2.874241
+    },
+    {
+      "id": "unseen_unsupported_005",
+      "query": "维修检测确认后，配件缺货平台是否必须提供同款新品？",
+      "expected_status": "UNSUPPORTED",
+      "predicted_status": "UNSUPPORTED",
+      "top1_evidence_id": "quality_repair_01",
+      "rerank_score": 0.08296900242567062,
+      "supported_facts": [
+        "符合维修条件的质量问题可安排检测和维修",
+        "维修周期以检测结果和配件供应情况为准"
+      ],
+      "missing_facts": [
+        "配件缺货时平台是否必须提供同款新品",
+        "配件缺货时的具体处理方案或替代方案",
+        "平台在配件缺货情况下的义务或责任"
+      ],
+      "reason": "证据仅说明质量问题可安排检测维修且维修周期取决于检测结果和配件供应情况，并未提及配件缺货时平台是否必须提供同款新品，无法回答核心问题。",
+      "correct": true,
+      "retrieval_mediated_failure": false,
+      "judge_failure": null,
+      "label_rationale": "主题接近质量维修和换货，但知识库没有配件缺货时必须换新或提供同款的义务。",
+      "usage": {
+        "input_tokens": 309,
+        "output_tokens": 329,
+        "total_tokens": 638
+      },
+      "latency_seconds": 1.742928
+    },
+    {
+      "id": "unseen_unsupported_006",
+      "query": "订单还没发货，修改收货人后能否保证当天同步到仓库？",
+      "expected_status": "UNSUPPORTED",
+      "predicted_status": "PARTIAL",
+      "top1_evidence_id": "order_modify_01",
+      "rerank_score": 0.963660717010498,
+      "supported_facts": [
+        "订单未发货时可以尝试联系客服修改收货人或联系方式",
+        "能否修改取决于仓库处理进度"
+      ],
+      "missing_facts": [
+        "修改后是否能在当天同步到仓库的保证"
+      ],
+      "reason": "证据仅说明未发货时可尝试联系客服修改且能否修改取决于仓库处理进度，未提及任何关于当天同步到仓库的保证，因此核心问句中的当天同步承诺无依据。",
+      "correct": false,
+      "retrieval_mediated_failure": false,
+      "judge_failure": null,
+      "label_rationale": "主题接近未发货修改信息，但知识库没有修改后当天同步的时效保证。",
+      "usage": {
+        "input_tokens": 306,
+        "output_tokens": 217,
+        "total_tokens": 523
+      },
+      "latency_seconds": 1.561387
+    },
+    {
+      "id": "unseen_unsupported_007",
+      "query": "支付失败但银行卡已经扣款，多久一定会自动解冻？",
+      "expected_status": "UNSUPPORTED",
+      "predicted_status": "UNSUPPORTED",
+      "top1_evidence_id": "payment_failed_01",
+      "rerank_score": 0.4126437306404114,
+      "supported_facts": [
+        "支付失败时建议先确认银行卡余额、支付限额和网络状态，再重新发起支付",
+        "重复扣款需联系支付渠道核查"
+      ],
+      "missing_facts": [
+        "银行卡已扣款后是否会自动解冻",
+        "自动解冻的具体时限",
+        "“一定会”自动解冻的说明"
+      ],
+      "reason": "证据只说明支付失败后的排查/重试建议以及重复扣款需联系支付渠道核查，未提及银行卡扣款后的自动解冻机制或时限，无法回答所问的自动解冻时间。",
+      "correct": true,
+      "retrieval_mediated_failure": false,
+      "judge_failure": null,
+      "label_rationale": "主题接近支付失败和重复扣款，但知识库没有银行卡已扣款后的自动解冻时限。",
+      "usage": {
+        "input_tokens": 315,
+        "output_tokens": 372,
+        "total_tokens": 687
+      },
+      "latency_seconds": 2.253225
+    },
+    {
+      "id": "unseen_unsupported_008",
+      "query": "优惠券满足门槛后，和会员折扣能否同时叠加？",
+      "expected_status": "UNSUPPORTED",
+      "predicted_status": "UNSUPPORTED",
+      "top1_evidence_id": "coupon_stack_01",
+      "rerank_score": 0.9491857886314392,
+      "supported_facts": [
+        "不同优惠券能否叠加使用取决于活动规则",
+        "结算页显示的优惠金额为最终可用结果"
+      ],
+      "missing_facts": [
+        "优惠券与会员折扣能否同时叠加",
+        "会员折扣的叠加规则",
+        "优惠券满足门槛后与会员折扣共同结算时的具体处理方式"
+      ],
+      "reason": "证据仅说明不同优惠券之间的叠加取决于活动规则，并以结算页优惠金额为最终结果；没有提及优惠券与会员折扣能否叠加，因此无法回答该核心问题。",
+      "correct": true,
+      "retrieval_mediated_failure": false,
+      "judge_failure": null,
+      "label_rationale": "主题接近优惠券叠加，但知识库只讨论不同优惠券叠加，没有会员折扣与优惠券的组合规则。",
+      "usage": {
+        "input_tokens": 305,
+        "output_tokens": 327,
+        "total_tokens": 632
+      },
+      "latency_seconds": 1.598831
+    },
+    {
+      "id": "unseen_unsupported_009",
+      "query": "电子发票下载后能否直接转换成增值税专用发票？",
+      "expected_status": "UNSUPPORTED",
+      "predicted_status": "UNSUPPORTED",
+      "top1_evidence_id": "invoice_download_01",
+      "rerank_score": 0.06908316165208817,
+      "supported_facts": [
+        "订单完成并满足开票条件后，用户可以在订单详情页申请或下载电子发票。"
+      ],
+      "missing_facts": [
+        "电子发票下载后能否直接转换成增值税专用发票",
+        "是否存在转换流程、条件或限制",
+        "增值税专用发票是否可申请或开具"
+      ],
+      "reason": "证据只说明订单完成后可申请或下载电子发票，没有提及电子发票与增值税专用发票之间的转换，也未说明能否直接转换。",
+      "correct": true,
+      "retrieval_mediated_failure": true,
+      "judge_failure": null,
+      "label_rationale": "主题接近电子发票和发票类型，但知识库没有下载后转换为专票的能力或流程。",
+      "usage": {
+        "input_tokens": 303,
+        "output_tokens": 339,
+        "total_tokens": 642
+      },
+      "latency_seconds": 2.000186
+    },
+    {
+      "id": "unseen_unsupported_010",
+      "query": "会员积分因退款被扣回后，多久会恢复为可用状态？",
+      "expected_status": "UNSUPPORTED",
+      "predicted_status": "UNSUPPORTED",
+      "top1_evidence_id": "membership_points_01",
+      "rerank_score": 0.11097442358732224,
+      "supported_facts": [],
+      "missing_facts": [
+        "积分因退款被扣回后恢复为可用状态的时间"
+      ],
+      "reason": "证据只说明退款或取消订单可能扣回相应积分，未提及扣回后多久恢复为可用状态。",
+      "correct": true,
+      "retrieval_mediated_failure": false,
+      "judge_failure": null,
+      "label_rationale": "主题接近积分扣回，但知识库只说明可能扣回，没有恢复可用状态的时限。",
+      "usage": {
+        "input_tokens": 311,
+        "output_tokens": 397,
+        "total_tokens": 708
+      },
+      "latency_seconds": 2.524348
+    }
+  ]
+}

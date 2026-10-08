@@ -1,0 +1,240 @@
+{
+  "dataset_version": "v1.2.4-hard-negative-boundary",
+  "source_knowledge_base": "data/knowledge_base.json",
+  "frozen_pipeline": "BM25 + Dense -> RRF -> Candidate K=5 -> local BGE reranker",
+  "case_count": 20,
+  "hard_negative_count": 10,
+  "boundary_supported_count": 10,
+  "cases": [
+    {
+      "id": "boundary_001",
+      "query": "签收第五天，商品没用过，外包装和配件都齐，我临时不想要了能退吗？",
+      "expected_answerability": "supported",
+      "ground_truth_id": "return_general_01",
+      "rationale": "问题使用口语化的‘没用过’和‘包装配件都齐’描述商品完好、包装配件齐全，并明确在签收后7天内。",
+      "validation": {
+        "ground_truth_document": "return_general_01",
+        "evidence": "商品完好、包装和配件齐全且不影响二次销售时，签收后7天内支持无理由退货。"
+      }
+    },
+    {
+      "id": "boundary_002",
+      "query": "信用卡那笔退货款要等几轮账单才看得到？",
+      "expected_answerability": "supported",
+      "ground_truth_id": "refund_credit_card_01",
+      "rationale": "‘几轮账单’是对信用卡退款入账时间的间接表达，知识库给出了5到10个工作日及以发卡行账单为准。",
+      "validation": {
+        "ground_truth_document": "refund_credit_card_01",
+        "evidence": "信用卡支付订单退款审核通过后通常需要5到10个工作日入账，具体以发卡行账单为准。"
+      }
+    },
+    {
+      "id": "boundary_003",
+      "query": "退回包裹刚寄出，退款时间是不是从我寄出的那刻起算？",
+      "expected_answerability": "supported",
+      "ground_truth_id": "refund_return_01",
+      "rationale": "问题用‘刚寄出’和‘那刻起算’间接询问退款起算点，知识库明确说明不以寄出时间计算。",
+      "validation": {
+        "ground_truth_document": "refund_return_01",
+        "evidence": "处理时间从仓库签收退回商品并完成验收后开始计算，不以寄出时间作为退款起点。"
+      }
+    },
+    {
+      "id": "boundary_004",
+      "query": "冷藏食品只是临时不想吃了，还能走普通七天无理由吗？",
+      "expected_answerability": "supported",
+      "ground_truth_id": "return_fresh_01",
+      "rationale": "‘冷藏食品’和‘普通七天无理由’是对生鲜退货例外的间接说法，知识库直接覆盖该例外。",
+      "validation": {
+        "ground_truth_document": "return_fresh_01",
+        "evidence": "生鲜、冷藏和定制类商品不适用七天无理由退货；质量问题应按质量售后流程提交凭证。"
+      }
+    },
+    {
+      "id": "boundary_005",
+      "query": "同一单拆成几个箱子，是不是每个箱子都有自己的物流编号要分别查？",
+      "expected_answerability": "supported",
+      "ground_truth_id": "shipping_split_01",
+      "rationale": "问题用‘几个箱子’和‘分别查’描述拆分包裹及分别查看物流，未照抄知识库术语。",
+      "validation": {
+        "ground_truth_document": "shipping_split_01",
+        "evidence": "同一订单可能拆分为多个包裹，需要分别查看各包裹的物流单号和状态。"
+      }
+    },
+    {
+      "id": "boundary_006",
+      "query": "快递轨迹两天多没动，我该找谁查？",
+      "expected_answerability": "supported",
+      "ground_truth_id": "shipping_no_update_01",
+      "rationale": "‘两天多没动’是对连续超过48小时未更新的口语化表达，问题还询问处理对象。",
+      "validation": {
+        "ground_truth_document": "shipping_no_update_01",
+        "evidence": "物流状态连续超过48小时没有更新时，可以联系客服核查物流轨迹。"
+      }
+    },
+    {
+      "id": "boundary_007",
+      "query": "包裹一直送不过来，我应该先问快递员还是直接找客服？",
+      "expected_answerability": "supported",
+      "ground_truth_id": "shipping_failed_delivery_01",
+      "rationale": "‘一直送不过来’是对派送失败的间接表达，知识库给出了先联系承运商、连续失败再联系客服的顺序。",
+      "validation": {
+        "ground_truth_document": "shipping_failed_delivery_01",
+        "evidence": "派送失败后先联系承运商确认原因；若连续派送失败，可联系客服协助安排后续配送。"
+      }
+    },
+    {
+      "id": "boundary_008",
+      "query": "还没发货之前，我想把收件人的电话换掉，能不能操作？",
+      "expected_answerability": "supported",
+      "ground_truth_id": "order_modify_01",
+      "rationale": "问题把‘修改联系方式’表达为更换收件人电话，并保留未发货条件，知识库证据充分。",
+      "validation": {
+        "ground_truth_document": "order_modify_01",
+        "evidence": "订单未发货时可尝试联系客服修改收货人或联系方式，能否修改取决于仓库处理进度。"
+      }
+    },
+    {
+      "id": "boundary_009",
+      "query": "支付界面一直转圈显示处理中，我是不是再点一次比较保险？",
+      "expected_answerability": "supported",
+      "ground_truth_id": "payment_pending_01",
+      "rationale": "问题使用‘一直转圈’描述支付处理中，并询问是否重复提交，知识库给出了明确的反向操作建议。",
+      "validation": {
+        "ground_truth_document": "payment_pending_01",
+        "evidence": "支付页面显示处理中时不要重复提交订单，建议等待支付渠道返回最终结果。"
+      }
+    },
+    {
+      "id": "boundary_010",
+      "query": "发票已经开出来了，抬头写错能直接在页面改吗？",
+      "expected_answerability": "supported",
+      "ground_truth_id": "invoice_modify_01",
+      "rationale": "问题用‘抬头写错’和‘直接在页面改’间接询问开具后的发票更正路径，知识库覆盖开具后需按规则联系客服。",
+      "validation": {
+        "ground_truth_document": "invoice_modify_01",
+        "evidence": "发票开具后能否更正需要联系客服按开票规则处理。"
+      }
+    },
+    {
+      "id": "hard_negative_001",
+      "query": "信用卡退款时原来的银行卡已经注销，钱会转到哪张卡？",
+      "expected_answerability": "unsupported",
+      "ground_truth_id": null,
+      "rationale": "与信用卡退款到账主题高度相关，但知识库没有说明原卡注销后的退款去向或替代入账卡。",
+      "validation": {
+        "closest_kb_document": "refund_credit_card_01",
+        "topical_relevance": "该文档覆盖信用卡退款审核后的入账时间和发卡行账单。",
+        "missing_fact": "原支付卡注销、退款转入哪张卡以及异常退款处理方式。"
+      }
+    },
+    {
+      "id": "hard_negative_002",
+      "query": "我申请了退款，能不能把钱改退到另一张银行卡？",
+      "expected_answerability": "unsupported",
+      "ground_truth_id": null,
+      "rationale": "与原路退款和信用卡退款主题相关，但知识库没有说明是否允许更换退款账户。",
+      "validation": {
+        "closest_kb_document": "refund_general_01",
+        "topical_relevance": "该文档说明退款通常原路退回及到账时间。",
+        "missing_fact": "修改退款路径、指定其他银行卡以及账户变更审核规则。"
+      }
+    },
+    {
+      "id": "hard_negative_003",
+      "query": "会员生日当天能领什么礼物，领取入口在哪里？",
+      "expected_answerability": "unsupported",
+      "ground_truth_id": null,
+      "rationale": "与会员权益主题高度相关，但知识库没有生日礼物项目或领取入口说明。",
+      "validation": {
+        "closest_kb_document": "membership_benefits_01",
+        "topical_relevance": "该文档覆盖会员可能享有的优惠、积分和优先服务权益。",
+        "missing_fact": "生日礼物是否存在、礼物内容、领取条件和入口。"
+      }
+    },
+    {
+      "id": "hard_negative_004",
+      "query": "会员生日礼物如果错过领取日期还能补发吗？",
+      "expected_answerability": "unsupported",
+      "ground_truth_id": null,
+      "rationale": "与会员权益和领取规则相关，但知识库没有生日礼物及逾期补发规则。",
+      "validation": {
+        "closest_kb_document": "membership_benefits_01",
+        "topical_relevance": "该文档说明当前会员权益以会员中心展示为准。",
+        "missing_fact": "生日礼物的领取期限、错过后的补发政策。"
+      }
+    },
+    {
+      "id": "hard_negative_005",
+      "query": "可以开具增值税专用发票吗？",
+      "expected_answerability": "unsupported",
+      "ground_truth_id": null,
+      "rationale": "与发票类型主题直接相关，但知识库没有列出增值税专用发票这一具体类型是否支持。",
+      "validation": {
+        "closest_kb_document": "invoice_type_01",
+        "topical_relevance": "该文档说明可申请的发票类型和抬头范围以页面展示为准。",
+        "missing_fact": "增值税专用发票的可开具性、资质要求和申请流程。"
+      }
+    },
+    {
+      "id": "hard_negative_006",
+      "query": "发票开出后，能不能直接在订单页面自己改成公司抬头？",
+      "expected_answerability": "unsupported",
+      "ground_truth_id": null,
+      "rationale": "与发票抬头修改主题相关，但知识库只说明开具后需联系客服按规则处理，没有自助页面修改能力的事实。",
+      "validation": {
+        "closest_kb_document": "invoice_modify_01",
+        "topical_relevance": "该文档覆盖发票开具前后的抬头修改和更正路径。",
+        "missing_fact": "开具后是否存在订单页面自助修改入口。"
+      }
+    },
+    {
+      "id": "hard_negative_007",
+      "query": "商品超过保修期后还能不能免费更换主板？",
+      "expected_answerability": "unsupported",
+      "ground_truth_id": null,
+      "rationale": "与保修和维修主题相关，但知识库没有具体部件更换、免费维修或主板政策。",
+      "validation": {
+        "closest_kb_document": "quality_warranty_01",
+        "topical_relevance": "该文档说明保修期限来源及超过保修期可能产生费用。",
+        "missing_fact": "主板更换资格、是否免费以及超过保修期的具体维修价目。"
+      }
+    },
+    {
+      "id": "hard_negative_008",
+      "query": "生鲜商品发现质量问题，平台会赔付几倍货款？",
+      "expected_answerability": "unsupported",
+      "ground_truth_id": null,
+      "rationale": "与生鲜质量售后主题高度相关，但知识库只说明提交凭证和售后流程，没有赔付倍数。",
+      "validation": {
+        "closest_kb_document": "return_fresh_01",
+        "topical_relevance": "该文档说明生鲜质量问题应按质量售后流程提交凭证。",
+        "missing_fact": "质量问题赔付金额、倍数或补偿计算规则。"
+      }
+    },
+    {
+      "id": "hard_negative_009",
+      "query": "包裹因为天气延误超过承诺日期，能申请运费赔偿吗？",
+      "expected_answerability": "unsupported",
+      "ground_truth_id": null,
+      "rationale": "与天气导致的配送延误主题直接相关，但知识库没有运费赔偿或延误补偿政策。",
+      "validation": {
+        "closest_kb_document": "shipping_delay_01",
+        "topical_relevance": "该文档说明天气、交通等原因造成延误时可查看预计送达信息。",
+        "missing_fact": "超过承诺日期后的运费赔偿资格、金额和申请方式。"
+      }
+    },
+    {
+      "id": "hard_negative_010",
+      "query": "同一个订单拆成多个包裹时，运费会合并算还是分别收？",
+      "expected_answerability": "unsupported",
+      "ground_truth_id": null,
+      "rationale": "与订单拆包和物流主题高度相关，但知识库没有拆包订单的运费计费方式。",
+      "validation": {
+        "closest_kb_document": "order_split_01",
+        "topical_relevance": "该文档说明库存或仓库不同可能导致拆分发货及包裹状态展示。",
+        "missing_fact": "多个包裹的运费合并、拆分及计费规则。"
+      }
+    }
+  ]
+}

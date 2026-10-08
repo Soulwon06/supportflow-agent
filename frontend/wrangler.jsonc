@@ -1,0 +1,10 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "supportflow-workbench-frontend",
+  "compatibility_date": "2026-10-07",
+  "compatibility_flags": ["nodejs_compat"],
+  "main": "src/server.ts",
+  "vars": {
+    "BACKEND_ORIGIN": ""
+  }
+}

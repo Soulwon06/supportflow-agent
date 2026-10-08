@@ -1,0 +1,5535 @@
+{
+  "experiment_result_frozen": true,
+  "candidate_k": 5,
+  "model": "BAAI/bge-reranker-v2-m3",
+  "model_path": "D:\\models\\bge-reranker-v2-m3",
+  "model_size_bytes": 2271071852,
+  "cpu_or_gpu": "cpu",
+  "model_initialization_time_seconds": 1.5321,
+  "dense_status": {
+    "enabled": true,
+    "available": true,
+    "error": null
+  },
+  "before": {
+    "name": "Frozen Hybrid/RRF + mock pass-through",
+    "metrics": {
+      "1": {
+        "recall@1": 0.7286,
+        "precision@1": 0.7429,
+        "mrr": 0.7429
+      },
+      "3": {
+        "recall@3": 0.8286,
+        "precision@3": 0.2857,
+        "mrr": 0.781
+      },
+      "5": {
+        "recall@5": 0.8571,
+        "precision@5": 0.1771,
+        "mrr": 0.7867
+      }
+    },
+    "runtime_seconds": 0.0002,
+    "cases": [
+      {
+        "id": "eval_001",
+        "query": "退款一般多久到账？",
+        "ground_truth": [
+          "refund_general_01"
+        ],
+        "relevant_ids": [
+          "refund_general_01"
+        ],
+        "answerable": true,
+        "retrieved_ids": [
+          "refund_general_01",
+          "refund_credit_card_01",
+          "refund_return_01",
+          "refund_partial_01",
+          "membership_points_01"
+        ],
+        "latency_seconds": 4e-06,
+        "rank": 1,
+        "rerank_score": null,
+        "retrieved_evidence": [
+          {
+            "id": "refund_general_01",
+            "source_id": "refund_general_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "refund_credit_card_01",
+            "source_id": "refund_credit_card_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "refund_return_01",
+            "source_id": "refund_return_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "refund_partial_01",
+            "source_id": "refund_partial_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "membership_points_01",
+            "source_id": "membership_points_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          }
+        ],
+        "failure_type": null
+      },
+      {
+        "id": "eval_002",
+        "query": "钱退了好几天怎么还没回来？",
+        "ground_truth": [
+          "refund_general_01"
+        ],
+        "relevant_ids": [
+          "refund_general_01"
+        ],
+        "answerable": true,
+        "retrieved_ids": [
+          "return_shipping_fee_01",
+          "refund_general_01",
+          "return_general_01",
+          "refund_coupon_01",
+          "refund_return_01"
+        ],
+        "latency_seconds": 6e-06,
+        "rank": 2,
+        "rerank_score": null,
+        "retrieved_evidence": [
+          {
+            "id": "return_shipping_fee_01",
+            "source_id": "return_shipping_fee_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "refund_general_01",
+            "source_id": "refund_general_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "return_general_01",
+            "source_id": "return_general_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "refund_coupon_01",
+            "source_id": "refund_coupon_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "refund_return_01",
+            "source_id": "refund_return_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          }
+        ],
+        "failure_type": "RERANKING_ERROR"
+      },
+      {
+        "id": "eval_003",
+        "query": "信用卡退款第五天了为什么还没到账？",
+        "ground_truth": [
+          "refund_credit_card_01"
+        ],
+        "relevant_ids": [
+          "refund_credit_card_01"
+        ],
+        "answerable": true,
+        "retrieved_ids": [
+          "refund_credit_card_01",
+          "refund_general_01",
+          "refund_partial_01",
+          "membership_points_01",
+          "refund_coupon_01"
+        ],
+        "latency_seconds": 5e-06,
+        "rank": 1,
+        "rerank_score": null,
+        "retrieved_evidence": [
+          {
+            "id": "refund_credit_card_01",
+            "source_id": "refund_credit_card_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "refund_general_01",
+            "source_id": "refund_general_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "refund_partial_01",
+            "source_id": "refund_partial_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "membership_points_01",
+            "source_id": "membership_points_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "refund_coupon_01",
+            "source_id": "refund_coupon_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          }
+        ],
+        "failure_type": null
+      },
+      {
+        "id": "eval_004",
+        "query": "我用信用卡买的商品退货后，退款多久能回来？",
+        "ground_truth": [
+          "refund_credit_card_01",
+          "refund_return_01"
+        ],
+        "relevant_ids": [
+          "refund_credit_card_01",
+          "refund_return_01"
+        ],
+        "answerable": true,
+        "retrieved_ids": [
+          "refund_credit_card_01",
+          "refund_return_01",
+          "refund_general_01",
+          "return_general_01",
+          "return_fresh_01"
+        ],
+        "latency_seconds": 5e-06,
+        "rank": 1,
+        "rerank_score": null,
+        "retrieved_evidence": [
+          {
+            "id": "refund_credit_card_01",
+            "source_id": "refund_credit_card_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "refund_return_01",
+            "source_id": "refund_return_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "refund_general_01",
+            "source_id": "refund_general_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "return_general_01",
+            "source_id": "return_general_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "return_fresh_01",
+            "source_id": "return_fresh_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          }
+        ],
+        "failure_type": null
+      },
+      {
+        "id": "eval_005",
+        "query": "退货退款是从寄出那天开始算吗？",
+        "ground_truth": [
+          "refund_return_01"
+        ],
+        "relevant_ids": [
+          "refund_return_01"
+        ],
+        "answerable": true,
+        "retrieved_ids": [
+          "refund_return_01",
+          "refund_partial_01",
+          "return_shipping_fee_01",
+          "return_general_01",
+          "return_fresh_01"
+        ],
+        "latency_seconds": 4e-06,
+        "rank": 1,
+        "rerank_score": null,
+        "retrieved_evidence": [
+          {
+            "id": "refund_return_01",
+            "source_id": "refund_return_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "refund_partial_01",
+            "source_id": "refund_partial_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "return_shipping_fee_01",
+            "source_id": "return_shipping_fee_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "return_general_01",
+            "source_id": "return_general_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "return_fresh_01",
+            "source_id": "return_fresh_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          }
+        ],
+        "failure_type": null
+      },
+      {
+        "id": "eval_006",
+        "query": "用优惠券买的东西退款时优惠券怎么办？",
+        "ground_truth": [
+          "refund_coupon_01"
+        ],
+        "relevant_ids": [
+          "refund_coupon_01"
+        ],
+        "answerable": true,
+        "retrieved_ids": [
+          "refund_coupon_01",
+          "coupon_expired_01",
+          "coupon_stack_01",
+          "refund_partial_01",
+          "coupon_usage_01"
+        ],
+        "latency_seconds": 4e-06,
+        "rank": 1,
+        "rerank_score": null,
+        "retrieved_evidence": [
+          {
+            "id": "refund_coupon_01",
+            "source_id": "refund_coupon_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "coupon_expired_01",
+            "source_id": "coupon_expired_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "coupon_stack_01",
+            "source_id": "coupon_stack_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "refund_partial_01",
+            "source_id": "refund_partial_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "coupon_usage_01",
+            "source_id": "coupon_usage_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          }
+        ],
+        "failure_type": null
+      },
+      {
+        "id": "eval_007",
+        "query": "商品没拆封但不想要了可以退吗？",
+        "ground_truth": [
+          "return_general_01"
+        ],
+        "relevant_ids": [
+          "return_general_01"
+        ],
+        "answerable": true,
+        "retrieved_ids": [
+          "return_shipping_fee_01",
+          "return_fresh_01",
+          "return_general_01",
+          "quality_policy_01",
+          "shipping_no_update_01"
+        ],
+        "latency_seconds": 8e-06,
+        "rank": 3,
+        "rerank_score": null,
+        "retrieved_evidence": [
+          {
+            "id": "return_shipping_fee_01",
+            "source_id": "return_shipping_fee_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "return_fresh_01",
+            "source_id": "return_fresh_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "return_general_01",
+            "source_id": "return_general_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "quality_policy_01",
+            "source_id": "quality_policy_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "shipping_no_update_01",
+            "source_id": "shipping_no_update_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          }
+        ],
+        "failure_type": "RERANKING_ERROR"
+      },
+      {
+        "id": "eval_008",
+        "query": "买的生鲜不想要了能按七天无理由退吗？",
+        "ground_truth": [
+          "return_fresh_01"
+        ],
+        "relevant_ids": [
+          "return_fresh_01"
+        ],
+        "answerable": true,
+        "retrieved_ids": [
+          "return_fresh_01",
+          "return_general_01",
+          "return_shipping_fee_01",
+          "refund_credit_card_01",
+          "quality_photo_01"
+        ],
+        "latency_seconds": 5e-06,
+        "rank": 1,
+        "rerank_score": null,
+        "retrieved_evidence": [
+          {
+            "id": "return_fresh_01",
+            "source_id": "return_fresh_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "return_general_01",
+            "source_id": "return_general_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "return_shipping_fee_01",
+            "source_id": "return_shipping_fee_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "refund_credit_card_01",
+            "source_id": "refund_credit_card_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "quality_photo_01",
+            "source_id": "quality_photo_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          }
+        ],
+        "failure_type": null
+      },
+      {
+        "id": "eval_009",
+        "query": "质量问题退货的运费谁承担？",
+        "ground_truth": [
+          "return_shipping_fee_01"
+        ],
+        "relevant_ids": [
+          "return_shipping_fee_01"
+        ],
+        "answerable": true,
+        "retrieved_ids": [
+          "return_shipping_fee_01",
+          "quality_replacement_01",
+          "return_fresh_01",
+          "refund_partial_01",
+          "quality_policy_01"
+        ],
+        "latency_seconds": 5e-06,
+        "rank": 1,
+        "rerank_score": null,
+        "retrieved_evidence": [
+          {
+            "id": "return_shipping_fee_01",
+            "source_id": "return_shipping_fee_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "quality_replacement_01",
+            "source_id": "quality_replacement_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "return_fresh_01",
+            "source_id": "return_fresh_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "refund_partial_01",
+            "source_id": "refund_partial_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "quality_policy_01",
+            "source_id": "quality_policy_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          }
+        ],
+        "failure_type": null
+      },
+      {
+        "id": "eval_010",
+        "query": "物流已经超过48小时没有更新怎么办？",
+        "ground_truth": [
+          "shipping_no_update_01"
+        ],
+        "relevant_ids": [
+          "shipping_no_update_01"
+        ],
+        "answerable": true,
+        "retrieved_ids": [
+          "shipping_no_update_01",
+          "quality_warranty_01",
+          "shipping_tracking_01",
+          "shipping_delay_01",
+          "shipping_split_01"
+        ],
+        "latency_seconds": 5e-06,
+        "rank": 1,
+        "rerank_score": null,
+        "retrieved_evidence": [
+          {
+            "id": "shipping_no_update_01",
+            "source_id": "shipping_no_update_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "quality_warranty_01",
+            "source_id": "quality_warranty_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "shipping_tracking_01",
+            "source_id": "shipping_tracking_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "shipping_delay_01",
+            "source_id": "shipping_delay_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "shipping_split_01",
+            "source_id": "shipping_split_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          }
+        ],
+        "failure_type": null
+      },
+      {
+        "id": "eval_011",
+        "query": "天气导致快递晚到了，预计时间怎么看？",
+        "ground_truth": [
+          "shipping_delay_01"
+        ],
+        "relevant_ids": [
+          "shipping_delay_01"
+        ],
+        "answerable": true,
+        "retrieved_ids": [
+          "shipping_delay_01",
+          "refund_general_01",
+          "refund_return_01",
+          "refund_credit_card_01",
+          "shipping_no_update_01"
+        ],
+        "latency_seconds": 4e-06,
+        "rank": 1,
+        "rerank_score": null,
+        "retrieved_evidence": [
+          {
+            "id": "shipping_delay_01",
+            "source_id": "shipping_delay_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "refund_general_01",
+            "source_id": "refund_general_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "refund_return_01",
+            "source_id": "refund_return_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "refund_credit_card_01",
+            "source_id": "refund_credit_card_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "shipping_no_update_01",
+            "source_id": "shipping_no_update_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          }
+        ],
+        "failure_type": null
+      },
+      {
+        "id": "eval_012",
+        "query": "快递员派送失败后我该怎么处理？",
+        "ground_truth": [
+          "shipping_failed_delivery_01"
+        ],
+        "relevant_ids": [
+          "shipping_failed_delivery_01"
+        ],
+        "answerable": true,
+        "retrieved_ids": [
+          "shipping_failed_delivery_01",
+          "payment_failed_01",
+          "shipping_no_update_01",
+          "payment_pending_01",
+          "coupon_expired_01"
+        ],
+        "latency_seconds": 5e-06,
+        "rank": 1,
+        "rerank_score": null,
+        "retrieved_evidence": [
+          {
+            "id": "shipping_failed_delivery_01",
+            "source_id": "shipping_failed_delivery_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "payment_failed_01",
+            "source_id": "payment_failed_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "shipping_no_update_01",
+            "source_id": "shipping_no_update_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "payment_pending_01",
+            "source_id": "payment_pending_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "coupon_expired_01",
+            "source_id": "coupon_expired_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          }
+        ],
+        "failure_type": null
+      },
+      {
+        "id": "eval_013",
+        "query": "已经发货了还能改收货地址吗？",
+        "ground_truth": [
+          "shipping_address_change_01"
+        ],
+        "relevant_ids": [
+          "shipping_address_change_01"
+        ],
+        "answerable": true,
+        "retrieved_ids": [
+          "shipping_address_change_01",
+          "order_modify_01",
+          "order_cancel_01",
+          "invoice_modify_01",
+          "order_split_01"
+        ],
+        "latency_seconds": 5e-06,
+        "rank": 1,
+        "rerank_score": null,
+        "retrieved_evidence": [
+          {
+            "id": "shipping_address_change_01",
+            "source_id": "shipping_address_change_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "order_modify_01",
+            "source_id": "order_modify_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "order_cancel_01",
+            "source_id": "order_cancel_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "invoice_modify_01",
+            "source_id": "invoice_modify_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "order_split_01",
+            "source_id": "order_split_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          }
+        ],
+        "failure_type": null
+      },
+      {
+        "id": "eval_014",
+        "query": "为什么一个订单会有两个物流包裹？",
+        "ground_truth": [
+          "shipping_split_01"
+        ],
+        "relevant_ids": [
+          "shipping_split_01"
+        ],
+        "answerable": true,
+        "retrieved_ids": [
+          "order_split_01",
+          "shipping_split_01",
+          "shipping_tracking_01",
+          "shipping_no_update_01",
+          "order_modify_01"
+        ],
+        "latency_seconds": 4e-06,
+        "rank": 2,
+        "rerank_score": null,
+        "retrieved_evidence": [
+          {
+            "id": "order_split_01",
+            "source_id": "order_split_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "shipping_split_01",
+            "source_id": "shipping_split_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "shipping_tracking_01",
+            "source_id": "shipping_tracking_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "shipping_no_update_01",
+            "source_id": "shipping_no_update_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "order_modify_01",
+            "source_id": "order_modify_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          }
+        ],
+        "failure_type": "RERANKING_ERROR"
+      },
+      {
+        "id": "eval_015",
+        "query": "商品有质量问题应该怎么处理？",
+        "ground_truth": [
+          "quality_policy_01"
+        ],
+        "relevant_ids": [
+          "quality_policy_01"
+        ],
+        "answerable": true,
+        "retrieved_ids": [
+          "quality_policy_01",
+          "quality_replacement_01",
+          "quality_photo_01",
+          "quality_repair_01",
+          "return_fresh_01"
+        ],
+        "latency_seconds": 4e-06,
+        "rank": 1,
+        "rerank_score": null,
+        "retrieved_evidence": [
+          {
+            "id": "quality_policy_01",
+            "source_id": "quality_policy_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "quality_replacement_01",
+            "source_id": "quality_replacement_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "quality_photo_01",
+            "source_id": "quality_photo_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "quality_repair_01",
+            "source_id": "quality_repair_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "return_fresh_01",
+            "source_id": "return_fresh_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          }
+        ],
+        "failure_type": null
+      },
+      {
+        "id": "eval_016",
+        "query": "申请质量售后需要拍哪些凭证？",
+        "ground_truth": [
+          "quality_photo_01"
+        ],
+        "relevant_ids": [
+          "quality_photo_01"
+        ],
+        "answerable": true,
+        "retrieved_ids": [
+          "quality_photo_01",
+          "quality_policy_01",
+          "quality_replacement_01",
+          "return_fresh_01",
+          "quality_consumable_01"
+        ],
+        "latency_seconds": 4e-06,
+        "rank": 1,
+        "rerank_score": null,
+        "retrieved_evidence": [
+          {
+            "id": "quality_photo_01",
+            "source_id": "quality_photo_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "quality_policy_01",
+            "source_id": "quality_policy_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "quality_replacement_01",
+            "source_id": "quality_replacement_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "return_fresh_01",
+            "source_id": "return_fresh_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "quality_consumable_01",
+            "source_id": "quality_consumable_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          }
+        ],
+        "failure_type": null
+      },
+      {
+        "id": "eval_017",
+        "query": "质量问题可以安排维修吗？",
+        "ground_truth": [
+          "quality_repair_01"
+        ],
+        "relevant_ids": [
+          "quality_repair_01"
+        ],
+        "answerable": true,
+        "retrieved_ids": [
+          "quality_repair_01",
+          "quality_replacement_01",
+          "quality_photo_01",
+          "quality_policy_01",
+          "quality_warranty_01"
+        ],
+        "latency_seconds": 4e-06,
+        "rank": 1,
+        "rerank_score": null,
+        "retrieved_evidence": [
+          {
+            "id": "quality_repair_01",
+            "source_id": "quality_repair_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "quality_replacement_01",
+            "source_id": "quality_replacement_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "quality_photo_01",
+            "source_id": "quality_photo_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "quality_policy_01",
+            "source_id": "quality_policy_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "quality_warranty_01",
+            "source_id": "quality_warranty_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          }
+        ],
+        "failure_type": null
+      },
+      {
+        "id": "eval_018",
+        "query": "商品坏了能不能换货？",
+        "ground_truth": [
+          "quality_replacement_01"
+        ],
+        "relevant_ids": [
+          "quality_replacement_01"
+        ],
+        "answerable": true,
+        "retrieved_ids": [
+          "quality_replacement_01",
+          "quality_warranty_01",
+          "return_general_01",
+          "shipping_address_change_01",
+          "return_fresh_01"
+        ],
+        "latency_seconds": 5e-06,
+        "rank": 1,
+        "rerank_score": null,
+        "retrieved_evidence": [
+          {
+            "id": "quality_replacement_01",
+            "source_id": "quality_replacement_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "quality_warranty_01",
+            "source_id": "quality_warranty_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "return_general_01",
+            "source_id": "return_general_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "shipping_address_change_01",
+            "source_id": "shipping_address_change_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "return_fresh_01",
+            "source_id": "return_fresh_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          }
+        ],
+        "failure_type": null
+      },
+      {
+        "id": "eval_019",
+        "query": "这个商品的保修期怎么确认？",
+        "ground_truth": [
+          "quality_warranty_01"
+        ],
+        "relevant_ids": [
+          "quality_warranty_01"
+        ],
+        "answerable": true,
+        "retrieved_ids": [
+          "quality_warranty_01",
+          "refund_partial_01",
+          "quality_repair_01",
+          "quality_replacement_01",
+          "refund_return_01"
+        ],
+        "latency_seconds": 4e-06,
+        "rank": 1,
+        "rerank_score": null,
+        "retrieved_evidence": [
+          {
+            "id": "quality_warranty_01",
+            "source_id": "quality_warranty_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "refund_partial_01",
+            "source_id": "refund_partial_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "quality_repair_01",
+            "source_id": "quality_repair_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "quality_replacement_01",
+            "source_id": "quality_replacement_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "refund_return_01",
+            "source_id": "refund_return_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          }
+        ],
+        "failure_type": null
+      },
+      {
+        "id": "eval_020",
+        "query": "订单还没发货，我想取消订单怎么办？",
+        "ground_truth": [
+          "order_cancel_01"
+        ],
+        "relevant_ids": [
+          "order_cancel_01"
+        ],
+        "answerable": true,
+        "retrieved_ids": [
+          "order_cancel_01",
+          "order_modify_01",
+          "membership_cancel_01",
+          "order_missing_01",
+          "order_split_01"
+        ],
+        "latency_seconds": 5e-06,
+        "rank": 1,
+        "rerank_score": null,
+        "retrieved_evidence": [
+          {
+            "id": "order_cancel_01",
+            "source_id": "order_cancel_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "order_modify_01",
+            "source_id": "order_modify_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "membership_cancel_01",
+            "source_id": "membership_cancel_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "order_missing_01",
+            "source_id": "order_missing_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "order_split_01",
+            "source_id": "order_split_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          }
+        ],
+        "failure_type": null
+      },
+      {
+        "id": "eval_021",
+        "query": "在哪里能看到订单现在是什么状态？",
+        "ground_truth": [
+          "order_status_01"
+        ],
+        "relevant_ids": [
+          "order_status_01"
+        ],
+        "answerable": true,
+        "retrieved_ids": [
+          "order_status_01",
+          "order_cancel_01",
+          "shipping_tracking_01",
+          "order_split_01",
+          "order_modify_01"
+        ],
+        "latency_seconds": 4e-06,
+        "rank": 1,
+        "rerank_score": null,
+        "retrieved_evidence": [
+          {
+            "id": "order_status_01",
+            "source_id": "order_status_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "order_cancel_01",
+            "source_id": "order_cancel_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "shipping_tracking_01",
+            "source_id": "shipping_tracking_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "order_split_01",
+            "source_id": "order_split_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "order_modify_01",
+            "source_id": "order_modify_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          }
+        ],
+        "failure_type": null
+      },
+      {
+        "id": "eval_022",
+        "query": "订单没发货可以改收货人电话吗？",
+        "ground_truth": [
+          "order_modify_01"
+        ],
+        "relevant_ids": [
+          "order_modify_01"
+        ],
+        "answerable": true,
+        "retrieved_ids": [
+          "order_modify_01",
+          "shipping_address_change_01",
+          "order_cancel_01",
+          "order_missing_01",
+          "order_status_01"
+        ],
+        "latency_seconds": 4e-06,
+        "rank": 1,
+        "rerank_score": null,
+        "retrieved_evidence": [
+          {
+            "id": "order_modify_01",
+            "source_id": "order_modify_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "shipping_address_change_01",
+            "source_id": "shipping_address_change_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "order_cancel_01",
+            "source_id": "order_cancel_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "order_missing_01",
+            "source_id": "order_missing_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "order_status_01",
+            "source_id": "order_status_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          }
+        ],
+        "failure_type": null
+      },
+      {
+        "id": "eval_023",
+        "query": "支付失败后要不要重新付款？",
+        "ground_truth": [
+          "payment_failed_01"
+        ],
+        "relevant_ids": [
+          "payment_failed_01"
+        ],
+        "answerable": true,
+        "retrieved_ids": [
+          "payment_failed_01",
+          "shipping_failed_delivery_01",
+          "refund_partial_01",
+          "payment_pending_01",
+          "refund_coupon_01"
+        ],
+        "latency_seconds": 5e-06,
+        "rank": 1,
+        "rerank_score": null,
+        "retrieved_evidence": [
+          {
+            "id": "payment_failed_01",
+            "source_id": "payment_failed_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "shipping_failed_delivery_01",
+            "source_id": "shipping_failed_delivery_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "refund_partial_01",
+            "source_id": "refund_partial_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "payment_pending_01",
+            "source_id": "payment_pending_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "refund_coupon_01",
+            "source_id": "refund_coupon_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          }
+        ],
+        "failure_type": null
+      },
+      {
+        "id": "eval_024",
+        "query": "同一笔订单被扣了两次钱怎么办？",
+        "ground_truth": [
+          "payment_duplicate_01"
+        ],
+        "relevant_ids": [
+          "payment_duplicate_01"
+        ],
+        "answerable": true,
+        "retrieved_ids": [
+          "order_split_01",
+          "order_status_01",
+          "refund_coupon_01",
+          "order_cancel_01",
+          "payment_duplicate_01"
+        ],
+        "latency_seconds": 4e-06,
+        "rank": 5,
+        "rerank_score": null,
+        "retrieved_evidence": [
+          {
+            "id": "order_split_01",
+            "source_id": "order_split_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "order_status_01",
+            "source_id": "order_status_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "refund_coupon_01",
+            "source_id": "refund_coupon_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "order_cancel_01",
+            "source_id": "order_cancel_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "payment_duplicate_01",
+            "source_id": "payment_duplicate_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          }
+        ],
+        "failure_type": "RERANKING_ERROR"
+      },
+      {
+        "id": "eval_025",
+        "query": "支付页面一直显示处理中怎么办？",
+        "ground_truth": [
+          "payment_pending_01"
+        ],
+        "relevant_ids": [
+          "payment_pending_01"
+        ],
+        "answerable": true,
+        "retrieved_ids": [
+          "payment_pending_01",
+          "payment_duplicate_01",
+          "payment_failed_01",
+          "payment_method_01",
+          "order_missing_01"
+        ],
+        "latency_seconds": 5e-06,
+        "rank": 1,
+        "rerank_score": null,
+        "retrieved_evidence": [
+          {
+            "id": "payment_pending_01",
+            "source_id": "payment_pending_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "payment_duplicate_01",
+            "source_id": "payment_duplicate_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "payment_failed_01",
+            "source_id": "payment_failed_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "payment_method_01",
+            "source_id": "payment_method_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "order_missing_01",
+            "source_id": "order_missing_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          }
+        ],
+        "failure_type": null
+      },
+      {
+        "id": "eval_026",
+        "query": "优惠券要满足什么条件才能使用？",
+        "ground_truth": [
+          "coupon_usage_01"
+        ],
+        "relevant_ids": [
+          "coupon_usage_01"
+        ],
+        "answerable": true,
+        "retrieved_ids": [
+          "coupon_usage_01",
+          "coupon_stack_01",
+          "refund_coupon_01",
+          "coupon_expired_01",
+          "invoice_download_01"
+        ],
+        "latency_seconds": 5e-06,
+        "rank": 1,
+        "rerank_score": null,
+        "retrieved_evidence": [
+          {
+            "id": "coupon_usage_01",
+            "source_id": "coupon_usage_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "coupon_stack_01",
+            "source_id": "coupon_stack_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "refund_coupon_01",
+            "source_id": "refund_coupon_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "coupon_expired_01",
+            "source_id": "coupon_expired_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "invoice_download_01",
+            "source_id": "invoice_download_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          }
+        ],
+        "failure_type": null
+      },
+      {
+        "id": "eval_027",
+        "query": "优惠券过期了还能补发吗？",
+        "ground_truth": [
+          "coupon_expired_01"
+        ],
+        "relevant_ids": [
+          "coupon_expired_01"
+        ],
+        "answerable": true,
+        "retrieved_ids": [
+          "coupon_expired_01",
+          "refund_coupon_01",
+          "coupon_stack_01",
+          "coupon_usage_01",
+          "membership_points_01"
+        ],
+        "latency_seconds": 5e-06,
+        "rank": 1,
+        "rerank_score": null,
+        "retrieved_evidence": [
+          {
+            "id": "coupon_expired_01",
+            "source_id": "coupon_expired_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "refund_coupon_01",
+            "source_id": "refund_coupon_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "coupon_stack_01",
+            "source_id": "coupon_stack_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "coupon_usage_01",
+            "source_id": "coupon_usage_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "membership_points_01",
+            "source_id": "membership_points_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          }
+        ],
+        "failure_type": null
+      },
+      {
+        "id": "eval_028",
+        "query": "电子发票在哪里下载？",
+        "ground_truth": [
+          "invoice_download_01"
+        ],
+        "relevant_ids": [
+          "invoice_download_01"
+        ],
+        "answerable": true,
+        "retrieved_ids": [
+          "invoice_download_01",
+          "invoice_type_01",
+          "invoice_modify_01",
+          "shipping_pickup_01",
+          "coupon_expired_01"
+        ],
+        "latency_seconds": 4e-06,
+        "rank": 1,
+        "rerank_score": null,
+        "retrieved_evidence": [
+          {
+            "id": "invoice_download_01",
+            "source_id": "invoice_download_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "invoice_type_01",
+            "source_id": "invoice_type_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "invoice_modify_01",
+            "source_id": "invoice_modify_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "shipping_pickup_01",
+            "source_id": "shipping_pickup_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "coupon_expired_01",
+            "source_id": "coupon_expired_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          }
+        ],
+        "failure_type": null
+      },
+      {
+        "id": "eval_029",
+        "query": "发票开出来后发现抬头写错了怎么办？",
+        "ground_truth": [
+          "invoice_modify_01"
+        ],
+        "relevant_ids": [
+          "invoice_modify_01"
+        ],
+        "answerable": true,
+        "retrieved_ids": [
+          "invoice_modify_01",
+          "membership_points_01",
+          "invoice_type_01",
+          "invoice_download_01",
+          "refund_coupon_01"
+        ],
+        "latency_seconds": 4e-06,
+        "rank": 1,
+        "rerank_score": null,
+        "retrieved_evidence": [
+          {
+            "id": "invoice_modify_01",
+            "source_id": "invoice_modify_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "membership_points_01",
+            "source_id": "membership_points_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "invoice_type_01",
+            "source_id": "invoice_type_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "invoice_download_01",
+            "source_id": "invoice_download_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "refund_coupon_01",
+            "source_id": "refund_coupon_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          }
+        ],
+        "failure_type": null
+      },
+      {
+        "id": "eval_030",
+        "query": "会员有哪些专属权益？",
+        "ground_truth": [
+          "membership_benefits_01"
+        ],
+        "relevant_ids": [
+          "membership_benefits_01"
+        ],
+        "answerable": true,
+        "retrieved_ids": [
+          "membership_benefits_01",
+          "membership_cancel_01",
+          "membership_points_01",
+          "refund_partial_01",
+          "shipping_address_change_01"
+        ],
+        "latency_seconds": 4e-06,
+        "rank": 1,
+        "rerank_score": null,
+        "retrieved_evidence": [
+          {
+            "id": "membership_benefits_01",
+            "source_id": "membership_benefits_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "membership_cancel_01",
+            "source_id": "membership_cancel_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "membership_points_01",
+            "source_id": "membership_points_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "refund_partial_01",
+            "source_id": "refund_partial_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "shipping_address_change_01",
+            "source_id": "shipping_address_change_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          }
+        ],
+        "failure_type": null
+      },
+      {
+        "id": "eval_031",
+        "query": "可以把订单配送到日本吗？",
+        "ground_truth": [],
+        "relevant_ids": [],
+        "answerable": false,
+        "retrieved_ids": [
+          "shipping_delay_01",
+          "order_modify_01",
+          "membership_points_01",
+          "shipping_address_change_01",
+          "refund_credit_card_01"
+        ],
+        "latency_seconds": 4e-06,
+        "rank": null,
+        "rerank_score": null,
+        "retrieved_evidence": [
+          {
+            "id": "shipping_delay_01",
+            "source_id": "shipping_delay_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "order_modify_01",
+            "source_id": "order_modify_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "membership_points_01",
+            "source_id": "membership_points_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "shipping_address_change_01",
+            "source_id": "shipping_address_change_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "refund_credit_card_01",
+            "source_id": "refund_credit_card_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          }
+        ],
+        "failure_type": "NO_ANSWER_FALSE_POSITIVE"
+      },
+      {
+        "id": "eval_032",
+        "query": "商品甲醛超标应该依据什么检测标准？",
+        "ground_truth": [],
+        "relevant_ids": [],
+        "answerable": false,
+        "retrieved_ids": [
+          "quality_consumable_01",
+          "quality_repair_01",
+          "quality_replacement_01",
+          "quality_warranty_01",
+          "quality_policy_01"
+        ],
+        "latency_seconds": 6e-06,
+        "rank": null,
+        "rerank_score": null,
+        "retrieved_evidence": [
+          {
+            "id": "quality_consumable_01",
+            "source_id": "quality_consumable_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "quality_repair_01",
+            "source_id": "quality_repair_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "quality_replacement_01",
+            "source_id": "quality_replacement_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "quality_warranty_01",
+            "source_id": "quality_warranty_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "quality_policy_01",
+            "source_id": "quality_policy_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          }
+        ],
+        "failure_type": "NO_ANSWER_FALSE_POSITIVE"
+      },
+      {
+        "id": "eval_033",
+        "query": "如何绑定银行卡自动还款？",
+        "ground_truth": [],
+        "relevant_ids": [],
+        "answerable": false,
+        "retrieved_ids": [
+          "payment_failed_01",
+          "payment_method_01",
+          "refund_coupon_01",
+          "promotion_price_01",
+          "refund_credit_card_01"
+        ],
+        "latency_seconds": 5e-06,
+        "rank": null,
+        "rerank_score": null,
+        "retrieved_evidence": [
+          {
+            "id": "payment_failed_01",
+            "source_id": "payment_failed_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "payment_method_01",
+            "source_id": "payment_method_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "refund_coupon_01",
+            "source_id": "refund_coupon_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "promotion_price_01",
+            "source_id": "promotion_price_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "refund_credit_card_01",
+            "source_id": "refund_credit_card_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          }
+        ],
+        "failure_type": "NO_ANSWER_FALSE_POSITIVE"
+      },
+      {
+        "id": "eval_034",
+        "query": "会员生日礼物怎么领取？",
+        "ground_truth": [],
+        "relevant_ids": [],
+        "answerable": false,
+        "retrieved_ids": [
+          "membership_benefits_01",
+          "membership_cancel_01",
+          "coupon_stack_01",
+          "refund_coupon_01",
+          "membership_points_01"
+        ],
+        "latency_seconds": 5e-06,
+        "rank": null,
+        "rerank_score": null,
+        "retrieved_evidence": [
+          {
+            "id": "membership_benefits_01",
+            "source_id": "membership_benefits_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "membership_cancel_01",
+            "source_id": "membership_cancel_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "coupon_stack_01",
+            "source_id": "coupon_stack_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "refund_coupon_01",
+            "source_id": "refund_coupon_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "membership_points_01",
+            "source_id": "membership_points_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          }
+        ],
+        "failure_type": "NO_ANSWER_FALSE_POSITIVE"
+      },
+      {
+        "id": "eval_035",
+        "query": "可以开具增值税专用发票吗？",
+        "ground_truth": [],
+        "relevant_ids": [],
+        "answerable": false,
+        "retrieved_ids": [
+          "invoice_modify_01",
+          "payment_method_01",
+          "shipping_tracking_01",
+          "refund_partial_01",
+          "invoice_download_01"
+        ],
+        "latency_seconds": 5e-06,
+        "rank": null,
+        "rerank_score": null,
+        "retrieved_evidence": [
+          {
+            "id": "invoice_modify_01",
+            "source_id": "invoice_modify_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "payment_method_01",
+            "source_id": "payment_method_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "shipping_tracking_01",
+            "source_id": "shipping_tracking_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "refund_partial_01",
+            "source_id": "refund_partial_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          },
+          {
+            "id": "invoice_download_01",
+            "source_id": "invoice_download_01",
+            "source_version": "1.0",
+            "retrieval_method": "mock_rerank",
+            "original_rank": null,
+            "rerank_score": null,
+            "rerank_rank": null,
+            "rerank_latency_ms": null
+          }
+        ],
+        "failure_type": "NO_ANSWER_FALSE_POSITIVE"
+      }
+    ]
+  },
+  "after": {
+    "name": "Frozen Hybrid/RRF + local BAAI/bge-reranker-v2-m3",
+    "metrics": {
+      "1": {
+        "recall@1": 0.8429,
+        "precision@1": 0.8571,
+        "mrr": 0.8571
+      },
+      "3": {
+        "recall@3": 0.8571,
+        "precision@3": 0.2952,
+        "mrr": 0.8571
+      },
+      "5": {
+        "recall@5": 0.8571,
+        "precision@5": 0.1771,
+        "mrr": 0.8571
+      }
+    },
+    "runtime_seconds": 12.4532,
+    "failure_breakdown_supported": {},
+    "cases": [
+      {
+        "id": "eval_001",
+        "query": "退款一般多久到账？",
+        "ground_truth": [
+          "refund_general_01"
+        ],
+        "relevant_ids": [
+          "refund_general_01"
+        ],
+        "answerable": true,
+        "retrieved_ids": [
+          "refund_general_01",
+          "refund_credit_card_01",
+          "refund_return_01",
+          "membership_points_01",
+          "refund_partial_01"
+        ],
+        "latency_seconds": 0.443526,
+        "rank": 1,
+        "rerank_score": 0.9527945518493652,
+        "retrieved_evidence": [
+          {
+            "id": "refund_general_01",
+            "source_id": "refund_general_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 1,
+            "rerank_score": 0.9527945518493652,
+            "rerank_rank": 1,
+            "rerank_latency_ms": 443.49
+          },
+          {
+            "id": "refund_credit_card_01",
+            "source_id": "refund_credit_card_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 2,
+            "rerank_score": 0.9149140119552612,
+            "rerank_rank": 2,
+            "rerank_latency_ms": 443.49
+          },
+          {
+            "id": "refund_return_01",
+            "source_id": "refund_return_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 3,
+            "rerank_score": 0.5065702795982361,
+            "rerank_rank": 3,
+            "rerank_latency_ms": 443.49
+          },
+          {
+            "id": "membership_points_01",
+            "source_id": "membership_points_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 5,
+            "rerank_score": 0.390189528465271,
+            "rerank_rank": 4,
+            "rerank_latency_ms": 443.49
+          },
+          {
+            "id": "refund_partial_01",
+            "source_id": "refund_partial_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 4,
+            "rerank_score": 0.0019048923859372735,
+            "rerank_rank": 5,
+            "rerank_latency_ms": 443.49
+          }
+        ],
+        "failure_type": null
+      },
+      {
+        "id": "eval_002",
+        "query": "钱退了好几天怎么还没回来？",
+        "ground_truth": [
+          "refund_general_01"
+        ],
+        "relevant_ids": [
+          "refund_general_01"
+        ],
+        "answerable": true,
+        "retrieved_ids": [
+          "refund_general_01",
+          "refund_return_01",
+          "refund_coupon_01",
+          "return_shipping_fee_01",
+          "return_general_01"
+        ],
+        "latency_seconds": 0.362796,
+        "rank": 1,
+        "rerank_score": 0.19030095636844635,
+        "retrieved_evidence": [
+          {
+            "id": "refund_general_01",
+            "source_id": "refund_general_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 2,
+            "rerank_score": 0.19030095636844635,
+            "rerank_rank": 1,
+            "rerank_latency_ms": 362.75
+          },
+          {
+            "id": "refund_return_01",
+            "source_id": "refund_return_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 5,
+            "rerank_score": 0.15705606341362,
+            "rerank_rank": 2,
+            "rerank_latency_ms": 362.75
+          },
+          {
+            "id": "refund_coupon_01",
+            "source_id": "refund_coupon_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 4,
+            "rerank_score": 0.025552602484822273,
+            "rerank_rank": 3,
+            "rerank_latency_ms": 362.75
+          },
+          {
+            "id": "return_shipping_fee_01",
+            "source_id": "return_shipping_fee_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 1,
+            "rerank_score": 0.006522644776850939,
+            "rerank_rank": 4,
+            "rerank_latency_ms": 362.75
+          },
+          {
+            "id": "return_general_01",
+            "source_id": "return_general_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 3,
+            "rerank_score": 0.0007747211493551731,
+            "rerank_rank": 5,
+            "rerank_latency_ms": 362.75
+          }
+        ],
+        "failure_type": null
+      },
+      {
+        "id": "eval_003",
+        "query": "信用卡退款第五天了为什么还没到账？",
+        "ground_truth": [
+          "refund_credit_card_01"
+        ],
+        "relevant_ids": [
+          "refund_credit_card_01"
+        ],
+        "answerable": true,
+        "retrieved_ids": [
+          "refund_credit_card_01",
+          "refund_general_01",
+          "membership_points_01",
+          "refund_partial_01",
+          "refund_coupon_01"
+        ],
+        "latency_seconds": 0.38036,
+        "rank": 1,
+        "rerank_score": 0.5716313719749451,
+        "retrieved_evidence": [
+          {
+            "id": "refund_credit_card_01",
+            "source_id": "refund_credit_card_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 1,
+            "rerank_score": 0.5716313719749451,
+            "rerank_rank": 1,
+            "rerank_latency_ms": 380.33
+          },
+          {
+            "id": "refund_general_01",
+            "source_id": "refund_general_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 2,
+            "rerank_score": 0.48954686522483826,
+            "rerank_rank": 2,
+            "rerank_latency_ms": 380.33
+          },
+          {
+            "id": "membership_points_01",
+            "source_id": "membership_points_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 4,
+            "rerank_score": 0.025276612490415573,
+            "rerank_rank": 3,
+            "rerank_latency_ms": 380.33
+          },
+          {
+            "id": "refund_partial_01",
+            "source_id": "refund_partial_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 3,
+            "rerank_score": 0.008668607100844383,
+            "rerank_rank": 4,
+            "rerank_latency_ms": 380.33
+          },
+          {
+            "id": "refund_coupon_01",
+            "source_id": "refund_coupon_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 5,
+            "rerank_score": 0.0032556296791881323,
+            "rerank_rank": 5,
+            "rerank_latency_ms": 380.33
+          }
+        ],
+        "failure_type": null
+      },
+      {
+        "id": "eval_004",
+        "query": "我用信用卡买的商品退货后，退款多久能回来？",
+        "ground_truth": [
+          "refund_credit_card_01",
+          "refund_return_01"
+        ],
+        "relevant_ids": [
+          "refund_credit_card_01",
+          "refund_return_01"
+        ],
+        "answerable": true,
+        "retrieved_ids": [
+          "refund_credit_card_01",
+          "refund_general_01",
+          "refund_return_01",
+          "return_general_01",
+          "return_fresh_01"
+        ],
+        "latency_seconds": 0.390984,
+        "rank": 1,
+        "rerank_score": 0.9725463390350342,
+        "retrieved_evidence": [
+          {
+            "id": "refund_credit_card_01",
+            "source_id": "refund_credit_card_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 1,
+            "rerank_score": 0.9725463390350342,
+            "rerank_rank": 1,
+            "rerank_latency_ms": 390.954
+          },
+          {
+            "id": "refund_general_01",
+            "source_id": "refund_general_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 3,
+            "rerank_score": 0.7906009554862976,
+            "rerank_rank": 2,
+            "rerank_latency_ms": 390.954
+          },
+          {
+            "id": "refund_return_01",
+            "source_id": "refund_return_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 2,
+            "rerank_score": 0.6750742793083191,
+            "rerank_rank": 3,
+            "rerank_latency_ms": 390.954
+          },
+          {
+            "id": "return_general_01",
+            "source_id": "return_general_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 4,
+            "rerank_score": 0.2528226971626282,
+            "rerank_rank": 4,
+            "rerank_latency_ms": 390.954
+          },
+          {
+            "id": "return_fresh_01",
+            "source_id": "return_fresh_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 5,
+            "rerank_score": 0.08335547894239426,
+            "rerank_rank": 5,
+            "rerank_latency_ms": 390.954
+          }
+        ],
+        "failure_type": null
+      },
+      {
+        "id": "eval_005",
+        "query": "退货退款是从寄出那天开始算吗？",
+        "ground_truth": [
+          "refund_return_01"
+        ],
+        "relevant_ids": [
+          "refund_return_01"
+        ],
+        "answerable": true,
+        "retrieved_ids": [
+          "refund_return_01",
+          "return_general_01",
+          "refund_partial_01",
+          "return_fresh_01",
+          "return_shipping_fee_01"
+        ],
+        "latency_seconds": 0.369613,
+        "rank": 1,
+        "rerank_score": 0.9977920055389404,
+        "retrieved_evidence": [
+          {
+            "id": "refund_return_01",
+            "source_id": "refund_return_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 1,
+            "rerank_score": 0.9977920055389404,
+            "rerank_rank": 1,
+            "rerank_latency_ms": 369.588
+          },
+          {
+            "id": "return_general_01",
+            "source_id": "return_general_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 4,
+            "rerank_score": 0.12334095686674118,
+            "rerank_rank": 2,
+            "rerank_latency_ms": 369.588
+          },
+          {
+            "id": "refund_partial_01",
+            "source_id": "refund_partial_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 2,
+            "rerank_score": 0.03840157762169838,
+            "rerank_rank": 3,
+            "rerank_latency_ms": 369.588
+          },
+          {
+            "id": "return_fresh_01",
+            "source_id": "return_fresh_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 5,
+            "rerank_score": 0.023019155487418175,
+            "rerank_rank": 4,
+            "rerank_latency_ms": 369.588
+          },
+          {
+            "id": "return_shipping_fee_01",
+            "source_id": "return_shipping_fee_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 3,
+            "rerank_score": 0.008627261035144329,
+            "rerank_rank": 5,
+            "rerank_latency_ms": 369.588
+          }
+        ],
+        "failure_type": null
+      },
+      {
+        "id": "eval_006",
+        "query": "用优惠券买的东西退款时优惠券怎么办？",
+        "ground_truth": [
+          "refund_coupon_01"
+        ],
+        "relevant_ids": [
+          "refund_coupon_01"
+        ],
+        "answerable": true,
+        "retrieved_ids": [
+          "refund_coupon_01",
+          "coupon_expired_01",
+          "coupon_usage_01",
+          "coupon_stack_01",
+          "refund_partial_01"
+        ],
+        "latency_seconds": 0.394082,
+        "rank": 1,
+        "rerank_score": 0.9924593567848206,
+        "retrieved_evidence": [
+          {
+            "id": "refund_coupon_01",
+            "source_id": "refund_coupon_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 1,
+            "rerank_score": 0.9924593567848206,
+            "rerank_rank": 1,
+            "rerank_latency_ms": 394.047
+          },
+          {
+            "id": "coupon_expired_01",
+            "source_id": "coupon_expired_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 2,
+            "rerank_score": 0.4975681006908417,
+            "rerank_rank": 2,
+            "rerank_latency_ms": 394.047
+          },
+          {
+            "id": "coupon_usage_01",
+            "source_id": "coupon_usage_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 5,
+            "rerank_score": 0.3017985224723816,
+            "rerank_rank": 3,
+            "rerank_latency_ms": 394.047
+          },
+          {
+            "id": "coupon_stack_01",
+            "source_id": "coupon_stack_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 3,
+            "rerank_score": 0.04909028112888336,
+            "rerank_rank": 4,
+            "rerank_latency_ms": 394.047
+          },
+          {
+            "id": "refund_partial_01",
+            "source_id": "refund_partial_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 4,
+            "rerank_score": 0.007619017735123634,
+            "rerank_rank": 5,
+            "rerank_latency_ms": 394.047
+          }
+        ],
+        "failure_type": null
+      },
+      {
+        "id": "eval_007",
+        "query": "商品没拆封但不想要了可以退吗？",
+        "ground_truth": [
+          "return_general_01"
+        ],
+        "relevant_ids": [
+          "return_general_01"
+        ],
+        "answerable": true,
+        "retrieved_ids": [
+          "return_general_01",
+          "return_fresh_01",
+          "return_shipping_fee_01",
+          "quality_policy_01",
+          "shipping_no_update_01"
+        ],
+        "latency_seconds": 0.355817,
+        "rank": 1,
+        "rerank_score": 0.2972234785556793,
+        "retrieved_evidence": [
+          {
+            "id": "return_general_01",
+            "source_id": "return_general_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 3,
+            "rerank_score": 0.2972234785556793,
+            "rerank_rank": 1,
+            "rerank_latency_ms": 355.786
+          },
+          {
+            "id": "return_fresh_01",
+            "source_id": "return_fresh_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 2,
+            "rerank_score": 0.17456333339214325,
+            "rerank_rank": 2,
+            "rerank_latency_ms": 355.786
+          },
+          {
+            "id": "return_shipping_fee_01",
+            "source_id": "return_shipping_fee_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 1,
+            "rerank_score": 0.0863775759935379,
+            "rerank_rank": 3,
+            "rerank_latency_ms": 355.786
+          },
+          {
+            "id": "quality_policy_01",
+            "source_id": "quality_policy_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 4,
+            "rerank_score": 0.01155427098274231,
+            "rerank_rank": 4,
+            "rerank_latency_ms": 355.786
+          },
+          {
+            "id": "shipping_no_update_01",
+            "source_id": "shipping_no_update_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 5,
+            "rerank_score": 0.0005488877068273723,
+            "rerank_rank": 5,
+            "rerank_latency_ms": 355.786
+          }
+        ],
+        "failure_type": null
+      },
+      {
+        "id": "eval_008",
+        "query": "买的生鲜不想要了能按七天无理由退吗？",
+        "ground_truth": [
+          "return_fresh_01"
+        ],
+        "relevant_ids": [
+          "return_fresh_01"
+        ],
+        "answerable": true,
+        "retrieved_ids": [
+          "return_fresh_01",
+          "return_general_01",
+          "return_shipping_fee_01",
+          "refund_credit_card_01",
+          "quality_photo_01"
+        ],
+        "latency_seconds": 0.414576,
+        "rank": 1,
+        "rerank_score": 0.9961097836494446,
+        "retrieved_evidence": [
+          {
+            "id": "return_fresh_01",
+            "source_id": "return_fresh_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 1,
+            "rerank_score": 0.9961097836494446,
+            "rerank_rank": 1,
+            "rerank_latency_ms": 414.542
+          },
+          {
+            "id": "return_general_01",
+            "source_id": "return_general_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 2,
+            "rerank_score": 0.8499609231948853,
+            "rerank_rank": 2,
+            "rerank_latency_ms": 414.542
+          },
+          {
+            "id": "return_shipping_fee_01",
+            "source_id": "return_shipping_fee_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 3,
+            "rerank_score": 0.30657756328582764,
+            "rerank_rank": 3,
+            "rerank_latency_ms": 414.542
+          },
+          {
+            "id": "refund_credit_card_01",
+            "source_id": "refund_credit_card_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 4,
+            "rerank_score": 0.0022667343728244305,
+            "rerank_rank": 4,
+            "rerank_latency_ms": 414.542
+          },
+          {
+            "id": "quality_photo_01",
+            "source_id": "quality_photo_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 5,
+            "rerank_score": 0.0008490170584991574,
+            "rerank_rank": 5,
+            "rerank_latency_ms": 414.542
+          }
+        ],
+        "failure_type": null
+      },
+      {
+        "id": "eval_009",
+        "query": "质量问题退货的运费谁承担？",
+        "ground_truth": [
+          "return_shipping_fee_01"
+        ],
+        "relevant_ids": [
+          "return_shipping_fee_01"
+        ],
+        "answerable": true,
+        "retrieved_ids": [
+          "return_shipping_fee_01",
+          "quality_replacement_01",
+          "return_fresh_01",
+          "quality_policy_01",
+          "refund_partial_01"
+        ],
+        "latency_seconds": 0.361818,
+        "rank": 1,
+        "rerank_score": 0.9829220771789551,
+        "retrieved_evidence": [
+          {
+            "id": "return_shipping_fee_01",
+            "source_id": "return_shipping_fee_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 1,
+            "rerank_score": 0.9829220771789551,
+            "rerank_rank": 1,
+            "rerank_latency_ms": 361.788
+          },
+          {
+            "id": "quality_replacement_01",
+            "source_id": "quality_replacement_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 2,
+            "rerank_score": 0.08557488769292831,
+            "rerank_rank": 2,
+            "rerank_latency_ms": 361.788
+          },
+          {
+            "id": "return_fresh_01",
+            "source_id": "return_fresh_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 3,
+            "rerank_score": 0.015784161165356636,
+            "rerank_rank": 3,
+            "rerank_latency_ms": 361.788
+          },
+          {
+            "id": "quality_policy_01",
+            "source_id": "quality_policy_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 5,
+            "rerank_score": 0.01185682974755764,
+            "rerank_rank": 4,
+            "rerank_latency_ms": 361.788
+          },
+          {
+            "id": "refund_partial_01",
+            "source_id": "refund_partial_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 4,
+            "rerank_score": 0.0014540919801220298,
+            "rerank_rank": 5,
+            "rerank_latency_ms": 361.788
+          }
+        ],
+        "failure_type": null
+      },
+      {
+        "id": "eval_010",
+        "query": "物流已经超过48小时没有更新怎么办？",
+        "ground_truth": [
+          "shipping_no_update_01"
+        ],
+        "relevant_ids": [
+          "shipping_no_update_01"
+        ],
+        "answerable": true,
+        "retrieved_ids": [
+          "shipping_no_update_01",
+          "shipping_delay_01",
+          "shipping_split_01",
+          "shipping_tracking_01",
+          "quality_warranty_01"
+        ],
+        "latency_seconds": 0.385947,
+        "rank": 1,
+        "rerank_score": 0.9954547882080078,
+        "retrieved_evidence": [
+          {
+            "id": "shipping_no_update_01",
+            "source_id": "shipping_no_update_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 1,
+            "rerank_score": 0.9954547882080078,
+            "rerank_rank": 1,
+            "rerank_latency_ms": 385.917
+          },
+          {
+            "id": "shipping_delay_01",
+            "source_id": "shipping_delay_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 4,
+            "rerank_score": 0.02476489171385765,
+            "rerank_rank": 2,
+            "rerank_latency_ms": 385.917
+          },
+          {
+            "id": "shipping_split_01",
+            "source_id": "shipping_split_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 5,
+            "rerank_score": 0.0033458599355071783,
+            "rerank_rank": 3,
+            "rerank_latency_ms": 385.917
+          },
+          {
+            "id": "shipping_tracking_01",
+            "source_id": "shipping_tracking_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 3,
+            "rerank_score": 0.0022768096532672644,
+            "rerank_rank": 4,
+            "rerank_latency_ms": 385.917
+          },
+          {
+            "id": "quality_warranty_01",
+            "source_id": "quality_warranty_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 2,
+            "rerank_score": 0.0004406020452734083,
+            "rerank_rank": 5,
+            "rerank_latency_ms": 385.917
+          }
+        ],
+        "failure_type": null
+      },
+      {
+        "id": "eval_011",
+        "query": "天气导致快递晚到了，预计时间怎么看？",
+        "ground_truth": [
+          "shipping_delay_01"
+        ],
+        "relevant_ids": [
+          "shipping_delay_01"
+        ],
+        "answerable": true,
+        "retrieved_ids": [
+          "shipping_delay_01",
+          "refund_return_01",
+          "shipping_no_update_01",
+          "refund_general_01",
+          "refund_credit_card_01"
+        ],
+        "latency_seconds": 0.355174,
+        "rank": 1,
+        "rerank_score": 0.8512333035469055,
+        "retrieved_evidence": [
+          {
+            "id": "shipping_delay_01",
+            "source_id": "shipping_delay_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 1,
+            "rerank_score": 0.8512333035469055,
+            "rerank_rank": 1,
+            "rerank_latency_ms": 355.148
+          },
+          {
+            "id": "refund_return_01",
+            "source_id": "refund_return_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 3,
+            "rerank_score": 0.003610192332416773,
+            "rerank_rank": 2,
+            "rerank_latency_ms": 355.148
+          },
+          {
+            "id": "shipping_no_update_01",
+            "source_id": "shipping_no_update_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 5,
+            "rerank_score": 0.0023002042435109615,
+            "rerank_rank": 3,
+            "rerank_latency_ms": 355.148
+          },
+          {
+            "id": "refund_general_01",
+            "source_id": "refund_general_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 2,
+            "rerank_score": 0.0001270369830308482,
+            "rerank_rank": 4,
+            "rerank_latency_ms": 355.148
+          },
+          {
+            "id": "refund_credit_card_01",
+            "source_id": "refund_credit_card_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 4,
+            "rerank_score": 1.7944083083420992e-05,
+            "rerank_rank": 5,
+            "rerank_latency_ms": 355.148
+          }
+        ],
+        "failure_type": null
+      },
+      {
+        "id": "eval_012",
+        "query": "快递员派送失败后我该怎么处理？",
+        "ground_truth": [
+          "shipping_failed_delivery_01"
+        ],
+        "relevant_ids": [
+          "shipping_failed_delivery_01"
+        ],
+        "answerable": true,
+        "retrieved_ids": [
+          "shipping_failed_delivery_01",
+          "shipping_no_update_01",
+          "payment_failed_01",
+          "payment_pending_01",
+          "coupon_expired_01"
+        ],
+        "latency_seconds": 0.383066,
+        "rank": 1,
+        "rerank_score": 0.9916872382164001,
+        "retrieved_evidence": [
+          {
+            "id": "shipping_failed_delivery_01",
+            "source_id": "shipping_failed_delivery_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 1,
+            "rerank_score": 0.9916872382164001,
+            "rerank_rank": 1,
+            "rerank_latency_ms": 383.032
+          },
+          {
+            "id": "shipping_no_update_01",
+            "source_id": "shipping_no_update_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 3,
+            "rerank_score": 0.02818269655108452,
+            "rerank_rank": 2,
+            "rerank_latency_ms": 383.032
+          },
+          {
+            "id": "payment_failed_01",
+            "source_id": "payment_failed_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 2,
+            "rerank_score": 0.005260742735117674,
+            "rerank_rank": 3,
+            "rerank_latency_ms": 383.032
+          },
+          {
+            "id": "payment_pending_01",
+            "source_id": "payment_pending_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 4,
+            "rerank_score": 0.0024245232343673706,
+            "rerank_rank": 4,
+            "rerank_latency_ms": 383.032
+          },
+          {
+            "id": "coupon_expired_01",
+            "source_id": "coupon_expired_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 5,
+            "rerank_score": 2.6666344638215378e-05,
+            "rerank_rank": 5,
+            "rerank_latency_ms": 383.032
+          }
+        ],
+        "failure_type": null
+      },
+      {
+        "id": "eval_013",
+        "query": "已经发货了还能改收货地址吗？",
+        "ground_truth": [
+          "shipping_address_change_01"
+        ],
+        "relevant_ids": [
+          "shipping_address_change_01"
+        ],
+        "answerable": true,
+        "retrieved_ids": [
+          "shipping_address_change_01",
+          "order_modify_01",
+          "invoice_modify_01",
+          "order_split_01",
+          "order_cancel_01"
+        ],
+        "latency_seconds": 0.37558,
+        "rank": 1,
+        "rerank_score": 0.9975312352180481,
+        "retrieved_evidence": [
+          {
+            "id": "shipping_address_change_01",
+            "source_id": "shipping_address_change_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 1,
+            "rerank_score": 0.9975312352180481,
+            "rerank_rank": 1,
+            "rerank_latency_ms": 375.542
+          },
+          {
+            "id": "order_modify_01",
+            "source_id": "order_modify_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 2,
+            "rerank_score": 0.7282078862190247,
+            "rerank_rank": 2,
+            "rerank_latency_ms": 375.542
+          },
+          {
+            "id": "invoice_modify_01",
+            "source_id": "invoice_modify_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 4,
+            "rerank_score": 0.027172205969691277,
+            "rerank_rank": 3,
+            "rerank_latency_ms": 375.542
+          },
+          {
+            "id": "order_split_01",
+            "source_id": "order_split_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 5,
+            "rerank_score": 0.003115674713626504,
+            "rerank_rank": 4,
+            "rerank_latency_ms": 375.542
+          },
+          {
+            "id": "order_cancel_01",
+            "source_id": "order_cancel_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 3,
+            "rerank_score": 0.002085907617583871,
+            "rerank_rank": 5,
+            "rerank_latency_ms": 375.542
+          }
+        ],
+        "failure_type": null
+      },
+      {
+        "id": "eval_014",
+        "query": "为什么一个订单会有两个物流包裹？",
+        "ground_truth": [
+          "shipping_split_01"
+        ],
+        "relevant_ids": [
+          "shipping_split_01"
+        ],
+        "answerable": true,
+        "retrieved_ids": [
+          "shipping_split_01",
+          "order_split_01",
+          "shipping_tracking_01",
+          "shipping_no_update_01",
+          "order_modify_01"
+        ],
+        "latency_seconds": 0.304128,
+        "rank": 1,
+        "rerank_score": 0.9746195673942566,
+        "retrieved_evidence": [
+          {
+            "id": "shipping_split_01",
+            "source_id": "shipping_split_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 2,
+            "rerank_score": 0.9746195673942566,
+            "rerank_rank": 1,
+            "rerank_latency_ms": 304.098
+          },
+          {
+            "id": "order_split_01",
+            "source_id": "order_split_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 1,
+            "rerank_score": 0.9328942894935608,
+            "rerank_rank": 2,
+            "rerank_latency_ms": 304.098
+          },
+          {
+            "id": "shipping_tracking_01",
+            "source_id": "shipping_tracking_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 3,
+            "rerank_score": 0.0007702979492023587,
+            "rerank_rank": 3,
+            "rerank_latency_ms": 304.098
+          },
+          {
+            "id": "shipping_no_update_01",
+            "source_id": "shipping_no_update_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 4,
+            "rerank_score": 0.0005706294323317707,
+            "rerank_rank": 4,
+            "rerank_latency_ms": 304.098
+          },
+          {
+            "id": "order_modify_01",
+            "source_id": "order_modify_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 5,
+            "rerank_score": 0.00015602847270201892,
+            "rerank_rank": 5,
+            "rerank_latency_ms": 304.098
+          }
+        ],
+        "failure_type": null
+      },
+      {
+        "id": "eval_015",
+        "query": "商品有质量问题应该怎么处理？",
+        "ground_truth": [
+          "quality_policy_01"
+        ],
+        "relevant_ids": [
+          "quality_policy_01"
+        ],
+        "answerable": true,
+        "retrieved_ids": [
+          "quality_policy_01",
+          "quality_replacement_01",
+          "quality_photo_01",
+          "return_fresh_01",
+          "quality_repair_01"
+        ],
+        "latency_seconds": 0.309265,
+        "rank": 1,
+        "rerank_score": 0.975243091583252,
+        "retrieved_evidence": [
+          {
+            "id": "quality_policy_01",
+            "source_id": "quality_policy_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 1,
+            "rerank_score": 0.975243091583252,
+            "rerank_rank": 1,
+            "rerank_latency_ms": 309.239
+          },
+          {
+            "id": "quality_replacement_01",
+            "source_id": "quality_replacement_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 2,
+            "rerank_score": 0.9148604273796082,
+            "rerank_rank": 2,
+            "rerank_latency_ms": 309.239
+          },
+          {
+            "id": "quality_photo_01",
+            "source_id": "quality_photo_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 3,
+            "rerank_score": 0.3019692301750183,
+            "rerank_rank": 3,
+            "rerank_latency_ms": 309.239
+          },
+          {
+            "id": "return_fresh_01",
+            "source_id": "return_fresh_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 5,
+            "rerank_score": 0.17409810423851013,
+            "rerank_rank": 4,
+            "rerank_latency_ms": 309.239
+          },
+          {
+            "id": "quality_repair_01",
+            "source_id": "quality_repair_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 4,
+            "rerank_score": 0.12510322034358978,
+            "rerank_rank": 5,
+            "rerank_latency_ms": 309.239
+          }
+        ],
+        "failure_type": null
+      },
+      {
+        "id": "eval_016",
+        "query": "申请质量售后需要拍哪些凭证？",
+        "ground_truth": [
+          "quality_photo_01"
+        ],
+        "relevant_ids": [
+          "quality_photo_01"
+        ],
+        "answerable": true,
+        "retrieved_ids": [
+          "quality_photo_01",
+          "quality_policy_01",
+          "return_fresh_01",
+          "quality_replacement_01",
+          "quality_consumable_01"
+        ],
+        "latency_seconds": 0.358617,
+        "rank": 1,
+        "rerank_score": 0.951752245426178,
+        "retrieved_evidence": [
+          {
+            "id": "quality_photo_01",
+            "source_id": "quality_photo_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 1,
+            "rerank_score": 0.951752245426178,
+            "rerank_rank": 1,
+            "rerank_latency_ms": 358.592
+          },
+          {
+            "id": "quality_policy_01",
+            "source_id": "quality_policy_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 2,
+            "rerank_score": 0.7453009486198425,
+            "rerank_rank": 2,
+            "rerank_latency_ms": 358.592
+          },
+          {
+            "id": "return_fresh_01",
+            "source_id": "return_fresh_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 4,
+            "rerank_score": 0.08580666780471802,
+            "rerank_rank": 3,
+            "rerank_latency_ms": 358.592
+          },
+          {
+            "id": "quality_replacement_01",
+            "source_id": "quality_replacement_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 3,
+            "rerank_score": 0.019557151943445206,
+            "rerank_rank": 4,
+            "rerank_latency_ms": 358.592
+          },
+          {
+            "id": "quality_consumable_01",
+            "source_id": "quality_consumable_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 5,
+            "rerank_score": 0.007890689186751842,
+            "rerank_rank": 5,
+            "rerank_latency_ms": 358.592
+          }
+        ],
+        "failure_type": null
+      },
+      {
+        "id": "eval_017",
+        "query": "质量问题可以安排维修吗？",
+        "ground_truth": [
+          "quality_repair_01"
+        ],
+        "relevant_ids": [
+          "quality_repair_01"
+        ],
+        "answerable": true,
+        "retrieved_ids": [
+          "quality_repair_01",
+          "quality_policy_01",
+          "quality_photo_01",
+          "quality_replacement_01",
+          "quality_warranty_01"
+        ],
+        "latency_seconds": 0.319858,
+        "rank": 1,
+        "rerank_score": 0.9935247898101807,
+        "retrieved_evidence": [
+          {
+            "id": "quality_repair_01",
+            "source_id": "quality_repair_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 1,
+            "rerank_score": 0.9935247898101807,
+            "rerank_rank": 1,
+            "rerank_latency_ms": 319.829
+          },
+          {
+            "id": "quality_policy_01",
+            "source_id": "quality_policy_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 4,
+            "rerank_score": 0.12491460144519806,
+            "rerank_rank": 2,
+            "rerank_latency_ms": 319.829
+          },
+          {
+            "id": "quality_photo_01",
+            "source_id": "quality_photo_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 3,
+            "rerank_score": 0.0735202357172966,
+            "rerank_rank": 3,
+            "rerank_latency_ms": 319.829
+          },
+          {
+            "id": "quality_replacement_01",
+            "source_id": "quality_replacement_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 2,
+            "rerank_score": 0.05829472467303276,
+            "rerank_rank": 4,
+            "rerank_latency_ms": 319.829
+          },
+          {
+            "id": "quality_warranty_01",
+            "source_id": "quality_warranty_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 5,
+            "rerank_score": 0.0029703956097364426,
+            "rerank_rank": 5,
+            "rerank_latency_ms": 319.829
+          }
+        ],
+        "failure_type": null
+      },
+      {
+        "id": "eval_018",
+        "query": "商品坏了能不能换货？",
+        "ground_truth": [
+          "quality_replacement_01"
+        ],
+        "relevant_ids": [
+          "quality_replacement_01"
+        ],
+        "answerable": true,
+        "retrieved_ids": [
+          "quality_replacement_01",
+          "return_general_01",
+          "return_fresh_01",
+          "quality_warranty_01",
+          "shipping_address_change_01"
+        ],
+        "latency_seconds": 0.352925,
+        "rank": 1,
+        "rerank_score": 0.903018057346344,
+        "retrieved_evidence": [
+          {
+            "id": "quality_replacement_01",
+            "source_id": "quality_replacement_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 1,
+            "rerank_score": 0.903018057346344,
+            "rerank_rank": 1,
+            "rerank_latency_ms": 352.896
+          },
+          {
+            "id": "return_general_01",
+            "source_id": "return_general_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 3,
+            "rerank_score": 0.24391019344329834,
+            "rerank_rank": 2,
+            "rerank_latency_ms": 352.896
+          },
+          {
+            "id": "return_fresh_01",
+            "source_id": "return_fresh_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 5,
+            "rerank_score": 0.1712951809167862,
+            "rerank_rank": 3,
+            "rerank_latency_ms": 352.896
+          },
+          {
+            "id": "quality_warranty_01",
+            "source_id": "quality_warranty_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 2,
+            "rerank_score": 0.029549695551395416,
+            "rerank_rank": 4,
+            "rerank_latency_ms": 352.896
+          },
+          {
+            "id": "shipping_address_change_01",
+            "source_id": "shipping_address_change_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 4,
+            "rerank_score": 0.01274570357054472,
+            "rerank_rank": 5,
+            "rerank_latency_ms": 352.896
+          }
+        ],
+        "failure_type": null
+      },
+      {
+        "id": "eval_019",
+        "query": "这个商品的保修期怎么确认？",
+        "ground_truth": [
+          "quality_warranty_01"
+        ],
+        "relevant_ids": [
+          "quality_warranty_01"
+        ],
+        "answerable": true,
+        "retrieved_ids": [
+          "quality_warranty_01",
+          "quality_replacement_01",
+          "quality_repair_01",
+          "refund_return_01",
+          "refund_partial_01"
+        ],
+        "latency_seconds": 0.350443,
+        "rank": 1,
+        "rerank_score": 0.8168342113494873,
+        "retrieved_evidence": [
+          {
+            "id": "quality_warranty_01",
+            "source_id": "quality_warranty_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 1,
+            "rerank_score": 0.8168342113494873,
+            "rerank_rank": 1,
+            "rerank_latency_ms": 350.417
+          },
+          {
+            "id": "quality_replacement_01",
+            "source_id": "quality_replacement_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 4,
+            "rerank_score": 0.02676861174404621,
+            "rerank_rank": 2,
+            "rerank_latency_ms": 350.417
+          },
+          {
+            "id": "quality_repair_01",
+            "source_id": "quality_repair_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 3,
+            "rerank_score": 0.022865481674671173,
+            "rerank_rank": 3,
+            "rerank_latency_ms": 350.417
+          },
+          {
+            "id": "refund_return_01",
+            "source_id": "refund_return_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 5,
+            "rerank_score": 0.009330340661108494,
+            "rerank_rank": 4,
+            "rerank_latency_ms": 350.417
+          },
+          {
+            "id": "refund_partial_01",
+            "source_id": "refund_partial_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 2,
+            "rerank_score": 0.0004178228846285492,
+            "rerank_rank": 5,
+            "rerank_latency_ms": 350.417
+          }
+        ],
+        "failure_type": null
+      },
+      {
+        "id": "eval_020",
+        "query": "订单还没发货，我想取消订单怎么办？",
+        "ground_truth": [
+          "order_cancel_01"
+        ],
+        "relevant_ids": [
+          "order_cancel_01"
+        ],
+        "answerable": true,
+        "retrieved_ids": [
+          "order_cancel_01",
+          "order_modify_01",
+          "order_split_01",
+          "order_missing_01",
+          "membership_cancel_01"
+        ],
+        "latency_seconds": 0.320232,
+        "rank": 1,
+        "rerank_score": 0.9940841794013977,
+        "retrieved_evidence": [
+          {
+            "id": "order_cancel_01",
+            "source_id": "order_cancel_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 1,
+            "rerank_score": 0.9940841794013977,
+            "rerank_rank": 1,
+            "rerank_latency_ms": 320.204
+          },
+          {
+            "id": "order_modify_01",
+            "source_id": "order_modify_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 2,
+            "rerank_score": 0.8808785080909729,
+            "rerank_rank": 2,
+            "rerank_latency_ms": 320.204
+          },
+          {
+            "id": "order_split_01",
+            "source_id": "order_split_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 5,
+            "rerank_score": 0.15058940649032593,
+            "rerank_rank": 3,
+            "rerank_latency_ms": 320.204
+          },
+          {
+            "id": "order_missing_01",
+            "source_id": "order_missing_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 4,
+            "rerank_score": 0.021078022196888924,
+            "rerank_rank": 4,
+            "rerank_latency_ms": 320.204
+          },
+          {
+            "id": "membership_cancel_01",
+            "source_id": "membership_cancel_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 3,
+            "rerank_score": 0.0018388525350019336,
+            "rerank_rank": 5,
+            "rerank_latency_ms": 320.204
+          }
+        ],
+        "failure_type": null
+      },
+      {
+        "id": "eval_021",
+        "query": "在哪里能看到订单现在是什么状态？",
+        "ground_truth": [
+          "order_status_01"
+        ],
+        "relevant_ids": [
+          "order_status_01"
+        ],
+        "answerable": true,
+        "retrieved_ids": [
+          "order_status_01",
+          "shipping_tracking_01",
+          "order_split_01",
+          "order_cancel_01",
+          "order_modify_01"
+        ],
+        "latency_seconds": 0.283712,
+        "rank": 1,
+        "rerank_score": 0.9857906103134155,
+        "retrieved_evidence": [
+          {
+            "id": "order_status_01",
+            "source_id": "order_status_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 1,
+            "rerank_score": 0.9857906103134155,
+            "rerank_rank": 1,
+            "rerank_latency_ms": 283.687
+          },
+          {
+            "id": "shipping_tracking_01",
+            "source_id": "shipping_tracking_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 3,
+            "rerank_score": 0.9060817360877991,
+            "rerank_rank": 2,
+            "rerank_latency_ms": 283.687
+          },
+          {
+            "id": "order_split_01",
+            "source_id": "order_split_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 4,
+            "rerank_score": 0.8316277265548706,
+            "rerank_rank": 3,
+            "rerank_latency_ms": 283.687
+          },
+          {
+            "id": "order_cancel_01",
+            "source_id": "order_cancel_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 2,
+            "rerank_score": 0.17684467136859894,
+            "rerank_rank": 4,
+            "rerank_latency_ms": 283.687
+          },
+          {
+            "id": "order_modify_01",
+            "source_id": "order_modify_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 5,
+            "rerank_score": 0.0007950660074129701,
+            "rerank_rank": 5,
+            "rerank_latency_ms": 283.687
+          }
+        ],
+        "failure_type": null
+      },
+      {
+        "id": "eval_022",
+        "query": "订单没发货可以改收货人电话吗？",
+        "ground_truth": [
+          "order_modify_01"
+        ],
+        "relevant_ids": [
+          "order_modify_01"
+        ],
+        "answerable": true,
+        "retrieved_ids": [
+          "order_modify_01",
+          "shipping_address_change_01",
+          "order_cancel_01",
+          "order_missing_01",
+          "order_status_01"
+        ],
+        "latency_seconds": 0.345148,
+        "rank": 1,
+        "rerank_score": 0.9964324235916138,
+        "retrieved_evidence": [
+          {
+            "id": "order_modify_01",
+            "source_id": "order_modify_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 1,
+            "rerank_score": 0.9964324235916138,
+            "rerank_rank": 1,
+            "rerank_latency_ms": 345.12
+          },
+          {
+            "id": "shipping_address_change_01",
+            "source_id": "shipping_address_change_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 2,
+            "rerank_score": 0.7225813865661621,
+            "rerank_rank": 2,
+            "rerank_latency_ms": 345.12
+          },
+          {
+            "id": "order_cancel_01",
+            "source_id": "order_cancel_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 3,
+            "rerank_score": 0.057542845606803894,
+            "rerank_rank": 3,
+            "rerank_latency_ms": 345.12
+          },
+          {
+            "id": "order_missing_01",
+            "source_id": "order_missing_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 4,
+            "rerank_score": 0.007325444836169481,
+            "rerank_rank": 4,
+            "rerank_latency_ms": 345.12
+          },
+          {
+            "id": "order_status_01",
+            "source_id": "order_status_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 5,
+            "rerank_score": 0.0017482126131653786,
+            "rerank_rank": 5,
+            "rerank_latency_ms": 345.12
+          }
+        ],
+        "failure_type": null
+      },
+      {
+        "id": "eval_023",
+        "query": "支付失败后要不要重新付款？",
+        "ground_truth": [
+          "payment_failed_01"
+        ],
+        "relevant_ids": [
+          "payment_failed_01"
+        ],
+        "answerable": true,
+        "retrieved_ids": [
+          "payment_failed_01",
+          "payment_pending_01",
+          "refund_coupon_01",
+          "shipping_failed_delivery_01",
+          "refund_partial_01"
+        ],
+        "latency_seconds": 0.34923,
+        "rank": 1,
+        "rerank_score": 0.9024541974067688,
+        "retrieved_evidence": [
+          {
+            "id": "payment_failed_01",
+            "source_id": "payment_failed_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 1,
+            "rerank_score": 0.9024541974067688,
+            "rerank_rank": 1,
+            "rerank_latency_ms": 349.204
+          },
+          {
+            "id": "payment_pending_01",
+            "source_id": "payment_pending_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 4,
+            "rerank_score": 0.2713066637516022,
+            "rerank_rank": 2,
+            "rerank_latency_ms": 349.204
+          },
+          {
+            "id": "refund_coupon_01",
+            "source_id": "refund_coupon_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 5,
+            "rerank_score": 0.0018359387759119272,
+            "rerank_rank": 3,
+            "rerank_latency_ms": 349.204
+          },
+          {
+            "id": "shipping_failed_delivery_01",
+            "source_id": "shipping_failed_delivery_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 2,
+            "rerank_score": 0.0018216808093711734,
+            "rerank_rank": 4,
+            "rerank_latency_ms": 349.204
+          },
+          {
+            "id": "refund_partial_01",
+            "source_id": "refund_partial_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 3,
+            "rerank_score": 0.0010653670178726315,
+            "rerank_rank": 5,
+            "rerank_latency_ms": 349.204
+          }
+        ],
+        "failure_type": null
+      },
+      {
+        "id": "eval_024",
+        "query": "同一笔订单被扣了两次钱怎么办？",
+        "ground_truth": [
+          "payment_duplicate_01"
+        ],
+        "relevant_ids": [
+          "payment_duplicate_01"
+        ],
+        "answerable": true,
+        "retrieved_ids": [
+          "payment_duplicate_01",
+          "refund_coupon_01",
+          "order_split_01",
+          "order_cancel_01",
+          "order_status_01"
+        ],
+        "latency_seconds": 0.368547,
+        "rank": 1,
+        "rerank_score": 0.9848671555519104,
+        "retrieved_evidence": [
+          {
+            "id": "payment_duplicate_01",
+            "source_id": "payment_duplicate_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 5,
+            "rerank_score": 0.9848671555519104,
+            "rerank_rank": 1,
+            "rerank_latency_ms": 368.518
+          },
+          {
+            "id": "refund_coupon_01",
+            "source_id": "refund_coupon_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 3,
+            "rerank_score": 0.05028719827532768,
+            "rerank_rank": 2,
+            "rerank_latency_ms": 368.518
+          },
+          {
+            "id": "order_split_01",
+            "source_id": "order_split_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 1,
+            "rerank_score": 0.004597425926476717,
+            "rerank_rank": 3,
+            "rerank_latency_ms": 368.518
+          },
+          {
+            "id": "order_cancel_01",
+            "source_id": "order_cancel_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 4,
+            "rerank_score": 0.0034676375798881054,
+            "rerank_rank": 4,
+            "rerank_latency_ms": 368.518
+          },
+          {
+            "id": "order_status_01",
+            "source_id": "order_status_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 2,
+            "rerank_score": 0.0001430260599590838,
+            "rerank_rank": 5,
+            "rerank_latency_ms": 368.518
+          }
+        ],
+        "failure_type": null
+      },
+      {
+        "id": "eval_025",
+        "query": "支付页面一直显示处理中怎么办？",
+        "ground_truth": [
+          "payment_pending_01"
+        ],
+        "relevant_ids": [
+          "payment_pending_01"
+        ],
+        "answerable": true,
+        "retrieved_ids": [
+          "payment_pending_01",
+          "payment_failed_01",
+          "payment_method_01",
+          "order_missing_01",
+          "payment_duplicate_01"
+        ],
+        "latency_seconds": 0.343908,
+        "rank": 1,
+        "rerank_score": 0.9464300274848938,
+        "retrieved_evidence": [
+          {
+            "id": "payment_pending_01",
+            "source_id": "payment_pending_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 1,
+            "rerank_score": 0.9464300274848938,
+            "rerank_rank": 1,
+            "rerank_latency_ms": 343.881
+          },
+          {
+            "id": "payment_failed_01",
+            "source_id": "payment_failed_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 3,
+            "rerank_score": 0.08859117329120636,
+            "rerank_rank": 2,
+            "rerank_latency_ms": 343.881
+          },
+          {
+            "id": "payment_method_01",
+            "source_id": "payment_method_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 4,
+            "rerank_score": 0.024688616394996643,
+            "rerank_rank": 3,
+            "rerank_latency_ms": 343.881
+          },
+          {
+            "id": "order_missing_01",
+            "source_id": "order_missing_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 5,
+            "rerank_score": 0.01558775082230568,
+            "rerank_rank": 4,
+            "rerank_latency_ms": 343.881
+          },
+          {
+            "id": "payment_duplicate_01",
+            "source_id": "payment_duplicate_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 2,
+            "rerank_score": 0.00999497715383768,
+            "rerank_rank": 5,
+            "rerank_latency_ms": 343.881
+          }
+        ],
+        "failure_type": null
+      },
+      {
+        "id": "eval_026",
+        "query": "优惠券要满足什么条件才能使用？",
+        "ground_truth": [
+          "coupon_usage_01"
+        ],
+        "relevant_ids": [
+          "coupon_usage_01"
+        ],
+        "answerable": true,
+        "retrieved_ids": [
+          "coupon_usage_01",
+          "coupon_expired_01",
+          "coupon_stack_01",
+          "refund_coupon_01",
+          "invoice_download_01"
+        ],
+        "latency_seconds": 0.352259,
+        "rank": 1,
+        "rerank_score": 0.9921063184738159,
+        "retrieved_evidence": [
+          {
+            "id": "coupon_usage_01",
+            "source_id": "coupon_usage_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 1,
+            "rerank_score": 0.9921063184738159,
+            "rerank_rank": 1,
+            "rerank_latency_ms": 352.232
+          },
+          {
+            "id": "coupon_expired_01",
+            "source_id": "coupon_expired_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 4,
+            "rerank_score": 0.5334256291389465,
+            "rerank_rank": 2,
+            "rerank_latency_ms": 352.232
+          },
+          {
+            "id": "coupon_stack_01",
+            "source_id": "coupon_stack_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 2,
+            "rerank_score": 0.2098800241947174,
+            "rerank_rank": 3,
+            "rerank_latency_ms": 352.232
+          },
+          {
+            "id": "refund_coupon_01",
+            "source_id": "refund_coupon_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 3,
+            "rerank_score": 0.02224653959274292,
+            "rerank_rank": 4,
+            "rerank_latency_ms": 352.232
+          },
+          {
+            "id": "invoice_download_01",
+            "source_id": "invoice_download_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 5,
+            "rerank_score": 0.0033261626958847046,
+            "rerank_rank": 5,
+            "rerank_latency_ms": 352.232
+          }
+        ],
+        "failure_type": null
+      },
+      {
+        "id": "eval_027",
+        "query": "优惠券过期了还能补发吗？",
+        "ground_truth": [
+          "coupon_expired_01"
+        ],
+        "relevant_ids": [
+          "coupon_expired_01"
+        ],
+        "answerable": true,
+        "retrieved_ids": [
+          "coupon_expired_01",
+          "coupon_usage_01",
+          "refund_coupon_01",
+          "coupon_stack_01",
+          "membership_points_01"
+        ],
+        "latency_seconds": 0.393882,
+        "rank": 1,
+        "rerank_score": 0.9966369867324829,
+        "retrieved_evidence": [
+          {
+            "id": "coupon_expired_01",
+            "source_id": "coupon_expired_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 1,
+            "rerank_score": 0.9966369867324829,
+            "rerank_rank": 1,
+            "rerank_latency_ms": 393.849
+          },
+          {
+            "id": "coupon_usage_01",
+            "source_id": "coupon_usage_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 4,
+            "rerank_score": 0.5849282145500183,
+            "rerank_rank": 2,
+            "rerank_latency_ms": 393.849
+          },
+          {
+            "id": "refund_coupon_01",
+            "source_id": "refund_coupon_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 2,
+            "rerank_score": 0.2872700095176697,
+            "rerank_rank": 3,
+            "rerank_latency_ms": 393.849
+          },
+          {
+            "id": "coupon_stack_01",
+            "source_id": "coupon_stack_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 3,
+            "rerank_score": 0.03238232061266899,
+            "rerank_rank": 4,
+            "rerank_latency_ms": 393.849
+          },
+          {
+            "id": "membership_points_01",
+            "source_id": "membership_points_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 5,
+            "rerank_score": 0.0014769005356356502,
+            "rerank_rank": 5,
+            "rerank_latency_ms": 393.849
+          }
+        ],
+        "failure_type": null
+      },
+      {
+        "id": "eval_028",
+        "query": "电子发票在哪里下载？",
+        "ground_truth": [
+          "invoice_download_01"
+        ],
+        "relevant_ids": [
+          "invoice_download_01"
+        ],
+        "answerable": true,
+        "retrieved_ids": [
+          "invoice_download_01",
+          "invoice_type_01",
+          "invoice_modify_01",
+          "shipping_pickup_01",
+          "coupon_expired_01"
+        ],
+        "latency_seconds": 0.313483,
+        "rank": 1,
+        "rerank_score": 0.9754765033721924,
+        "retrieved_evidence": [
+          {
+            "id": "invoice_download_01",
+            "source_id": "invoice_download_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 1,
+            "rerank_score": 0.9754765033721924,
+            "rerank_rank": 1,
+            "rerank_latency_ms": 313.454
+          },
+          {
+            "id": "invoice_type_01",
+            "source_id": "invoice_type_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 2,
+            "rerank_score": 0.002181109506636858,
+            "rerank_rank": 2,
+            "rerank_latency_ms": 313.454
+          },
+          {
+            "id": "invoice_modify_01",
+            "source_id": "invoice_modify_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 3,
+            "rerank_score": 0.00020539567049127072,
+            "rerank_rank": 3,
+            "rerank_latency_ms": 313.454
+          },
+          {
+            "id": "shipping_pickup_01",
+            "source_id": "shipping_pickup_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 4,
+            "rerank_score": 5.611000597127713e-05,
+            "rerank_rank": 4,
+            "rerank_latency_ms": 313.454
+          },
+          {
+            "id": "coupon_expired_01",
+            "source_id": "coupon_expired_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 5,
+            "rerank_score": 1.628556492505595e-05,
+            "rerank_rank": 5,
+            "rerank_latency_ms": 313.454
+          }
+        ],
+        "failure_type": null
+      },
+      {
+        "id": "eval_029",
+        "query": "发票开出来后发现抬头写错了怎么办？",
+        "ground_truth": [
+          "invoice_modify_01"
+        ],
+        "relevant_ids": [
+          "invoice_modify_01"
+        ],
+        "answerable": true,
+        "retrieved_ids": [
+          "invoice_modify_01",
+          "invoice_type_01",
+          "invoice_download_01",
+          "refund_coupon_01",
+          "membership_points_01"
+        ],
+        "latency_seconds": 0.383201,
+        "rank": 1,
+        "rerank_score": 0.9937790036201477,
+        "retrieved_evidence": [
+          {
+            "id": "invoice_modify_01",
+            "source_id": "invoice_modify_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 1,
+            "rerank_score": 0.9937790036201477,
+            "rerank_rank": 1,
+            "rerank_latency_ms": 383.175
+          },
+          {
+            "id": "invoice_type_01",
+            "source_id": "invoice_type_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 3,
+            "rerank_score": 0.3466254770755768,
+            "rerank_rank": 2,
+            "rerank_latency_ms": 383.175
+          },
+          {
+            "id": "invoice_download_01",
+            "source_id": "invoice_download_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 4,
+            "rerank_score": 0.0006756003713235259,
+            "rerank_rank": 3,
+            "rerank_latency_ms": 383.175
+          },
+          {
+            "id": "refund_coupon_01",
+            "source_id": "refund_coupon_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 5,
+            "rerank_score": 9.057564602699131e-05,
+            "rerank_rank": 4,
+            "rerank_latency_ms": 383.175
+          },
+          {
+            "id": "membership_points_01",
+            "source_id": "membership_points_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 2,
+            "rerank_score": 2.4968849174911156e-05,
+            "rerank_rank": 5,
+            "rerank_latency_ms": 383.175
+          }
+        ],
+        "failure_type": null
+      },
+      {
+        "id": "eval_030",
+        "query": "会员有哪些专属权益？",
+        "ground_truth": [
+          "membership_benefits_01"
+        ],
+        "relevant_ids": [
+          "membership_benefits_01"
+        ],
+        "answerable": true,
+        "retrieved_ids": [
+          "membership_benefits_01",
+          "membership_cancel_01",
+          "refund_partial_01",
+          "membership_points_01",
+          "shipping_address_change_01"
+        ],
+        "latency_seconds": 0.285436,
+        "rank": 1,
+        "rerank_score": 0.9908099174499512,
+        "retrieved_evidence": [
+          {
+            "id": "membership_benefits_01",
+            "source_id": "membership_benefits_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 1,
+            "rerank_score": 0.9908099174499512,
+            "rerank_rank": 1,
+            "rerank_latency_ms": 285.398
+          },
+          {
+            "id": "membership_cancel_01",
+            "source_id": "membership_cancel_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 2,
+            "rerank_score": 0.0258006788790226,
+            "rerank_rank": 2,
+            "rerank_latency_ms": 285.398
+          },
+          {
+            "id": "refund_partial_01",
+            "source_id": "refund_partial_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 4,
+            "rerank_score": 0.00024292901798617095,
+            "rerank_rank": 3,
+            "rerank_latency_ms": 285.398
+          },
+          {
+            "id": "membership_points_01",
+            "source_id": "membership_points_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 3,
+            "rerank_score": 2.3004753529676236e-05,
+            "rerank_rank": 4,
+            "rerank_latency_ms": 285.398
+          },
+          {
+            "id": "shipping_address_change_01",
+            "source_id": "shipping_address_change_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 5,
+            "rerank_score": 1.6225711078732274e-05,
+            "rerank_rank": 5,
+            "rerank_latency_ms": 285.398
+          }
+        ],
+        "failure_type": null
+      },
+      {
+        "id": "eval_031",
+        "query": "可以把订单配送到日本吗？",
+        "ground_truth": [],
+        "relevant_ids": [],
+        "answerable": false,
+        "retrieved_ids": [
+          "order_modify_01",
+          "shipping_address_change_01",
+          "shipping_delay_01",
+          "refund_credit_card_01",
+          "membership_points_01"
+        ],
+        "latency_seconds": 0.33032,
+        "rank": null,
+        "rerank_score": null,
+        "retrieved_evidence": [
+          {
+            "id": "order_modify_01",
+            "source_id": "order_modify_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 2,
+            "rerank_score": 0.0028710735496133566,
+            "rerank_rank": 1,
+            "rerank_latency_ms": 330.29
+          },
+          {
+            "id": "shipping_address_change_01",
+            "source_id": "shipping_address_change_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 4,
+            "rerank_score": 0.0023327399976551533,
+            "rerank_rank": 2,
+            "rerank_latency_ms": 330.29
+          },
+          {
+            "id": "shipping_delay_01",
+            "source_id": "shipping_delay_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 1,
+            "rerank_score": 0.0013793966500088573,
+            "rerank_rank": 3,
+            "rerank_latency_ms": 330.29
+          },
+          {
+            "id": "refund_credit_card_01",
+            "source_id": "refund_credit_card_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 5,
+            "rerank_score": 0.00023872418387327343,
+            "rerank_rank": 4,
+            "rerank_latency_ms": 330.29
+          },
+          {
+            "id": "membership_points_01",
+            "source_id": "membership_points_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 3,
+            "rerank_score": 5.734197475248948e-05,
+            "rerank_rank": 5,
+            "rerank_latency_ms": 330.29
+          }
+        ],
+        "failure_type": "NO_ANSWER_FALSE_POSITIVE"
+      },
+      {
+        "id": "eval_032",
+        "query": "商品甲醛超标应该依据什么检测标准？",
+        "ground_truth": [],
+        "relevant_ids": [],
+        "answerable": false,
+        "retrieved_ids": [
+          "quality_repair_01",
+          "quality_consumable_01",
+          "quality_replacement_01",
+          "quality_warranty_01",
+          "quality_policy_01"
+        ],
+        "latency_seconds": 0.355459,
+        "rank": null,
+        "rerank_score": null,
+        "retrieved_evidence": [
+          {
+            "id": "quality_repair_01",
+            "source_id": "quality_repair_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 2,
+            "rerank_score": 0.000751105195377022,
+            "rerank_rank": 1,
+            "rerank_latency_ms": 355.42
+          },
+          {
+            "id": "quality_consumable_01",
+            "source_id": "quality_consumable_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 1,
+            "rerank_score": 0.0006816029781475663,
+            "rerank_rank": 2,
+            "rerank_latency_ms": 355.42
+          },
+          {
+            "id": "quality_replacement_01",
+            "source_id": "quality_replacement_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 3,
+            "rerank_score": 0.0003781752602662891,
+            "rerank_rank": 3,
+            "rerank_latency_ms": 355.42
+          },
+          {
+            "id": "quality_warranty_01",
+            "source_id": "quality_warranty_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 4,
+            "rerank_score": 0.0003045012126676738,
+            "rerank_rank": 4,
+            "rerank_latency_ms": 355.42
+          },
+          {
+            "id": "quality_policy_01",
+            "source_id": "quality_policy_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 5,
+            "rerank_score": 0.00015671942674089223,
+            "rerank_rank": 5,
+            "rerank_latency_ms": 355.42
+          }
+        ],
+        "failure_type": "NO_ANSWER_FALSE_POSITIVE"
+      },
+      {
+        "id": "eval_033",
+        "query": "如何绑定银行卡自动还款？",
+        "ground_truth": [],
+        "relevant_ids": [],
+        "answerable": false,
+        "retrieved_ids": [
+          "payment_failed_01",
+          "refund_credit_card_01",
+          "payment_method_01",
+          "refund_coupon_01",
+          "promotion_price_01"
+        ],
+        "latency_seconds": 0.362115,
+        "rank": null,
+        "rerank_score": null,
+        "retrieved_evidence": [
+          {
+            "id": "payment_failed_01",
+            "source_id": "payment_failed_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 1,
+            "rerank_score": 0.0030603078193962574,
+            "rerank_rank": 1,
+            "rerank_latency_ms": 362.089
+          },
+          {
+            "id": "refund_credit_card_01",
+            "source_id": "refund_credit_card_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 5,
+            "rerank_score": 0.0003171013086102903,
+            "rerank_rank": 2,
+            "rerank_latency_ms": 362.089
+          },
+          {
+            "id": "payment_method_01",
+            "source_id": "payment_method_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 2,
+            "rerank_score": 0.00015669224376324564,
+            "rerank_rank": 3,
+            "rerank_latency_ms": 362.089
+          },
+          {
+            "id": "refund_coupon_01",
+            "source_id": "refund_coupon_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 3,
+            "rerank_score": 9.689700527815148e-05,
+            "rerank_rank": 4,
+            "rerank_latency_ms": 362.089
+          },
+          {
+            "id": "promotion_price_01",
+            "source_id": "promotion_price_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 4,
+            "rerank_score": 2.1187675883993506e-05,
+            "rerank_rank": 5,
+            "rerank_latency_ms": 362.089
+          }
+        ],
+        "failure_type": "NO_ANSWER_FALSE_POSITIVE"
+      },
+      {
+        "id": "eval_034",
+        "query": "会员生日礼物怎么领取？",
+        "ground_truth": [],
+        "relevant_ids": [],
+        "answerable": false,
+        "retrieved_ids": [
+          "membership_benefits_01",
+          "membership_points_01",
+          "membership_cancel_01",
+          "refund_coupon_01",
+          "coupon_stack_01"
+        ],
+        "latency_seconds": 0.349806,
+        "rank": null,
+        "rerank_score": null,
+        "retrieved_evidence": [
+          {
+            "id": "membership_benefits_01",
+            "source_id": "membership_benefits_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 1,
+            "rerank_score": 0.011851383373141289,
+            "rerank_rank": 1,
+            "rerank_latency_ms": 349.781
+          },
+          {
+            "id": "membership_points_01",
+            "source_id": "membership_points_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 5,
+            "rerank_score": 0.0014651748351752758,
+            "rerank_rank": 2,
+            "rerank_latency_ms": 349.781
+          },
+          {
+            "id": "membership_cancel_01",
+            "source_id": "membership_cancel_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 2,
+            "rerank_score": 0.0005005858256481588,
+            "rerank_rank": 3,
+            "rerank_latency_ms": 349.781
+          },
+          {
+            "id": "refund_coupon_01",
+            "source_id": "refund_coupon_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 4,
+            "rerank_score": 0.0002803331008180976,
+            "rerank_rank": 4,
+            "rerank_latency_ms": 349.781
+          },
+          {
+            "id": "coupon_stack_01",
+            "source_id": "coupon_stack_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 3,
+            "rerank_score": 0.00016257433162536472,
+            "rerank_rank": 5,
+            "rerank_latency_ms": 349.781
+          }
+        ],
+        "failure_type": "NO_ANSWER_FALSE_POSITIVE"
+      },
+      {
+        "id": "eval_035",
+        "query": "可以开具增值税专用发票吗？",
+        "ground_truth": [],
+        "relevant_ids": [],
+        "answerable": false,
+        "retrieved_ids": [
+          "invoice_modify_01",
+          "invoice_download_01",
+          "payment_method_01",
+          "refund_partial_01",
+          "shipping_tracking_01"
+        ],
+        "latency_seconds": 0.34785,
+        "rank": null,
+        "rerank_score": null,
+        "retrieved_evidence": [
+          {
+            "id": "invoice_modify_01",
+            "source_id": "invoice_modify_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 1,
+            "rerank_score": 0.054966822266578674,
+            "rerank_rank": 1,
+            "rerank_latency_ms": 347.824
+          },
+          {
+            "id": "invoice_download_01",
+            "source_id": "invoice_download_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 5,
+            "rerank_score": 0.04544604942202568,
+            "rerank_rank": 2,
+            "rerank_latency_ms": 347.824
+          },
+          {
+            "id": "payment_method_01",
+            "source_id": "payment_method_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 2,
+            "rerank_score": 0.00010719918645918369,
+            "rerank_rank": 3,
+            "rerank_latency_ms": 347.824
+          },
+          {
+            "id": "refund_partial_01",
+            "source_id": "refund_partial_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 4,
+            "rerank_score": 9.428254270460457e-05,
+            "rerank_rank": 4,
+            "rerank_latency_ms": 347.824
+          },
+          {
+            "id": "shipping_tracking_01",
+            "source_id": "shipping_tracking_01",
+            "source_version": "1.0",
+            "retrieval_method": "rrf",
+            "original_rank": 3,
+            "rerank_score": 1.6251340639428236e-05,
+            "rerank_rank": 5,
+            "rerank_latency_ms": 347.824
+          }
+        ],
+        "failure_type": "NO_ANSWER_FALSE_POSITIVE"
+      }
+    ]
+  },
+  "known_cases_before_after": [
+    {
+      "id": "eval_002",
+      "query": "钱退了好几天怎么还没回来？",
+      "ground_truth": [
+        "refund_general_01"
+      ],
+      "rank_before": 2,
+      "rank_after": 1,
+      "rerank_score": 0.19030095636844635,
+      "transition": "rescued"
+    },
+    {
+      "id": "eval_007",
+      "query": "商品没拆封但不想要了可以退吗？",
+      "ground_truth": [
+        "return_general_01"
+      ],
+      "rank_before": 3,
+      "rank_after": 1,
+      "rerank_score": 0.2972234785556793,
+      "transition": "rescued"
+    },
+    {
+      "id": "eval_014",
+      "query": "为什么一个订单会有两个物流包裹？",
+      "ground_truth": [
+        "shipping_split_01"
+      ],
+      "rank_before": 2,
+      "rank_after": 1,
+      "rerank_score": 0.9746195673942566,
+      "transition": "rescued"
+    },
+    {
+      "id": "eval_024",
+      "query": "同一笔订单被扣了两次钱怎么办？",
+      "ground_truth": [
+        "payment_duplicate_01"
+      ],
+      "rank_before": 5,
+      "rank_after": 1,
+      "rerank_score": 0.9848671555519104,
+      "transition": "rescued"
+    }
+  ],
+  "rescued_cases": [
+    {
+      "id": "eval_002",
+      "query": "钱退了好几天怎么还没回来？",
+      "rank_before": 2,
+      "rank_after": 1,
+      "transition": "rescued"
+    },
+    {
+      "id": "eval_007",
+      "query": "商品没拆封但不想要了可以退吗？",
+      "rank_before": 3,
+      "rank_after": 1,
+      "transition": "rescued"
+    },
+    {
+      "id": "eval_014",
+      "query": "为什么一个订单会有两个物流包裹？",
+      "rank_before": 2,
+      "rank_after": 1,
+      "transition": "rescued"
+    },
+    {
+      "id": "eval_024",
+      "query": "同一笔订单被扣了两次钱怎么办？",
+      "rank_before": 5,
+      "rank_after": 1,
+      "transition": "rescued"
+    }
+  ],
+  "harmed_cases": [],
+  "unchanged_cases": [
+    {
+      "id": "eval_001",
+      "query": "退款一般多久到账？",
+      "rank_before": 1,
+      "rank_after": 1,
+      "transition": "unchanged"
+    },
+    {
+      "id": "eval_003",
+      "query": "信用卡退款第五天了为什么还没到账？",
+      "rank_before": 1,
+      "rank_after": 1,
+      "transition": "unchanged"
+    },
+    {
+      "id": "eval_004",
+      "query": "我用信用卡买的商品退货后，退款多久能回来？",
+      "rank_before": 1,
+      "rank_after": 1,
+      "transition": "unchanged"
+    },
+    {
+      "id": "eval_005",
+      "query": "退货退款是从寄出那天开始算吗？",
+      "rank_before": 1,
+      "rank_after": 1,
+      "transition": "unchanged"
+    },
+    {
+      "id": "eval_006",
+      "query": "用优惠券买的东西退款时优惠券怎么办？",
+      "rank_before": 1,
+      "rank_after": 1,
+      "transition": "unchanged"
+    },
+    {
+      "id": "eval_008",
+      "query": "买的生鲜不想要了能按七天无理由退吗？",
+      "rank_before": 1,
+      "rank_after": 1,
+      "transition": "unchanged"
+    },
+    {
+      "id": "eval_009",
+      "query": "质量问题退货的运费谁承担？",
+      "rank_before": 1,
+      "rank_after": 1,
+      "transition": "unchanged"
+    },
+    {
+      "id": "eval_010",
+      "query": "物流已经超过48小时没有更新怎么办？",
+      "rank_before": 1,
+      "rank_after": 1,
+      "transition": "unchanged"
+    },
+    {
+      "id": "eval_011",
+      "query": "天气导致快递晚到了，预计时间怎么看？",
+      "rank_before": 1,
+      "rank_after": 1,
+      "transition": "unchanged"
+    },
+    {
+      "id": "eval_012",
+      "query": "快递员派送失败后我该怎么处理？",
+      "rank_before": 1,
+      "rank_after": 1,
+      "transition": "unchanged"
+    },
+    {
+      "id": "eval_013",
+      "query": "已经发货了还能改收货地址吗？",
+      "rank_before": 1,
+      "rank_after": 1,
+      "transition": "unchanged"
+    },
+    {
+      "id": "eval_015",
+      "query": "商品有质量问题应该怎么处理？",
+      "rank_before": 1,
+      "rank_after": 1,
+      "transition": "unchanged"
+    },
+    {
+      "id": "eval_016",
+      "query": "申请质量售后需要拍哪些凭证？",
+      "rank_before": 1,
+      "rank_after": 1,
+      "transition": "unchanged"
+    },
+    {
+      "id": "eval_017",
+      "query": "质量问题可以安排维修吗？",
+      "rank_before": 1,
+      "rank_after": 1,
+      "transition": "unchanged"
+    },
+    {
+      "id": "eval_018",
+      "query": "商品坏了能不能换货？",
+      "rank_before": 1,
+      "rank_after": 1,
+      "transition": "unchanged"
+    },
+    {
+      "id": "eval_019",
+      "query": "这个商品的保修期怎么确认？",
+      "rank_before": 1,
+      "rank_after": 1,
+      "transition": "unchanged"
+    },
+    {
+      "id": "eval_020",
+      "query": "订单还没发货，我想取消订单怎么办？",
+      "rank_before": 1,
+      "rank_after": 1,
+      "transition": "unchanged"
+    },
+    {
+      "id": "eval_021",
+      "query": "在哪里能看到订单现在是什么状态？",
+      "rank_before": 1,
+      "rank_after": 1,
+      "transition": "unchanged"
+    },
+    {
+      "id": "eval_022",
+      "query": "订单没发货可以改收货人电话吗？",
+      "rank_before": 1,
+      "rank_after": 1,
+      "transition": "unchanged"
+    },
+    {
+      "id": "eval_023",
+      "query": "支付失败后要不要重新付款？",
+      "rank_before": 1,
+      "rank_after": 1,
+      "transition": "unchanged"
+    },
+    {
+      "id": "eval_025",
+      "query": "支付页面一直显示处理中怎么办？",
+      "rank_before": 1,
+      "rank_after": 1,
+      "transition": "unchanged"
+    },
+    {
+      "id": "eval_026",
+      "query": "优惠券要满足什么条件才能使用？",
+      "rank_before": 1,
+      "rank_after": 1,
+      "transition": "unchanged"
+    },
+    {
+      "id": "eval_027",
+      "query": "优惠券过期了还能补发吗？",
+      "rank_before": 1,
+      "rank_after": 1,
+      "transition": "unchanged"
+    },
+    {
+      "id": "eval_028",
+      "query": "电子发票在哪里下载？",
+      "rank_before": 1,
+      "rank_after": 1,
+      "transition": "unchanged"
+    },
+    {
+      "id": "eval_029",
+      "query": "发票开出来后发现抬头写错了怎么办？",
+      "rank_before": 1,
+      "rank_after": 1,
+      "transition": "unchanged"
+    },
+    {
+      "id": "eval_030",
+      "query": "会员有哪些专属权益？",
+      "rank_before": 1,
+      "rank_after": 1,
+      "transition": "unchanged"
+    }
+  ],
+  "top1_improvements": [
+    {
+      "id": "eval_002",
+      "query": "钱退了好几天怎么还没回来？",
+      "rank_before": 2,
+      "rank_after": 1,
+      "transition": "rescued"
+    },
+    {
+      "id": "eval_007",
+      "query": "商品没拆封但不想要了可以退吗？",
+      "rank_before": 3,
+      "rank_after": 1,
+      "transition": "rescued"
+    },
+    {
+      "id": "eval_014",
+      "query": "为什么一个订单会有两个物流包裹？",
+      "rank_before": 2,
+      "rank_after": 1,
+      "transition": "rescued"
+    },
+    {
+      "id": "eval_024",
+      "query": "同一笔订单被扣了两次钱怎么办？",
+      "rank_before": 5,
+      "rank_after": 1,
+      "transition": "rescued"
+    }
+  ],
+  "top1_regressions": [],
+  "failure_attribution_after_supported": {
+    "RETRIEVAL_ERROR": [],
+    "RERANKING_ERROR": []
+  },
+  "total_evaluation_runtime_seconds": 13.0522,
+  "per_query_rerank_latency_ms": {
+    "mean": 355.775,
+    "median": 355.42,
+    "min": 283.687,
+    "max": 443.49
+  },
+  "no_answer_score_observation": [
+    {
+      "id": "eval_031",
+      "query": "可以把订单配送到日本吗？",
+      "highest_rerank_score": 0.0028710735496133566
+    },
+    {
+      "id": "eval_032",
+      "query": "商品甲醛超标应该依据什么检测标准？",
+      "highest_rerank_score": 0.000751105195377022
+    },
+    {
+      "id": "eval_033",
+      "query": "如何绑定银行卡自动还款？",
+      "highest_rerank_score": 0.0030603078193962574
+    },
+    {
+      "id": "eval_034",
+      "query": "会员生日礼物怎么领取？",
+      "highest_rerank_score": 0.011851383373141289
+    },
+    {
+      "id": "eval_035",
+      "query": "可以开具增值税专用发票吗？",
+      "highest_rerank_score": 0.054966822266578674
+    }
+  ]
+}

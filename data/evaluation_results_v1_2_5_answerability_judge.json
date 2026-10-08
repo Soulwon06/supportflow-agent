@@ -1,0 +1,508 @@
+{
+  "experiment_result_frozen": true,
+  "dataset": "data/evaluation_stress_v1_2_4.json",
+  "retrieval_artifact": "data\\evaluation_results_v1_2_4_hard_negative.json",
+  "judge_input_contract": "question + actual retrieved Top-1 evidence text only",
+  "judge_prompt_version": "answerability-judge-v1",
+  "total_judge_calls": 20,
+  "judge_only_metrics": {
+    "eligible_cases": 19,
+    "accuracy": 0.7895,
+    "precision": 0.7778,
+    "recall": 0.7778,
+    "f1": 0.7778
+  },
+  "judge_only_confusion_matrix": {
+    "TP": 7,
+    "TN": 8,
+    "FP": 2,
+    "FN": 2
+  },
+  "end_to_end_metrics": {
+    "eligible_cases": 20,
+    "accuracy": 0.75,
+    "precision": 0.7778,
+    "recall": 0.7,
+    "f1": 0.7368
+  },
+  "end_to_end_confusion_matrix": {
+    "TP": 7,
+    "TN": 8,
+    "FP": 2,
+    "FN": 3
+  },
+  "end_to_end_failures": {
+    "retrieval_error_cases": [
+      "boundary_007"
+    ],
+    "judge_false_positives": [
+      "hard_negative_002",
+      "hard_negative_006"
+    ],
+    "judge_false_negatives_excluding_retrieval_errors": [
+      "boundary_001",
+      "boundary_002"
+    ],
+    "retrieval_mediated_false_negatives": [
+      "boundary_007"
+    ],
+    "provider_or_validation_failures": []
+  },
+  "case_by_case_results": [
+    {
+      "id": "boundary_001",
+      "question": "签收第五天，商品没用过，外包装和配件都齐，我临时不想要了能退吗？",
+      "expected_answerability": "supported",
+      "top1_evidence_id": "return_general_01",
+      "rerank_score": 0.9775711297988892,
+      "judge_answerable": false,
+      "judge_reason": "证据要求同时满足商品完好、包装配件齐全且不影响二次销售；问题未说明是否不影响二次销售，无法仅凭证据确定能否退货。",
+      "correct": false,
+      "retrieval_error": false,
+      "judge_failure": null,
+      "usage": {
+        "input_tokens": 240,
+        "output_tokens": 1590,
+        "total_tokens": 1830
+      },
+      "latency_seconds": 7.637108
+    },
+    {
+      "id": "boundary_002",
+      "question": "信用卡那笔退货款要等几轮账单才看得到？",
+      "expected_answerability": "supported",
+      "top1_evidence_id": "refund_credit_card_01",
+      "rerank_score": 0.8212933540344238,
+      "judge_answerable": false,
+      "judge_reason": "Evidence only states refunds usually post in 5 to 10 working days and are subject to the issuing bank's statement; it does not specify how many billing cycles are required.",
+      "correct": false,
+      "retrieval_error": false,
+      "judge_failure": null,
+      "usage": {
+        "input_tokens": 233,
+        "output_tokens": 275,
+        "total_tokens": 508
+      },
+      "latency_seconds": 1.663355
+    },
+    {
+      "id": "boundary_003",
+      "question": "退回包裹刚寄出，退款时间是不是从我寄出的那刻起算？",
+      "expected_answerability": "supported",
+      "top1_evidence_id": "refund_return_01",
+      "rerank_score": 0.9957306981086731,
+      "judge_answerable": true,
+      "judge_reason": "证据明确说明退款处理时间从仓库签收并验收后开始计算，不以寄出时间作为退款起点，直接回答了问题。",
+      "correct": true,
+      "retrieval_error": false,
+      "judge_failure": null,
+      "usage": {
+        "input_tokens": 234,
+        "output_tokens": 131,
+        "total_tokens": 365
+      },
+      "latency_seconds": 0.936957
+    },
+    {
+      "id": "boundary_004",
+      "question": "冷藏食品只是临时不想吃了，还能走普通七天无理由吗？",
+      "expected_answerability": "supported",
+      "top1_evidence_id": "return_fresh_01",
+      "rerank_score": 0.863815188407898,
+      "judge_answerable": true,
+      "judge_reason": "证据明确说明冷藏类商品不适用七天无理由退货，直接回答了冷藏食品能否走普通七天无理由的问题。",
+      "correct": true,
+      "retrieval_error": false,
+      "judge_failure": null,
+      "usage": {
+        "input_tokens": 233,
+        "output_tokens": 128,
+        "total_tokens": 361
+      },
+      "latency_seconds": 0.978344
+    },
+    {
+      "id": "boundary_005",
+      "question": "同一单拆成几个箱子，是不是每个箱子都有自己的物流编号要分别查？",
+      "expected_answerability": "supported",
+      "top1_evidence_id": "shipping_split_01",
+      "rerank_score": 0.993868887424469,
+      "judge_answerable": true,
+      "judge_reason": "证据明确说明同一订单可能拆分为多个包裹，且用户需要分别查看各包裹的物流单号和状态，直接回答了每个箱子有各自物流编号并需分别查询的问题。",
+      "correct": true,
+      "retrieval_error": false,
+      "judge_failure": null,
+      "usage": {
+        "input_tokens": 234,
+        "output_tokens": 243,
+        "total_tokens": 477
+      },
+      "latency_seconds": 1.995551
+    },
+    {
+      "id": "boundary_006",
+      "question": "快递轨迹两天多没动，我该找谁查？",
+      "expected_answerability": "supported",
+      "top1_evidence_id": "shipping_no_update_01",
+      "rerank_score": 0.896243691444397,
+      "judge_answerable": true,
+      "judge_reason": "证据明确说明物流状态连续超过48小时未更新时，用户可以联系客服核查物流轨迹；两天多即超过48小时，符合该条件。",
+      "correct": true,
+      "retrieval_error": false,
+      "judge_failure": null,
+      "usage": {
+        "input_tokens": 222,
+        "output_tokens": 204,
+        "total_tokens": 426
+      },
+      "latency_seconds": 1.268772
+    },
+    {
+      "id": "boundary_007",
+      "question": "包裹一直送不过来，我应该先问快递员还是直接找客服？",
+      "expected_answerability": "supported",
+      "top1_evidence_id": "order_modify_01",
+      "rerank_score": 0.13186365365982056,
+      "judge_answerable": false,
+      "judge_reason": "Evidence only discusses modifying recipient/contact info for an unshipped order via customer service; it does not address what to do when a package is not being delivered or whether to ask the courier first versus contacting customer service.",
+      "correct": false,
+      "retrieval_error": true,
+      "judge_failure": null,
+      "usage": {
+        "input_tokens": 226,
+        "output_tokens": 178,
+        "total_tokens": 404
+      },
+      "latency_seconds": 1.345257
+    },
+    {
+      "id": "boundary_008",
+      "question": "还没发货之前，我想把收件人的电话换掉，能不能操作？",
+      "expected_answerability": "supported",
+      "top1_evidence_id": "order_modify_01",
+      "rerank_score": 0.9883025288581848,
+      "judge_answerable": true,
+      "judge_reason": "证据明确说明订单未发货时可尝试联系客服修改收货人或联系方式，但能否修改取决于仓库处理进度。",
+      "correct": true,
+      "retrieval_error": false,
+      "judge_failure": null,
+      "usage": {
+        "input_tokens": 227,
+        "output_tokens": 120,
+        "total_tokens": 347
+      },
+      "latency_seconds": 1.12823
+    },
+    {
+      "id": "boundary_009",
+      "question": "支付界面一直转圈显示处理中，我是不是再点一次比较保险？",
+      "expected_answerability": "supported",
+      "top1_evidence_id": "payment_pending_01",
+      "rerank_score": 0.9636592864990234,
+      "judge_answerable": true,
+      "judge_reason": "Evidence explicitly states that when the payment page shows processing, do not resubmit the order and instead wait for the payment channel's final result.",
+      "correct": true,
+      "retrieval_error": false,
+      "judge_failure": null,
+      "usage": {
+        "input_tokens": 232,
+        "output_tokens": 122,
+        "total_tokens": 354
+      },
+      "latency_seconds": 0.806286
+    },
+    {
+      "id": "boundary_010",
+      "question": "发票已经开出来了，抬头写错能直接在页面改吗？",
+      "expected_answerability": "supported",
+      "top1_evidence_id": "invoice_modify_01",
+      "rerank_score": 0.9874832630157471,
+      "judge_answerable": true,
+      "judge_reason": "Evidence states that after issuance, correction requires contacting customer service according to invoicing rules, which addresses whether it can be changed directly on the page.",
+      "correct": true,
+      "retrieval_error": false,
+      "judge_failure": null,
+      "usage": {
+        "input_tokens": 229,
+        "output_tokens": 181,
+        "total_tokens": 410
+      },
+      "latency_seconds": 1.214862
+    },
+    {
+      "id": "hard_negative_001",
+      "question": "信用卡退款时原来的银行卡已经注销，钱会转到哪张卡？",
+      "expected_answerability": "unsupported",
+      "top1_evidence_id": "refund_credit_card_01",
+      "rerank_score": 0.05309171974658966,
+      "judge_answerable": false,
+      "judge_reason": "Evidence only states refund processing time and that it depends on the issuing bank's statement; it does not address what happens when the original credit card has been cancelled or which card receives the refund.",
+      "correct": true,
+      "retrieval_error": false,
+      "judge_failure": null,
+      "usage": {
+        "input_tokens": 234,
+        "output_tokens": 116,
+        "total_tokens": 350
+      },
+      "latency_seconds": 0.867404
+    },
+    {
+      "id": "hard_negative_002",
+      "question": "我申请了退款，能不能把钱改退到另一张银行卡？",
+      "expected_answerability": "unsupported",
+      "top1_evidence_id": "refund_general_01",
+      "rerank_score": 0.13378098607063293,
+      "judge_answerable": true,
+      "judge_reason": "证据明确说明退款是原路退回，因此直接表明不能改退到另一张银行卡。",
+      "correct": false,
+      "retrieval_error": false,
+      "judge_failure": null,
+      "usage": {
+        "input_tokens": 231,
+        "output_tokens": 888,
+        "total_tokens": 1119
+      },
+      "latency_seconds": 4.46855
+    },
+    {
+      "id": "hard_negative_003",
+      "question": "会员生日当天能领什么礼物，领取入口在哪里？",
+      "expected_answerability": "unsupported",
+      "top1_evidence_id": "membership_benefits_01",
+      "rerank_score": 0.006129688583314419,
+      "judge_answerable": false,
+      "judge_reason": "Evidence仅笼统提及会员权益可能包括专属优惠、积分加速或服务优先权，未提及生日礼物或领取入口。",
+      "correct": true,
+      "retrieval_error": false,
+      "judge_failure": null,
+      "usage": {
+        "input_tokens": 227,
+        "output_tokens": 164,
+        "total_tokens": 391
+      },
+      "latency_seconds": 1.105864
+    },
+    {
+      "id": "hard_negative_004",
+      "question": "会员生日礼物如果错过领取日期还能补发吗？",
+      "expected_answerability": "unsupported",
+      "top1_evidence_id": "coupon_expired_01",
+      "rerank_score": 0.09344224631786346,
+      "judge_answerable": false,
+      "judge_reason": "证据仅说明优惠券超过有效期通常无法补发，未提及会员生日礼物或生日礼物错过领取日期后的补发规则。",
+      "correct": true,
+      "retrieval_error": false,
+      "judge_failure": null,
+      "usage": {
+        "input_tokens": 222,
+        "output_tokens": 165,
+        "total_tokens": 387
+      },
+      "latency_seconds": 1.155821
+    },
+    {
+      "id": "hard_negative_005",
+      "question": "可以开具增值税专用发票吗？",
+      "expected_answerability": "unsupported",
+      "top1_evidence_id": "invoice_modify_01",
+      "rerank_score": 0.054966822266578674,
+      "judge_answerable": false,
+      "judge_reason": "证据仅提到发票开具前可尝试修改抬头信息，以及开具后能否更正需联系客服，并未说明是否可以开具增值税专用发票。",
+      "correct": true,
+      "retrieval_error": false,
+      "judge_failure": null,
+      "usage": {
+        "input_tokens": 222,
+        "output_tokens": 135,
+        "total_tokens": 357
+      },
+      "latency_seconds": 1.053145
+    },
+    {
+      "id": "hard_negative_006",
+      "question": "发票开出后，能不能直接在订单页面自己改成公司抬头？",
+      "expected_answerability": "unsupported",
+      "top1_evidence_id": "invoice_modify_01",
+      "rerank_score": 0.9624964594841003,
+      "judge_answerable": true,
+      "judge_reason": "Evidence explicitly states that after the invoice is issued, whether it can be corrected requires contacting customer service according to invoicing rules, which directly addresses whether the user can directly change it themselves on the order page.",
+      "correct": false,
+      "retrieval_error": false,
+      "judge_failure": null,
+      "usage": {
+        "input_tokens": 228,
+        "output_tokens": 396,
+        "total_tokens": 624
+      },
+      "latency_seconds": 2.205439
+    },
+    {
+      "id": "hard_negative_007",
+      "question": "商品超过保修期后还能不能免费更换主板？",
+      "expected_answerability": "unsupported",
+      "top1_evidence_id": "quality_warranty_01",
+      "rerank_score": 0.33382153511047363,
+      "judge_answerable": false,
+      "judge_reason": "证据仅说明超过保修期的服务可能产生费用，未明确说明超过保修期后主板能否免费更换。",
+      "correct": true,
+      "retrieval_error": false,
+      "judge_failure": null,
+      "usage": {
+        "input_tokens": 228,
+        "output_tokens": 167,
+        "total_tokens": 395
+      },
+      "latency_seconds": 1.365804
+    },
+    {
+      "id": "hard_negative_008",
+      "question": "生鲜商品发现质量问题，平台会赔付几倍货款？",
+      "expected_answerability": "unsupported",
+      "top1_evidence_id": "return_fresh_01",
+      "rerank_score": 0.05940068140625954,
+      "judge_answerable": false,
+      "judge_reason": "证据仅说明生鲜商品存在质量问题需按质量售后流程提交凭证，未提及赔付几倍货款。",
+      "correct": true,
+      "retrieval_error": false,
+      "judge_failure": null,
+      "usage": {
+        "input_tokens": 231,
+        "output_tokens": 122,
+        "total_tokens": 353
+      },
+      "latency_seconds": 1.395508
+    },
+    {
+      "id": "hard_negative_009",
+      "question": "包裹因为天气延误超过承诺日期，能申请运费赔偿吗？",
+      "expected_answerability": "unsupported",
+      "top1_evidence_id": "shipping_delay_01",
+      "rerank_score": 0.24413132667541504,
+      "judge_answerable": false,
+      "judge_reason": "证据仅说明天气延误时物流时效可能顺延，未提及能否申请运费赔偿。",
+      "correct": true,
+      "retrieval_error": false,
+      "judge_failure": null,
+      "usage": {
+        "input_tokens": 236,
+        "output_tokens": 134,
+        "total_tokens": 370
+      },
+      "latency_seconds": 1.227738
+    },
+    {
+      "id": "hard_negative_010",
+      "question": "同一个订单拆成多个包裹时，运费会合并算还是分别收？",
+      "expected_answerability": "unsupported",
+      "top1_evidence_id": "shipping_split_01",
+      "rerank_score": 0.8700917959213257,
+      "judge_answerable": false,
+      "judge_reason": "证据仅说明同一订单可能拆分为多个包裹并需分别查看物流单号和状态，未提及运费是合并计算还是分别收取。",
+      "correct": true,
+      "retrieval_error": false,
+      "judge_failure": null,
+      "usage": {
+        "input_tokens": 233,
+        "output_tokens": 99,
+        "total_tokens": 332
+      },
+      "latency_seconds": 0.838627
+    }
+  ],
+  "high_score_hard_negative_results": [
+    {
+      "id": "hard_negative_006",
+      "question": "发票开出后，能不能直接在订单页面自己改成公司抬头？",
+      "expected_answerability": "unsupported",
+      "top1_evidence_id": "invoice_modify_01",
+      "rerank_score": 0.9624964594841003,
+      "judge_answerable": true,
+      "judge_reason": "Evidence explicitly states that after the invoice is issued, whether it can be corrected requires contacting customer service according to invoicing rules, which directly addresses whether the user can directly change it themselves on the order page.",
+      "correct": false,
+      "retrieval_error": false,
+      "judge_failure": null,
+      "usage": {
+        "input_tokens": 228,
+        "output_tokens": 396,
+        "total_tokens": 624
+      },
+      "latency_seconds": 2.205439
+    },
+    {
+      "id": "hard_negative_007",
+      "question": "商品超过保修期后还能不能免费更换主板？",
+      "expected_answerability": "unsupported",
+      "top1_evidence_id": "quality_warranty_01",
+      "rerank_score": 0.33382153511047363,
+      "judge_answerable": false,
+      "judge_reason": "证据仅说明超过保修期的服务可能产生费用，未明确说明超过保修期后主板能否免费更换。",
+      "correct": true,
+      "retrieval_error": false,
+      "judge_failure": null,
+      "usage": {
+        "input_tokens": 228,
+        "output_tokens": 167,
+        "total_tokens": 395
+      },
+      "latency_seconds": 1.365804
+    },
+    {
+      "id": "hard_negative_009",
+      "question": "包裹因为天气延误超过承诺日期，能申请运费赔偿吗？",
+      "expected_answerability": "unsupported",
+      "top1_evidence_id": "shipping_delay_01",
+      "rerank_score": 0.24413132667541504,
+      "judge_answerable": false,
+      "judge_reason": "证据仅说明天气延误时物流时效可能顺延，未提及能否申请运费赔偿。",
+      "correct": true,
+      "retrieval_error": false,
+      "judge_failure": null,
+      "usage": {
+        "input_tokens": 236,
+        "output_tokens": 134,
+        "total_tokens": 370
+      },
+      "latency_seconds": 1.227738
+    },
+    {
+      "id": "hard_negative_010",
+      "question": "同一个订单拆成多个包裹时，运费会合并算还是分别收？",
+      "expected_answerability": "unsupported",
+      "top1_evidence_id": "shipping_split_01",
+      "rerank_score": 0.8700917959213257,
+      "judge_answerable": false,
+      "judge_reason": "证据仅说明同一订单可能拆分为多个包裹并需分别查看物流单号和状态，未提及运费是合并计算还是分别收取。",
+      "correct": true,
+      "retrieval_error": false,
+      "judge_failure": null,
+      "usage": {
+        "input_tokens": 233,
+        "output_tokens": 99,
+        "total_tokens": 332
+      },
+      "latency_seconds": 0.838627
+    }
+  ],
+  "judge_false_positives": [
+    "hard_negative_002",
+    "hard_negative_006"
+  ],
+  "judge_false_negatives": [
+    "boundary_001",
+    "boundary_002"
+  ],
+  "token_usage": {
+    "input_tokens": 4602,
+    "completion_tokens": 5558,
+    "total_tokens": 10160
+  },
+  "latency": {
+    "count": 20,
+    "mean_seconds": 1.7329,
+    "median_seconds": 1.2213,
+    "min_seconds": 0.8063,
+    "max_seconds": 7.6371
+  },
+  "cost": null
+}

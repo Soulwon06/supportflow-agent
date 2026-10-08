@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="330" viewBox="0 0 1100 330">
+  <style>
+    .box{fill:#18251f;stroke:#71d7b0;stroke-width:2;rx:14}
+    .warn{fill:#29231a;stroke:#f4c95d;stroke-width:2;rx:14}
+    .title{fill:#ffffff;font:700 20px Arial,"Microsoft YaHei",sans-serif}
+    .text{fill:#e8f5ef;font:15px Arial,"Microsoft YaHei",sans-serif}
+    .arrow{stroke:#91a7c9;stroke-width:3;marker-end:url(#arrow)}
+  </style>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#91a7c9"/></marker></defs>
+  <rect width="1100" height="330" fill="#0d1117"/>
+  <text x="550" y="36" text-anchor="middle" class="title">员工申请到业务生效</text>
+  <rect x="35" y="105" width="175" height="100" class="box"/>
+  <text x="122" y="143" text-anchor="middle" class="title">员工填写</text><text x="122" y="174" text-anchor="middle" class="text">订单 / 报工 / 质检 / 出库</text>
+  <rect x="270" y="105" width="175" height="100" class="box"/>
+  <text x="357" y="143" text-anchor="middle" class="title">后端校验</text><text x="357" y="174" text-anchor="middle" class="text">权限、数量、状态</text>
+  <rect x="505" y="105" width="175" height="100" class="warn"/>
+  <text x="592" y="143" text-anchor="middle" class="title">待审批</text><text x="592" y="174" text-anchor="middle" class="text">库存暂不改变</text>
+  <rect x="740" y="105" width="145" height="100" class="box"/>
+  <text x="812" y="143" text-anchor="middle" class="title">管理员</text><text x="812" y="174" text-anchor="middle" class="text">批准 / 驳回</text>
+  <rect x="945" y="105" width="120" height="100" class="box"/>
+  <text x="1005" y="143" text-anchor="middle" class="title">生效</text><text x="1005" y="174" text-anchor="middle" class="text">写入数据</text>
+  <path d="M210 155 H270" class="arrow"/><path d="M445 155 H505" class="arrow"/><path d="M680 155 H740" class="arrow"/><path d="M885 155 H945" class="arrow"/>
+  <text x="550" y="270" text-anchor="middle" class="text">驳回、撤回、重复提交和超额操作不会绕过后端规则</text>
+</svg>

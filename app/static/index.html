@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SupportFlow Workbench · 永好塑胶订单运营助手</title>
+  <link rel="stylesheet" href="/static/styles.css?v=thread-ui" />
+</head>
+<body>
+  <main class="workbench">
+    <header class="topbar">
+      <div class="brand-lockup">
+        <div class="brand-mark" aria-hidden="true">YH</div>
+        <div>
+          <div class="eyebrow">INTERNAL OPERATIONS</div>
+          <h1>永好塑胶订单运营助手</h1>
+          <p class="subtitle">订单 · 生产 · 质检 · 库存</p>
+        </div>
+      </div>
+      <div class="toolbar" aria-label="账户操作">
+        <span id="currentUser" class="muted">未登录</span>
+        <button id="adminButton" class="button secondary hidden" type="button">管理员</button>
+        <button id="logoutButton" class="button secondary hidden" type="button">退出登录</button>
+        <button id="resetButton" class="button secondary">新建会话</button>
+      </div>
+    </header>
+
+    <section id="authPanel" class="auth-panel">
+      <div class="auth-card">
+        <div class="auth-kicker">内部工作台</div>
+        <h2>登录内部系统</h2>
+        <p class="auth-description">使用员工账号进入订单运营工作台。权限由管理员统一管理。</p>
+        <form id="loginForm" class="auth-form">
+          <input id="loginUsername" required placeholder="用户名" autocomplete="username" />
+          <input id="loginPassword" required type="password" placeholder="密码" autocomplete="current-password" />
+          <button class="button primary" type="submit">登录</button>
+        </form>
+        <button id="showRegister" class="link-button" type="button">注册员工账号</button>
+        <form id="registerForm" class="auth-form hidden">
+          <input id="registerUsername" required minlength="3" placeholder="用户名" autocomplete="username" />
+          <input id="registerName" required placeholder="姓名" />
+          <input id="registerDepartment" placeholder="部门" />
+          <input id="registerPassword" required minlength="8" type="password" placeholder="密码（至少 8 位）" autocomplete="new-password" />
+          <button class="button primary" type="submit">提交注册</button>
+          <button id="cancelRegister" class="link-button" type="button">返回登录</button>
+        </form>
+        <div id="authMessage" class="trace-note warning hidden"></div>
+      </div>
+    </section>
+
+    <section id="adminPanel" class="admin-panel hidden">
+      <div class="panel-heading"><h2>员工权限管理</h2><button id="closeAdmin" class="button secondary" type="button">返回对话</button></div>
+      <div id="adminUsers" class="admin-users"></div>
+    </section>
+
+    <section id="appShell" class="layout hidden">
+      <section class="chat-column panel">
+        <div id="conversation" class="conversation" aria-live="polite"></div>
+        <div id="progress" class="progress hidden"></div>
+        <div id="hitlCard" class="hitl-card hidden"></div>
+        <form id="composer" class="composer">
+          <textarea id="messageInput" rows="3" placeholder="输入客服问题…（Enter 发送，Shift+Enter 换行）"></textarea>
+          <div class="composer-footer">
+            <span class="hint">Thread: <code id="threadIdLabel"></code></span>
+            <button id="sendButton" class="button primary" type="submit">发送</button>
+          </div>
+        </form>
+      </section>
+
+      <aside class="trace-column panel">
+        <div class="panel-heading">
+          <div>
+            <div class="eyebrow">RUNTIME OBSERVABILITY</div>
+            <h2>处理详情</h2>
+          </div>
+          <span id="traceStatus" class="muted">等待请求</span>
+        </div>
+        <div id="tracePanel" class="trace-panel empty-state">发送请求后显示处理详情。</div>
+      </aside>
+    </section>
+    <footer class="footer">内部账号登录由后端验证；权限和退款逻辑始终由后端控制。</footer>
+  </main>
+  <script src="/static/app.js" defer></script>
+</body>
+</html>

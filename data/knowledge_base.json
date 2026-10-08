@@ -1,0 +1,49 @@
+[
+  {"id":"refund_general_01","category":"refund_return","title":"一般退款到账时间","content":"退款审核通过后，通常会在3个工作日内原路退回。具体到账时间以支付渠道处理速度为准。","keywords":["退款","到账","3个工作日","原路退回"],"version":"1.0"},
+  {"id":"refund_credit_card_01","category":"refund_return","title":"信用卡退款到账时间","content":"使用信用卡支付的订单退款审核通过后，通常需要5到10个工作日入账，具体以发卡行账单为准。","keywords":["信用卡","退款","入账","发卡行","5到10个工作日"],"version":"1.0"},
+  {"id":"refund_return_01","category":"refund_return","title":"退货退款起算时间","content":"退货退款的处理时间从仓库签收退回商品并完成验收后开始计算，不以寄出时间作为退款起点。","keywords":["退货","退款","仓库签收","验收","起算"],"version":"1.0"},
+  {"id":"refund_coupon_01","category":"refund_return","title":"优惠券订单退款","content":"使用优惠券支付的订单发生退款时，现金部分按实际支付金额原路退回；已使用优惠券是否返还按优惠券规则处理。","keywords":["优惠券","退款","现金部分","返还"],"version":"1.0"},
+  {"id":"refund_partial_01","category":"refund_return","title":"部分退款处理","content":"部分退款只退回审核确认的退款金额，未退款部分的订单权益和支付记录不受影响。","keywords":["部分退款","退款金额","审核确认"],"version":"1.0"},
+  {"id":"return_general_01","category":"refund_return","title":"七天无理由退货","content":"商品完好、包装和配件齐全且不影响二次销售时，签收后7天内支持无理由退货。","keywords":["七天无理由","退货","包装","配件","二次销售"],"version":"1.0"},
+  {"id":"return_fresh_01","category":"refund_return","title":"生鲜商品退货例外","content":"生鲜、冷藏和定制类商品不适用七天无理由退货；如存在质量问题，应按质量售后流程提交凭证。","keywords":["生鲜","冷藏","定制","退货例外","质量问题"],"version":"1.0"},
+  {"id":"return_shipping_fee_01","category":"refund_return","title":"退货运费承担","content":"无理由退货的寄回运费通常由用户承担；商品质量问题或商家责任导致的退货，经审核后可按规则承担寄回运费。","keywords":["退货运费","寄回","质量问题","商家责任"],"version":"1.0"},
+
+  {"id":"shipping_tracking_01","category":"logistics_shipping","title":"查看物流单号","content":"用户可以在订单详情页查看物流状态、承运商名称和物流单号。","keywords":["物流","单号","订单详情","承运商"],"version":"1.0"},
+  {"id":"shipping_no_update_01","category":"logistics_shipping","title":"物流超过48小时未更新","content":"如果物流状态连续超过48小时没有更新，用户可以联系客服核查物流轨迹。","keywords":["物流不更新","48小时","物流轨迹","联系客服"],"version":"1.0"},
+  {"id":"shipping_delay_01","category":"logistics_shipping","title":"配送延误处理","content":"因天气、交通或分拨高峰造成配送延误时，物流时效可能顺延，用户可以在订单详情页查看最新预计送达信息。","keywords":["配送延误","天气","交通","预计送达"],"version":"1.0"},
+  {"id":"shipping_failed_delivery_01","category":"logistics_shipping","title":"派送失败处理","content":"派送失败后，用户应先联系承运商确认原因；若连续派送失败，可联系客服协助安排后续配送。","keywords":["派送失败","承运商","重新派送","配送"],"version":"1.0"},
+  {"id":"shipping_address_change_01","category":"logistics_shipping","title":"发货后修改地址","content":"订单发货后通常不能直接修改收货地址，用户可以联系承运商或客服确认是否仍有修改可能。","keywords":["修改地址","收货地址","发货后","承运商"],"version":"1.0"},
+  {"id":"shipping_split_01","category":"logistics_shipping","title":"拆分包裹物流","content":"同一订单包含不同仓库商品时可能拆分为多个包裹，用户需要分别查看各包裹的物流单号和状态。","keywords":["拆单","多个包裹","物流单号","不同仓库"],"version":"1.0"},
+  {"id":"shipping_pickup_01","category":"logistics_shipping","title":"驿站自提通知","content":"选择驿站或代收点配送的订单到达后，通常以短信或配送平台通知为准，用户可凭取件信息领取。","keywords":["驿站","自提","代收点","取件"],"version":"1.0"},
+
+  {"id":"quality_policy_01","category":"quality_after_sales","title":"质量问题申请售后","content":"商品存在质量问题时，用户可以提交商品照片、问题描述和订单信息申请售后处理。","keywords":["质量问题","售后","照片","问题描述"],"version":"1.0"},
+  {"id":"quality_photo_01","category":"quality_after_sales","title":"质量售后凭证要求","content":"质量问题售后通常需要提供能清晰展示问题的照片或视频；凭证不足时客服可能要求补充材料。","keywords":["质量售后","照片","视频","凭证","补充材料"],"version":"1.0"},
+  {"id":"quality_repair_01","category":"quality_after_sales","title":"维修处理方式","content":"符合维修条件的质量问题可安排检测和维修，维修周期以检测结果和配件供应情况为准。","keywords":["质量问题","维修","检测","配件","维修周期"],"version":"1.0"},
+  {"id":"quality_replacement_01","category":"quality_after_sales","title":"质量问题换货","content":"商品确认存在质量问题且满足换货条件时，可申请换货；换货库存和寄回方式以售后审核结果为准。","keywords":["质量问题","换货","库存","售后审核"],"version":"1.0"},
+  {"id":"quality_warranty_01","category":"quality_after_sales","title":"保修期限","content":"商品保修期限以商品详情页或随附保修凭证标注的期限为准，超过保修期的服务可能产生费用。","keywords":["保修","保修期","凭证","费用"],"version":"1.0"},
+  {"id":"quality_consumable_01","category":"quality_after_sales","title":"易耗品售后范围","content":"滤芯、电池等易耗品的自然损耗通常不属于质量问题；非正常损坏是否支持售后需根据检测结果判断。","keywords":["易耗品","滤芯","电池","自然损耗","售后"],"version":"1.0"},
+
+  {"id":"order_cancel_01","category":"order","title":"未发货订单取消","content":"订单尚未发货时，用户可以在订单页面申请取消；是否立即取消成功以订单当前状态为准。","keywords":["取消订单","未发货","订单状态"],"version":"1.0"},
+  {"id":"order_status_01","category":"order","title":"查看订单状态","content":"用户可以在订单列表或订单详情页查看支付、备货、发货和完成等订单状态。","keywords":["订单状态","订单列表","订单详情","支付","发货"],"version":"1.0"},
+  {"id":"order_modify_01","category":"order","title":"未发货订单修改信息","content":"订单未发货时可尝试联系客服修改收货人或联系方式，是否能修改取决于仓库处理进度。","keywords":["修改订单","收货人","联系方式","未发货"],"version":"1.0"},
+  {"id":"order_missing_01","category":"order","title":"订单记录未找到","content":"如果订单列表中找不到订单，用户应先确认登录账号和下单渠道，再提供支付凭证联系客服核查。","keywords":["找不到订单","订单记录","登录账号","支付凭证"],"version":"1.0"},
+  {"id":"order_split_01","category":"order","title":"一个订单多个包裹","content":"一个订单可能因商品库存或仓库不同拆分发货，订单详情页会分别展示包裹状态。","keywords":["订单","拆分发货","多个包裹","库存"],"version":"1.0"},
+
+  {"id":"payment_failed_01","category":"payment","title":"支付失败处理","content":"支付失败时请先确认银行卡余额、支付限额和网络状态，再重新发起支付；重复扣款需联系支付渠道核查。","keywords":["支付失败","银行卡","支付限额","重新支付"],"version":"1.0"},
+  {"id":"payment_duplicate_01","category":"payment","title":"重复扣款处理","content":"如果同一订单出现重复扣款，请保留支付记录并联系客服核对，重复款项按支付渠道核查结果处理。","keywords":["重复扣款","支付记录","重复支付","核对"],"version":"1.0"},
+  {"id":"payment_pending_01","category":"payment","title":"支付状态处理中","content":"支付页面显示处理中时不要重复提交订单，建议等待支付渠道返回最终结果后再确认订单状态。","keywords":["支付处理中","支付状态","不要重复提交","订单状态"],"version":"1.0"},
+  {"id":"payment_method_01","category":"payment","title":"支持的支付方式","content":"可用支付方式以结算页实际展示为准，部分商品、地区或活动可能限制支付方式。","keywords":["支付方式","结算页","银行卡","支付"],"version":"1.0"},
+
+  {"id":"coupon_usage_01","category":"coupon_promotion","title":"优惠券使用条件","content":"优惠券需要在有效期内并满足适用商品、使用门槛和使用渠道等条件，具体限制以券面说明为准。","keywords":["优惠券","使用条件","有效期","门槛"],"version":"1.0"},
+  {"id":"coupon_expired_01","category":"coupon_promotion","title":"优惠券过期处理","content":"优惠券超过有效期后通常无法恢复或补发，用户应在有效期内使用。","keywords":["优惠券过期","有效期","补发"],"version":"1.0"},
+  {"id":"coupon_stack_01","category":"coupon_promotion","title":"优惠券叠加使用","content":"不同优惠券能否叠加使用取决于活动规则，结算页显示的优惠金额为最终可用结果。","keywords":["优惠券叠加","活动规则","结算页","优惠"],"version":"1.0"},
+  {"id":"promotion_price_01","category":"coupon_promotion","title":"促销价保规则","content":"促销活动结束后的价格变化不自动触发补差，具体是否支持价保以活动页面说明为准。","keywords":["促销","价保","补差","活动页面"],"version":"1.0"},
+
+  {"id":"invoice_download_01","category":"invoice","title":"电子发票下载","content":"订单完成并满足开票条件后，用户可以在订单详情页申请或下载电子发票。","keywords":["电子发票","下载发票","订单详情","开票"],"version":"1.0"},
+  {"id":"invoice_modify_01","category":"invoice","title":"发票信息修改","content":"发票开具前可以尝试修改抬头信息；发票开具后能否更正需要联系客服按开票规则处理。","keywords":["发票抬头","修改发票","开票前","更正"],"version":"1.0"},
+  {"id":"invoice_type_01","category":"invoice","title":"发票类型说明","content":"可申请的发票类型和抬头范围以结算页及开票页面实际展示为准。","keywords":["发票类型","抬头","开票页面"],"version":"1.0"},
+
+  {"id":"membership_benefits_01","category":"membership","title":"会员权益","content":"会员权益可能包括专属优惠、积分加速或服务优先权，当前可用权益以会员中心展示为准。","keywords":["会员权益","专属优惠","积分","会员中心"],"version":"1.0"},
+  {"id":"membership_points_01","category":"membership","title":"会员积分到账","content":"符合规则的订单完成后积分通常会在系统结算后到账，退款或取消订单可能扣回相应积分。","keywords":["会员积分","积分到账","退款扣回","订单完成"],"version":"1.0"},
+  {"id":"membership_cancel_01","category":"membership","title":"会员服务取消","content":"会员服务是否支持取消或退订以会员页面的当前规则为准，已享受的权益可能影响退款金额。","keywords":["会员取消","退订","会员服务","退款"],"version":"1.0"}
+]
