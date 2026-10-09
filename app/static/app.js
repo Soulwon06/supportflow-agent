@@ -32,6 +32,8 @@ const INTENT_LABELS = {
   inventory: "库存查询",
   production: "生产进度",
   quality_submit: "质检申报",
+  admin_approval: "管理员审批",
+  outbound_status: "出库状态",
   order_entry: "上单申请",
   unknown: "其他问题",
 };

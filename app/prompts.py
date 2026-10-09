@@ -5,7 +5,7 @@ ANSWERABILITY_PROMPT_VERSION = "answerability-v2-general-principles-only"
 GROUNDING_PROMPT_VERSION = "grounded-generation-v1-2-7-constrained"
 
 INTENT_SYSTEM_PROMPT = """你是 SupportFlow 的意图分类器。只输出一个 JSON 对象，不能输出 Markdown、解释或额外字段。
-JSON schema: {\"intent\": \"knowledge|manufacturing_knowledge|quality_mixed|order|logistics|refund|inventory|production|order_entry|quality_submit|unknown\"}
+JSON schema: {\"intent\": \"knowledge|manufacturing_knowledge|quality_mixed|order|logistics|refund|inventory|production|order_entry|quality_submit|admin_approval|outbound_status|unknown\"}
 
 分类规则：
 - 询问退款政策、退款期限、退货条件或退货政策 -> knowledge
@@ -19,6 +19,8 @@ JSON schema: {\"intent\": \"knowledge|manufacturing_knowledge|quality_mixed|orde
 - 查询已完成数量、生产进度、合格数量、生产任务 -> production
 - 明确要求给客户创建/提交一个新订单 -> order_entry
 - 明确要求提交质检/检验数据（不是查询质检结果） -> quality_submit
+- 批准、拒绝、同意或审批已有申请 -> admin_approval；聊天不能直接执行审批
+- 查询订单出库数量、剩余未出库数量或出库状态 -> outbound_status
 - 无法确定 -> unknown
 
 不要执行工具，不要判断权限，不要生成工具结果。"""

@@ -58,6 +58,8 @@ INTENT_LABELS = {
     "production": "生产进度",
     "quality": "质检结果",
     "quality_submit": "质检申报",
+    "admin_approval": "管理员审批",
+    "outbound_status": "出库状态",
     "order_entry": "上单申请",
     "production_submit": "生产报工申请",
     "outbound_submit": "出库申请",
@@ -82,6 +84,10 @@ def _get_llm_service() -> LLMService:
 
 def _keyword_fallback_intent(message: str) -> str:
     """Small, explicit safety net used only when semantic classification fails."""
+    if _is_admin_approval_request(message):
+        return "admin_approval"
+    if _is_outbound_status_query(message):
+        return "outbound_status"
     if _is_quality_mixed_query(message):
         return "quality_mixed"
     if _is_manufacturing_knowledge_query(message):
@@ -163,6 +169,31 @@ def _is_quality_submit_query(message: str) -> bool:
         re.search(r"质检|检验|检查", message)
         and re.search(r"提交|申报|报工", message)
         and not re.search(r"查询|查一下|结果|状态|多少|记录", message)
+    )
+
+
+def _is_admin_approval_request(message: str) -> bool:
+    """Detect approval commands without ever executing them from chat."""
+    normalized = re.sub(r"\s+", "", message)
+    if re.search(r"审批流程|审批顺序|怎么审批|如何审批|审批规范", normalized):
+        return False
+    if re.fullmatch(r"(?:同意|批准|审批|拒绝|驳回)", normalized):
+        return True
+    return bool(
+        re.search(r"(?:批准|审批|同意|拒绝|驳回)", normalized)
+        and re.search(r"申请|订单|出库|报工|质检", normalized)
+    )
+
+
+def _is_outbound_status_query(message: str) -> bool:
+    """Recognize read-only shipment progress, not an outbound application."""
+    if re.search(r"提交|申报|申请|出库申请|直接出库", message):
+        return False
+    if re.search(r"物流|快递|配送|运输|到哪|当前位置", message):
+        return False
+    return bool(
+        re.search(r"出库|发货|发出|已发|未发|发了|发过", message)
+        and re.search(r"了吗|多少|数量|状态|剩余|还有|查看|多少件|没有", message)
     )
 
 
@@ -292,6 +323,7 @@ def _resolve_order_context(
         "quality",
         "production_submit",
         "outbound_submit",
+        "outbound_status",
     }:
         return "", history, True, _clarification_for_orders(history)
     return "", history, False, ""
@@ -420,6 +452,21 @@ def router_node(state: SupportState):
             **_write_guard_result(state, negation_kind),
         }
 
+    if _is_admin_approval_request(message):
+        return {
+            "intent": "admin_approval",
+            "routing_source": "deterministic_admin_approval_guard",
+            "routing_error_classification": "CHAT_APPROVAL_DISABLED",
+            "result": "审批操作请通过管理员审批看板执行，聊天入口不会直接批准或拒绝申请。",
+            "terminal_status": "NEED_USER_INPUT",
+            "write_guarded": True,
+            "pending_action": "",
+            "missing_fields": [],
+            "need_confirmation": False,
+            "confirmed": False,
+            "execution_log": state["execution_log"] + ["admin_approval_guard"],
+        }
+
     if _is_pending_refund_continuation(state, message):
         # Only an unambiguous slot completion bypasses fresh intent routing.
         intent = "refund"
@@ -443,6 +490,7 @@ def router_node(state: SupportState):
 
         quality_mixed_query = _is_quality_mixed_query(message)
         quality_submit_query = _is_quality_submit_query(message)
+        outbound_status_query = _is_outbound_status_query(message)
         manufacturing_knowledge_query = _is_manufacturing_knowledge_query(message)
         quality_query = (
             re.search(r"质检|检验|不良品|不合格率|合格率", message)
@@ -451,7 +499,10 @@ def router_node(state: SupportState):
                 and re.search(r"不合格", message)
             )
         )
-        if quality_submit_query:
+        if outbound_status_query:
+            intent = "outbound_status"
+            routing_source = "deterministic_outbound_status_override"
+        elif quality_submit_query:
             intent = "quality_submit"
             routing_source = "deterministic_quality_submit_override"
         elif quality_mixed_query:
@@ -1044,6 +1095,60 @@ def logistics_node(state: SupportState):
     }
 
 
+def outbound_status_node(state: SupportState):
+    """Read trusted order quantities without creating an outbound request."""
+    if not has_tool_permission(
+        state["role"], "query_order", state.get("permissions")
+    ):
+        return {
+            "result": "当前账号没有查询订单出库状态的权限。",
+            "error_log": "PERMISSION_DENIED",
+            "terminal_status": "PERMISSION_DENIED",
+            "execution_log": state["execution_log"] + ["outbound_status_node"],
+        }
+
+    order_id = _target_order_id(state, state["user_message"])
+    if not order_id:
+        return {
+            "result": "没有识别到订单号，请提供订单号。",
+            "error_log": "INVALID_ARGUMENT: missing order_id",
+            "terminal_status": "NEED_USER_INPUT",
+            "execution_log": state["execution_log"] + ["outbound_status_node"],
+        }
+    order = get_order(order_id)
+    if not order:
+        return {
+            "order_id": order_id,
+            "current_order_id": order_id,
+            "result": f"未找到订单 {order_id}，无法查询出库状态。",
+            "error_log": "NOT_FOUND: ORDER_NOT_FOUND",
+            "terminal_status": "FAILED",
+            "execution_log": state["execution_log"] + ["outbound_status_node"],
+        }
+
+    ordered = int(order.get("ordered_quantity") or 0)
+    shipped = int(order.get("shipped_quantity") or 0)
+    remaining = max(0, ordered - shipped)
+    if shipped <= 0:
+        status = "尚未出库"
+    elif remaining == 0:
+        status = "已全部出库"
+    else:
+        status = "部分出库"
+    return {
+        "order_id": order_id,
+        "current_order_id": order_id,
+        "result": (
+            f"订单 {order_id} 出库状态：{status}。"
+            f"需求 {ordered} 个，已出库 {shipped} 个，剩余未出库 {remaining} 个。\n"
+            "本次仅查询订单出库数量；如需运输位置和物流节点，请单独查询物流。"
+        ),
+        "error_log": "",
+        "terminal_status": "SUCCESS",
+        "execution_log": state["execution_log"] + ["outbound_status_node"],
+    }
+
+
 # ============================================================
 # 5. Manufacturing Business Nodes
 # ============================================================
@@ -1455,7 +1560,14 @@ def production_submit_node(state: SupportState):
     # Validate against trusted production data before creating a request. The
     # approval path repeats this check because the order may change while the
     # request is waiting for an administrator.
-    production_rows = get_production(order_no=order_id)
+    production_no_match = re.search(
+        r"MO-[A-Z0-9-]+", state["user_message"], re.IGNORECASE
+    )
+    production_no = production_no_match.group(0).upper() if production_no_match else ""
+    production_rows = get_production(
+        production_no=production_no or None,
+        order_no=None if production_no else order_id,
+    )
     if not production_rows:
         return {
             "result": f"未找到订单 {order_id} 对应的生产任务，无法提交报工。",
@@ -1464,6 +1576,7 @@ def production_submit_node(state: SupportState):
             "execution_log": state["execution_log"] + ["production_submit_node"],
         }
     production = production_rows[0]
+    order_id = str(production["order_no"]).upper()
     remaining = int(production["planned_quantity"]) - int(production["reported_quantity"])
     if quantity > remaining:
         return {
@@ -1478,6 +1591,7 @@ def production_submit_node(state: SupportState):
             int(state.get("user_id") or 0),
             {
                 "order_no": order_id,
+                "production_no": production["production_no"],
                 "reported_quantity": quantity,
                 "qualified_quantity": quantity,
                 "rejected_quantity": 0,

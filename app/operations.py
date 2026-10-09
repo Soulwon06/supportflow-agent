@@ -72,6 +72,18 @@ def _positive_quantity(value: Any, field: str) -> int:
     return result
 
 
+def _production_payload_key(payload: dict[str, Any]) -> tuple[str, str, int, int, int, str]:
+    """Canonical key for one pending production report."""
+    return (
+        str(payload.get("order_no") or "").strip().upper(),
+        str(payload.get("production_no") or "").strip().upper(),
+        int(payload.get("reported_quantity") or 0),
+        int(payload.get("qualified_quantity") or 0),
+        int(payload.get("rejected_quantity") or 0),
+        str(payload.get("report_date") or "").strip(),
+    )
+
+
 def create_request(request_type: str, requested_by: int, payload: dict[str, Any], idempotency_key: str | None = None) -> dict[str, Any]:
     initialize_database()
     if request_type not in REQUEST_TYPES:
@@ -98,6 +110,22 @@ def create_request(request_type: str, requested_by: int, payload: dict[str, Any]
             ).fetchall()
             for candidate in pending:
                 if json.loads(candidate["payload_json"]) == payload:
+                    return _row(candidate)
+        if request_type == "production_report":
+            # Natural-language submissions have no HTTP idempotency header.
+            # Reuse only an exact same pending business payload for the same
+            # employee; decided history remains eligible for a new report.
+            requested_key = _production_payload_key(payload)
+            pending = conn.execute(
+                """SELECT * FROM operation_requests
+                WHERE request_type = 'production_report'
+                  AND requested_by = ?
+                  AND status = 'SUBMITTED'
+                ORDER BY id DESC""",
+                (requested_by,),
+            ).fetchall()
+            for candidate in pending:
+                if _production_payload_key(json.loads(candidate["payload_json"])) == requested_key:
                     return _row(candidate)
         cursor = conn.execute(
             """INSERT INTO operation_requests(
@@ -401,19 +429,22 @@ def _approve_order(conn, payload: dict[str, Any], requester_id: int) -> str:
 
 def _approve_production(conn, payload: dict[str, Any], requester_id: int) -> None:
     order_no = str(payload.get("order_no", "")).strip().upper()
+    production_no = str(payload.get("production_no", "")).strip().upper()
     reported = _positive_quantity(payload.get("reported_quantity"), "完成数量")
     qualified = _positive_quantity(payload.get("qualified_quantity", 0), "合格数量") if payload.get("qualified_quantity", 0) else 0
     rejected = _positive_quantity(payload.get("rejected_quantity", 0), "不良数量") if payload.get("rejected_quantity", 0) else 0
     if qualified + rejected > reported:
         raise ValueError("合格数量与不良数量不能超过完成数量")
+    production_filter = "po.production_no = ?" if production_no else "so.order_no = ?"
+    production_value = production_no or order_no
     row = conn.execute(
-        """SELECT po.id, po.planned_quantity, po.status,
+        f"""SELECT po.id, po.planned_quantity, po.status,
             COALESCE(SUM(CASE WHEN pr.status = 'ACTIVE' THEN pr.reported_quantity ELSE 0 END), 0) AS reported_total
         FROM production_orders po JOIN sales_order_lines sol ON sol.id = po.order_line_id
         JOIN sales_orders so ON so.id = sol.order_id
         LEFT JOIN production_reports pr ON pr.production_order_id = po.id
-        WHERE so.order_no = ? GROUP BY po.id""",
-        (order_no,),
+        WHERE {production_filter} GROUP BY po.id""",
+        (production_value,),
     ).fetchone()
     if row is None:
         raise ValueError("订单没有对应生产任务")
