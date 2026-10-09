@@ -57,6 +57,7 @@ INTENT_LABELS = {
     "inventory": "库存查询",
     "production": "生产进度",
     "quality": "质检结果",
+    "quality_submit": "质检申报",
     "order_entry": "上单申请",
     "production_submit": "生产报工申请",
     "outbound_submit": "出库申请",
@@ -85,6 +86,8 @@ def _keyword_fallback_intent(message: str) -> str:
         return "quality_mixed"
     if _is_manufacturing_knowledge_query(message):
         return "manufacturing_knowledge"
+    if _is_quality_submit_query(message):
+        return "quality_submit"
     if re.search(r"退款政策|退款期限|退货政策|退货条件", message):
         return "knowledge"
     if re.search(
@@ -152,6 +155,61 @@ def _is_quality_mixed_query(message: str) -> bool:
     asks_reason = bool(re.search(r"为什么|原因|未通过|不通过|不合格", message))
     asks_treatment = bool(re.search(r"处理|怎么办|怎么做|如何|应该|隔离|记录|复检", message))
     return has_order and has_quality_fact and asks_reason and asks_treatment
+
+
+def _is_quality_submit_query(message: str) -> bool:
+    """Recognize a quality-report write request, not a read-only query."""
+    return bool(
+        re.search(r"质检|检验|检查", message)
+        and re.search(r"提交|申报|报工", message)
+        and not re.search(r"查询|查一下|结果|状态|多少|记录", message)
+    )
+
+
+def _write_negation_kind(message: str) -> str:
+    """Classify explicit write prohibitions before any LLM/tool decision.
+
+    This is intentionally narrow: the guard protects high-risk writes but does
+    not treat every occurrence of "不要" as a cancellation.
+    """
+    normalized = re.sub(r"\s+", "", message)
+    action = r"(?:提交|申报|执行|出库|报工|质检|检验|创建|下单|上单|退款|申请)"
+    if re.search(r"(?:不要|别)(?:忘记|忘了)", normalized):
+        return ""
+    if re.search(r"(?:为什么|为何|怎么|如何)不能", normalized) and re.search(action, normalized):
+        return "query"
+    if re.search(
+        r"如果.+?(?:不足|不够|不满足|不允许|失败|异常).+?(?:不要|别|不应|不可).*(?:提交|执行|出库|报工|创建|下单|上单|申请)",
+        normalized,
+    ):
+        return "conditional"
+    if re.search(
+        rf"(?:不要|别|无需|不用|暂不|先别|取消)(?:本次|这次|当前)?(?:直接|马上|立即)?{action}",
+        normalized,
+    ):
+        return "blocked"
+    return ""
+
+
+def _write_guard_result(state: SupportState, kind: str):
+    if kind == "query":
+        message = "这是查询问题，系统不会提交或执行任何申请。请说明你想查询的具体条件。"
+    elif kind == "conditional":
+        message = "检测到条件式的暂不执行要求，系统不会直接创建申请；请明确确认满足条件后是否提交。"
+    else:
+        message = "已按你的要求停止本次提交，未创建申请，也未执行任何业务写入。"
+    return {
+        "result": message,
+        "error_log": "",
+        "terminal_status": "NEED_USER_INPUT",
+        "write_guarded": True,
+        "pending_action": "",
+        "missing_fields": [],
+        "need_confirmation": False,
+        "confirmed": False,
+        "routing_error_classification": "WRITE_NEGATION_GUARDED",
+        "execution_log": state["execution_log"] + ["write_negation_guard"],
+    }
 
 
 def extract_order_ids(message: str) -> list[str]:
@@ -312,10 +370,22 @@ def _extract_operation_quantity(message: str) -> int | None:
 
 def _is_pending_manufacturing_continuation(state: SupportState, message: str) -> bool:
     action = state.get("pending_action")
-    if action not in {"production_submit", "outbound_submit"}:
+    if action not in {"production_submit", "outbound_submit", "order_entry", "quality_submit"}:
         return False
     if _is_obvious_new_intent(message):
         return False
+    if action == "order_entry":
+        return bool(
+            CUSTOMER_PATTERN.search(message)
+            or _extract_sku(message)
+            or re.search(r"\d+\s*(?:个|卷|只|pcs)", message, re.IGNORECASE)
+            or re.search(r"20\d{2}[-/]\d{1,2}[-/]\d{1,2}", message)
+        )
+    if action == "quality_submit":
+        return bool(
+            extract_order_ids(message)
+            or re.search(r"检验|合格|不合格|不良|数量", message)
+        )
     return bool(extract_order_ids(message) or _extract_operation_quantity(message))
 
 
@@ -332,6 +402,23 @@ def router_node(state: SupportState):
     routing_source = "llm"
     routing_error = ""
     emit_progress("intent", "running", "正在理解你的问题…")
+
+    negation_kind = _write_negation_kind(message)
+    # Existing refund slot cancellation is a controlled continuation of an
+    # unsubmitted refund draft. It is handled by refund_prepare_node; a new
+    # negated write must never be treated as withdrawal of a submitted request.
+    allow_pending_refund_cancel = (
+        state.get("pending_action") == "refund"
+        and bool(re.search(r"取消|不要了|算了", message))
+    )
+    if negation_kind and not allow_pending_refund_cancel:
+        return {
+            "intent": "unknown",
+            "routing_source": "deterministic_write_negation_guard",
+            "routing_error_classification": "WRITE_NEGATION_GUARDED",
+            "terminal_status": "NEED_USER_INPUT",
+            **_write_guard_result(state, negation_kind),
+        }
 
     if _is_pending_refund_continuation(state, message):
         # Only an unambiguous slot completion bypasses fresh intent routing.
@@ -355,6 +442,7 @@ def router_node(state: SupportState):
             routing_error = "UNEXPECTED_ROUTING_ERROR"
 
         quality_mixed_query = _is_quality_mixed_query(message)
+        quality_submit_query = _is_quality_submit_query(message)
         manufacturing_knowledge_query = _is_manufacturing_knowledge_query(message)
         quality_query = (
             re.search(r"质检|检验|不良品|不合格率|合格率", message)
@@ -363,7 +451,10 @@ def router_node(state: SupportState):
                 and re.search(r"不合格", message)
             )
         )
-        if quality_mixed_query:
+        if quality_submit_query:
+            intent = "quality_submit"
+            routing_source = "deterministic_quality_submit_override"
+        elif quality_mixed_query:
             intent = "quality_mixed"
             routing_source = "deterministic_mixed_quality_override"
         elif manufacturing_knowledge_query:
@@ -458,8 +549,8 @@ def router_node(state: SupportState):
         routing_source=routing_source,
     )
 
-    pending_action = intent if intent in {"refund", "production_submit", "outbound_submit"} else ""
-    missing_fields = ["order_id"] if intent in {"refund", "production_submit", "outbound_submit"} and needs_clarification else []
+    pending_action = intent if intent in {"refund", "production_submit", "outbound_submit", "order_entry", "quality_submit"} else ""
+    missing_fields = ["order_id"] if intent in {"refund", "production_submit", "outbound_submit", "quality_submit"} and needs_clarification else []
 
     pending_refund_continuation = _is_pending_refund_continuation(
         state,
@@ -499,6 +590,7 @@ def router_node(state: SupportState):
         "missing_fields": missing_fields,
         "refund_cancelled": False,
         "terminal_status": "",
+        "write_guarded": False,
         "rag_corpus": rag_corpus,
         "retrieved_source_ids": [],
         **refund_context,
@@ -1051,6 +1143,121 @@ def quality_node(state: SupportState):
     return {"result": "\n".join(lines), "error_log": "", "terminal_status": "SUCCESS", "execution_log": state["execution_log"] + ["quality_node"]}
 
 
+def _extract_quality_quantity(message: str, labels: str) -> int | None:
+    match = re.search(
+        rf"(?:{labels})\s*(?:数量)?\s*[:：]?\s*(-?\d+)",
+        message,
+        re.IGNORECASE,
+    )
+    return int(match.group(1)) if match else None
+
+
+def quality_submit_node(state: SupportState):
+    """Create a pending quality-report request from explicit numeric slots."""
+    guarded = _write_node_guard(state)
+    if guarded:
+        return guarded
+    if not has_tool_permission(
+        state["role"], "submit_quality_report", state.get("permissions")
+    ):
+        return {
+            "result": "当前账号没有提交质检申报的权限。",
+            "error_log": "PERMISSION_DENIED",
+            "terminal_status": "PERMISSION_DENIED",
+            "execution_log": state["execution_log"] + ["quality_submit_node"],
+        }
+
+    message = state["user_message"]
+    order_id = _target_order_id(state, message).upper()
+    inspected = _extract_quality_quantity(message, r"检验|检查|质检")
+    qualified = _extract_quality_quantity(message, r"(?<!不)合格")
+    rejected = _extract_quality_quantity(message, r"不合格|不良")
+    if inspected is None:
+        inspected = state.get("quality_inspected_quantity")
+    if qualified is None:
+        qualified = state.get("quality_qualified_quantity")
+    if rejected is None:
+        rejected = state.get("quality_rejected_quantity")
+
+    missing = []
+    if not order_id:
+        missing.append("order_id")
+    if inspected is None:
+        missing.append("inspected_quantity")
+    if qualified is None:
+        missing.append("qualified_quantity")
+    if rejected is None:
+        missing.append("rejected_quantity")
+    if missing:
+        labels = {
+            "order_id": "订单号",
+            "inspected_quantity": "检验数量",
+            "qualified_quantity": "合格数量",
+            "rejected_quantity": "不合格数量",
+        }
+        return {
+            "result": "提交质检申报还需要：" + "、".join(labels[item] for item in missing) + "。例如：提交质检 SF1001 检验100合格90不合格10。",
+            "error_log": "",
+            "terminal_status": "NEED_USER_INPUT",
+            "pending_action": "quality_submit",
+            "missing_fields": missing,
+            "order_id": order_id,
+            "current_order_id": order_id,
+            "quality_inspected_quantity": inspected,
+            "quality_qualified_quantity": qualified,
+            "quality_rejected_quantity": rejected,
+            "execution_log": state["execution_log"] + ["quality_submit_node"],
+        }
+
+    values = (int(inspected), int(qualified), int(rejected))
+    if values[0] <= 0 or min(values[1], values[2]) < 0:
+        return {
+            "result": "质检数量必须合法：检验数量大于 0，合格和不合格数量不能为负数。",
+            "error_log": "INVALID_ARGUMENT: QUALITY_QUANTITY_INVALID",
+            "terminal_status": "FAILED",
+            "pending_action": "",
+            "missing_fields": [],
+            "execution_log": state["execution_log"] + ["quality_submit_node"],
+        }
+    if values[1] + values[2] != values[0]:
+        return {
+            "result": "质检申报不合法：合格数量与不合格数量之和必须等于检验数量。",
+            "error_log": "INVALID_ARGUMENT: QUALITY_QUANTITY_MISMATCH",
+            "terminal_status": "FAILED",
+            "pending_action": "",
+            "missing_fields": [],
+            "execution_log": state["execution_log"] + ["quality_submit_node"],
+        }
+    try:
+        item = create_request(
+            "quality_report",
+            int(state.get("user_id") or 0),
+            {
+                "order_no": order_id,
+                "inspected_quantity": values[0],
+                "qualified_quantity": values[1],
+                "rejected_quantity": values[2],
+                "report_date": str(date.today()),
+                "remark": "自然语言提交",
+            },
+        )
+    except (ValueError, TypeError) as exc:
+        return {
+            "result": str(exc),
+            "error_log": f"INVALID_ARGUMENT: {exc}",
+            "terminal_status": "FAILED",
+            "execution_log": state["execution_log"] + ["quality_submit_node"],
+        }
+    return {
+        "result": f"质检申报已提交：{order_id}，检验 {values[0]} 个，合格 {values[1]} 个，不合格 {values[2]} 个，申请号 {item['request_no']}，等待管理员审批。",
+        "error_log": "",
+        "terminal_status": "PENDING_APPROVAL",
+        "pending_action": "",
+        "missing_fields": [],
+        "execution_log": state["execution_log"] + ["quality_submit_node"],
+    }
+
+
 def _mixed_quality_order_id(state: SupportState) -> str:
     """Resolve a mixed-query order without treating an amount as an order ID."""
     resolved = _target_order_id(state, state["user_message"])
@@ -1216,7 +1423,23 @@ def _manufacturing_submission_error(state: SupportState, message: str, missing: 
     }
 
 
+def _write_node_guard(state: SupportState):
+    """Repeat the deterministic write guard at every high-risk node entry."""
+    kind = _write_negation_kind(state["user_message"])
+    if not kind:
+        return None
+    if (
+        state.get("pending_action") == "refund"
+        and re.search(r"取消|不要了|算了", state["user_message"])
+    ):
+        return None
+    return _write_guard_result(state, kind)
+
+
 def production_submit_node(state: SupportState):
+    guarded = _write_node_guard(state)
+    if guarded:
+        return guarded
     if not has_tool_permission(state["role"], "submit_production_report", state.get("permissions")):
         return {"result": "当前账号没有提交生产报工的权限。", "error_log": "PERMISSION_DENIED", "terminal_status": "PERMISSION_DENIED", "execution_log": state["execution_log"] + ["production_submit_node"]}
     order_id = _target_order_id(state, state["user_message"]).upper()
@@ -1268,6 +1491,9 @@ def production_submit_node(state: SupportState):
 
 
 def outbound_submit_node(state: SupportState):
+    guarded = _write_node_guard(state)
+    if guarded:
+        return guarded
     if not has_tool_permission(state["role"], "request_outbound", state.get("permissions")):
         return {"result": "当前账号没有提交出库申请的权限。", "error_log": "PERMISSION_DENIED", "terminal_status": "PERMISSION_DENIED", "execution_log": state["execution_log"] + ["outbound_submit_node"]}
     order_id = _target_order_id(state, state["user_message"]).upper()
@@ -1319,26 +1545,106 @@ def outbound_submit_node(state: SupportState):
 
 
 def order_entry_node(state: SupportState):
-    message = state["user_message"]
-    customer_match = CUSTOMER_PATTERN.search(message)
-    sku = _extract_sku(message)
-    quantity_match = re.search(r"(?<!\d)(\d+)\s*(?:个|卷|只|pcs)", message, re.IGNORECASE)
-    date_match = re.search(r"20\d{2}[-/]\d{1,2}[-/]\d{1,2}", message)
-    if not customer_match or not sku or not quantity_match:
+    guarded = _write_node_guard(state)
+    if guarded:
+        return guarded
+
+    can_direct_create = has_tool_permission(
+        state["role"], "create_sales_order", state.get("permissions")
+    )
+    can_submit = has_tool_permission(
+        state["role"], "submit_order", state.get("permissions")
+    )
+    if not can_direct_create and not can_submit:
         return {
-            "result": "上单需要客户编号、产品 SKU 和数量，例如：CUST-001 下单 REEL-7IN-BLACK 500个。",
-            "error_log": "INVALID_ARGUMENT: incomplete_order_entry",
-            "terminal_status": "FAILED",
+            "result": "当前账号没有提交订单申请的权限。",
+            "error_log": "PERMISSION_DENIED",
+            "terminal_status": "PERMISSION_DENIED",
+            "pending_action": "",
+            "missing_fields": [],
             "execution_log": state["execution_log"] + ["order_entry_node"],
         }
-    required_date = (date_match.group(0) if date_match else "2026-09-30").replace("/", "-")
+
+    message = state["user_message"]
+    customer_code = (
+        CUSTOMER_PATTERN.search(message).group(0).upper()
+        if CUSTOMER_PATTERN.search(message)
+        else str(state.get("order_customer_code") or "")
+    )
+    sku = _extract_sku(message) or str(state.get("order_sku") or "")
+    quantity_match = re.search(r"(?<!\d)(\d+)\s*(?:个|卷|只|pcs)", message, re.IGNORECASE)
+    quantity = int(quantity_match.group(1)) if quantity_match else state.get("order_quantity")
+    date_match = re.search(r"20\d{2}[-/]\d{1,2}[-/]\d{1,2}", message)
+    required_date = (
+        date_match.group(0).replace("/", "-")
+        if date_match
+        else str(state.get("order_required_date") or "")
+    )
+    missing = []
+    if not customer_code:
+        missing.append("customer_code")
+    if not sku:
+        missing.append("sku")
+    if quantity is None:
+        missing.append("quantity")
+    if not required_date:
+        missing.append("required_date")
+    if missing:
+        labels = {
+            "customer_code": "客户编号",
+            "sku": "产品 SKU",
+            "quantity": "需求数量",
+            "required_date": "交期",
+        }
+        return {
+            "result": "上单还需要：" + "、".join(labels[item] for item in missing) + "。例如：CUST-001 下单 REEL-7IN-BLACK 500个，交期 2026-09-30。",
+            "error_log": "",
+            "terminal_status": "NEED_USER_INPUT",
+            "pending_action": "order_entry",
+            "missing_fields": missing,
+            "order_customer_code": customer_code,
+            "order_sku": sku,
+            "order_quantity": quantity,
+            "order_required_date": required_date,
+            "execution_log": state["execution_log"] + ["order_entry_node"],
+        }
+
+    if can_submit and not can_direct_create:
+        try:
+            item = create_request(
+                "order_submission",
+                int(state.get("user_id") or 0),
+                {
+                    "customer_code": customer_code,
+                    "sku": sku,
+                    "quantity": int(quantity),
+                    "required_date": required_date,
+                    "remark": "自然语言提交",
+                },
+            )
+        except (ValueError, TypeError) as exc:
+            return {
+                "result": str(exc),
+                "error_log": f"INVALID_ARGUMENT: {exc}",
+                "terminal_status": "FAILED",
+                "execution_log": state["execution_log"] + ["order_entry_node"],
+            }
+        return {
+            "result": f"订单申请已提交：{customer_code}，产品 {sku}，数量 {quantity} 个，申请号 {item['request_no']}，等待管理员审批。",
+            "error_log": "",
+            "terminal_status": "PENDING_APPROVAL",
+            "pending_action": "",
+            "missing_fields": [],
+            "execution_log": state["execution_log"] + ["order_entry_node"],
+        }
+
     tool_result = dispatch_tool(
         "create_sales_order",
         role=state["role"],
         permissions=state.get("permissions"),
-        customer_code=customer_match.group(0).upper(),
+        customer_code=customer_code,
         sku=sku,
-        quantity=int(quantity_match.group(1)),
+        quantity=int(quantity),
         required_date=required_date,
     )
     if not tool_result.success:
@@ -1425,6 +1731,10 @@ def refund_prepare_node(state: SupportState):
     """
 
     message = state["user_message"]
+
+    guarded = _write_node_guard(state)
+    if guarded:
+        return guarded
 
     order_id = _target_order_id(state, message)
 

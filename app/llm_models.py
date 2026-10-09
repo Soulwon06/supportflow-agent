@@ -15,6 +15,7 @@ class IntentName(str, Enum):
     inventory = "inventory"
     production = "production"
     order_entry = "order_entry"
+    quality_submit = "quality_submit"
     unknown = "unknown"
 
 

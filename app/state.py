@@ -28,6 +28,16 @@ class SupportState(TypedDict):
     missing_fields: List[str]
     refund_cancelled: bool
     terminal_status: str
+    write_guarded: bool
+
+    # Pending slots for deterministic manufacturing submissions.
+    order_customer_code: str
+    order_sku: str
+    order_quantity: int | None
+    order_required_date: str
+    quality_inspected_quantity: int | None
+    quality_qualified_quantity: int | None
+    quality_rejected_quantity: int | None
 
     # LLM routing/generation metadata. These fields are informational and do
     # not grant permission to call tools or bypass HITL.
@@ -105,6 +115,14 @@ def create_initial_state(
         "missing_fields": [],
         "refund_cancelled": False,
         "terminal_status": "",
+        "write_guarded": False,
+        "order_customer_code": "",
+        "order_sku": "",
+        "order_quantity": None,
+        "order_required_date": "",
+        "quality_inspected_quantity": None,
+        "quality_qualified_quantity": None,
+        "quality_rejected_quantity": None,
 
         "routing_source": "",
         "routing_error_classification": "",
@@ -169,6 +187,15 @@ def create_turn_input(
         state["refund_amount"] = float(existing_state.get("refund_amount") or 0.0)
         state["refund_reason"] = str(existing_state.get("refund_reason") or "")
         state["permissions"] = list(existing_state.get("permissions") or [])
+        if state["pending_action"] == "order_entry":
+            state["order_customer_code"] = str(existing_state.get("order_customer_code") or "")
+            state["order_sku"] = str(existing_state.get("order_sku") or "")
+            state["order_quantity"] = existing_state.get("order_quantity")
+            state["order_required_date"] = str(existing_state.get("order_required_date") or "")
+        if state["pending_action"] == "quality_submit":
+            state["quality_inspected_quantity"] = existing_state.get("quality_inspected_quantity")
+            state["quality_qualified_quantity"] = existing_state.get("quality_qualified_quantity")
+            state["quality_rejected_quantity"] = existing_state.get("quality_rejected_quantity")
         # An idempotency key belongs to one active refund operation, not to
         # the whole conversation. Preserve it only while a refund is waiting
         # for HITL confirmation; terminal turns must start with a fresh key.

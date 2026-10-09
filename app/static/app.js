@@ -31,6 +31,7 @@ const INTENT_LABELS = {
   refund: "退款申请",
   inventory: "库存查询",
   production: "生产进度",
+  quality_submit: "质检申报",
   order_entry: "上单申请",
   unknown: "其他问题",
 };
