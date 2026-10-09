@@ -83,6 +83,22 @@ def create_request(request_type: str, requested_by: int, payload: dict[str, Any]
             existing = conn.execute("SELECT * FROM operation_requests WHERE idempotency_key = ?", (idempotency_key,)).fetchone()
             if existing is not None:
                 return _row(existing)
+        if request_type == "outbound_request":
+            # Chat submissions do not carry an HTTP idempotency header.  Do
+            # not create a second pending request for the same employee and
+            # exact outbound payload; once the first request is decided, a
+            # later request is allowed and will be revalidated again.
+            pending = conn.execute(
+                """SELECT * FROM operation_requests
+                WHERE request_type = 'outbound_request'
+                  AND requested_by = ?
+                  AND status = 'SUBMITTED'
+                ORDER BY id DESC""",
+                (requested_by,),
+            ).fetchall()
+            for candidate in pending:
+                if json.loads(candidate["payload_json"]) == payload:
+                    return _row(candidate)
         cursor = conn.execute(
             """INSERT INTO operation_requests(
                 request_no, request_type, status, requested_by, payload_json, idempotency_key
@@ -545,6 +561,19 @@ def decide_request(request_id: int, approver_id: int, approved: bool, reason: st
         request = conn.execute("SELECT * FROM operation_requests WHERE id = ?", (request_id,)).fetchone()
         if request is None:
             raise LookupError("申请不存在")
+        approver = conn.execute(
+            """SELECT u.role,
+                EXISTS(
+                    SELECT 1 FROM user_permissions up
+                    WHERE up.user_id = u.id AND up.permission = 'admin_data'
+                ) AS has_admin_permission
+            FROM users u WHERE u.id = ? AND u.status = 'ACTIVE'""",
+            (approver_id,),
+        ).fetchone()
+        if approver is None or (
+            approver["role"] != "admin" and not bool(approver["has_admin_permission"])
+        ):
+            raise PermissionError("当前账号没有管理员审批权限")
         if request["status"] != "SUBMITTED":
             raise ValueError("该申请已经处理过")
         payload = json.loads(request["payload_json"])

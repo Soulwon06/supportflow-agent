@@ -374,7 +374,10 @@ def router_node(state: SupportState):
             routing_source = "deterministic_manufacturing_override"
         elif (
             re.search(r"出库", message)
-            and _extract_operation_quantity(message) is not None
+            and (
+                _extract_operation_quantity(message) is not None
+                or re.search(r"提交|申报|申请", message)
+            )
             and not re.search(r"查询|查一下|状态|记录|多少|进度", message)
         ):
             intent = "outbound_submit"
@@ -1206,7 +1209,7 @@ def _manufacturing_submission_error(state: SupportState, message: str, missing: 
     return {
         "result": message,
         "error_log": "",
-        "terminal_status": "",
+        "terminal_status": "NEED_USER_INPUT",
         "pending_action": action,
         "missing_fields": missing,
         "execution_log": state["execution_log"] + [f"{action}_node"],

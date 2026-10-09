@@ -575,6 +575,8 @@ async def decide_operation_request(
         item = decide_request(request_id, actor["id"], payload.approved, payload.reason)
     except LookupError as exc:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
+    except PermissionError as exc:
+        raise HTTPException(status_code=403, detail=str(exc)) from exc
     except ValueError as exc:
         raise HTTPException(status_code=422, detail=str(exc)) from exc
     return {"request": item}
