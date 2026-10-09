@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 import os
 import time
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
@@ -12,6 +13,36 @@ import jieba
 from rank_bm25 import BM25Okapi
 
 from .observability import emit_progress
+from .rag_models import (
+    CorpusName,
+    RagChunk,
+    RagDocument,
+    filter_documents_for_role,
+)
+
+
+class CorpusUnavailableError(RuntimeError):
+    """Raised when an explicitly requested Corpus is not available."""
+
+    def __init__(self, corpus: CorpusName, reason: str):
+        self.corpus = corpus
+        self.reason = reason
+        super().__init__(f"{corpus.value}: {reason}")
+
+
+@dataclass
+class CorpusResources:
+    """Independent sparse/vector resources for one Corpus and role."""
+
+    corpus: CorpusName
+    role: str
+    documents: list[dict[str, Any]]
+    tokenized_documents: list[list[str]]
+    bm25: BM25Okapi
+    document_vectors: Any = None
+
+
+CorpusContract = RagDocument | RagChunk
 
 
 DATA_PATH = Path(__file__).parent.parent / "data" / "knowledge_base.json"
@@ -61,6 +92,130 @@ def retriever_startup_profile() -> dict[str, Any]:
     return dict(_retriever_startup_profile)
 
 
+def _legacy_customer_support_contracts() -> list[RagDocument]:
+    """Adapt the frozen legacy KB to the B1 contract without changing it."""
+
+    return [
+        RagDocument(
+            corpus=CorpusName.customer_support,
+            document_id=str(document["id"]),
+            source_version=str(document.get("version") or "legacy"),
+            title=str(document.get("title") or document["id"]),
+            content=document_text(document),
+            source_section=str(document.get("category") or ""),
+            synthetic=False,
+            authority="legacy_customer_support",
+            allowed_roles=[],
+        )
+        for document in documents
+    ]
+
+
+_corpus_source_documents: dict[CorpusName, list[CorpusContract]] = {
+    CorpusName.customer_support: _legacy_customer_support_contracts(),
+}
+_corpus_resource_cache: dict[tuple[CorpusName, str], CorpusResources] = {}
+
+
+def _contract_to_retriever_document(item: CorpusContract) -> dict[str, Any]:
+    """Convert a validated contract to the legacy scorer's document shape."""
+
+    if isinstance(item, RagChunk):
+        item_id = item.chunk_id
+        chunk_id = item.chunk_id
+    else:
+        item_id = item.document_id
+        chunk_id = None
+    return {
+        "id": item_id,
+        "document_id": item.document_id,
+        "chunk_id": chunk_id,
+        "corpus": item.corpus.value,
+        "source_version": item.source_version,
+        "version": item.source_version,
+        "title": item.title,
+        "content": item.content,
+        "text": item.content,
+        "category": item.source_section,
+        "source_section": item.source_section,
+        "synthetic": item.synthetic,
+        "authority": item.authority,
+        "allowed_roles": list(item.allowed_roles),
+        "effective_status": item.effective_status.value,
+        "keywords": [],
+    }
+
+
+def build_corpus_resources(
+    corpus: CorpusName,
+    documents_for_corpus: list[CorpusContract],
+    *,
+    role: str,
+) -> CorpusResources:
+    """Build isolated BM25 resources after deterministic access filtering.
+
+    This factory is intentionally usable with a small in-memory list for tests
+    and B3 preparation.  It does not register a production Corpus or create a
+    knowledge-base file.
+    """
+
+    if not isinstance(role, str) or not role.strip():
+        raise ValueError("role must be a non-empty string")
+    normalized_role = role.strip()
+    visible = filter_documents_for_role(
+        documents_for_corpus,
+        corpus=corpus,
+        role=normalized_role,
+    )
+    if not visible:
+        raise CorpusUnavailableError(corpus, "NO_AUTHORIZED_ACTIVE_DOCUMENTS")
+    retriever_documents = [_contract_to_retriever_document(item) for item in visible]
+    tokenized = [tokenize(index_text(document)) for document in retriever_documents]
+    return CorpusResources(
+        corpus=corpus,
+        role=normalized_role,
+        documents=retriever_documents,
+        tokenized_documents=tokenized,
+        bm25=BM25Okapi(tokenized),
+    )
+
+
+def corpus_status(corpus: CorpusName) -> dict[str, Any]:
+    """Report explicit availability without falling back to another Corpus."""
+
+    if not isinstance(corpus, CorpusName):
+        raise ValueError("corpus must be an explicit CorpusName")
+    source = _corpus_source_documents.get(corpus)
+    if not source:
+        return {
+            "corpus": corpus.value,
+            "available": False,
+            "reason": "CORPUS_NOT_CONFIGURED",
+        }
+    return {
+        "corpus": corpus.value,
+        "available": True,
+        "document_count": len(source),
+    }
+
+
+def _get_corpus_resources(corpus: CorpusName, role: str) -> CorpusResources:
+    if not isinstance(corpus, CorpusName):
+        raise ValueError("corpus must be an explicit CorpusName")
+    if not isinstance(role, str) or not role.strip():
+        raise ValueError("role must be a non-empty string")
+    if corpus not in _corpus_source_documents:
+        raise CorpusUnavailableError(corpus, "CORPUS_NOT_CONFIGURED")
+    cache_key = (corpus, role.strip())
+    if cache_key not in _corpus_resource_cache:
+        _corpus_resource_cache[cache_key] = build_corpus_resources(
+            corpus,
+            _corpus_source_documents[corpus],
+            role=role.strip(),
+        )
+    return _corpus_resource_cache[cache_key]
+
+
 def _set_profile(profile: dict[str, Any] | None, name: str, started: float) -> None:
     if profile is not None:
         profile[name] = round((time.perf_counter() - started) * 1000, 3)
@@ -75,12 +230,20 @@ def _result(
     """Return a stable evidence shape for tools, RAG prompts, and evaluation."""
     return {
         "id": document["id"],
+        "corpus": document.get("corpus", CorpusName.customer_support.value),
+        "document_id": document.get("document_id", document["id"]),
+        "chunk_id": document.get("chunk_id"),
         # ``text`` remains for compatibility with the accepted knowledge node.
         "text": document_text(document),
         "content": document_text(document),
         "title": document.get("title", ""),
         "category": document.get("category", ""),
+        "source_section": document.get("source_section", document.get("category", "")),
         "source_version": document.get("version", ""),
+        "synthetic": document.get("synthetic", False),
+        "authority": document.get("authority", "legacy_customer_support"),
+        "allowed_roles": list(document.get("allowed_roles", [])),
+        "effective_status": document.get("effective_status", "active"),
         "score": float(score),
         "rank": rank,
         "retrieval_method": method,
@@ -103,12 +266,15 @@ def bm25_search(
     top_k: int = 3,
     *,
     profile: dict[str, Any] | None = None,
+    resources: CorpusResources | None = None,
 ) -> list[dict[str, Any]]:
     started = time.perf_counter()
-    scores = bm25.get_scores(tokenize(query))
+    active_bm25 = resources.bm25 if resources is not None else bm25
+    active_documents = resources.documents if resources is not None else documents
+    scores = active_bm25.get_scores(tokenize(query))
     results = [
         _result(document, score, "bm25")
-        for document, score in zip(documents, scores)
+        for document, score in zip(active_documents, scores)
         if score > 0
     ]
     results.sort(key=lambda item: item["score"], reverse=True)
@@ -141,35 +307,65 @@ def _dense_enabled() -> bool:
     }
 
 
-def _ensure_dense_resources(profile: dict[str, Any] | None = None) -> bool:
+def _ensure_dense_resources(
+    profile: dict[str, Any] | None = None,
+    *,
+    resources: CorpusResources | None = None,
+) -> bool:
     global embedding_model, document_vectors, _dense_load_error
     global _dense_model_initialization_ms, _kb_embedding_preparation_ms
-    if embedding_model is not None and document_vectors is not None:
+
+    if resources is not None:
+        if resources.document_vectors is not None:
+            if profile is not None:
+                profile.setdefault("dense_model_initialization_ms", 0.0)
+                profile.setdefault("kb_embedding_preparation_ms", 0.0)
+                profile["dense_cache_hit"] = True
+                profile["dense_corpus"] = resources.corpus.value
+            return True
+        if not _dense_enabled() or _dense_load_error is not None:
+            return False
+    elif embedding_model is not None and document_vectors is not None:
         if profile is not None:
             profile.setdefault("dense_model_initialization_ms", 0.0)
             profile.setdefault("kb_embedding_preparation_ms", 0.0)
-            profile.setdefault("dense_cache_hit", True)
+            profile["dense_cache_hit"] = True
         return True
+
     if not _dense_enabled() or _dense_load_error is not None:
         return False
     try:
         from sentence_transformers import SentenceTransformer
 
-        emit_progress("retrieval", "running", "正在加载语义检索模型…")
-        model_started = time.perf_counter()
-        embedding_model = SentenceTransformer(
-            os.getenv(
-                "SUPPORTFLOW_EMBEDDING_MODEL",
-                "paraphrase-multilingual-MiniLM-L12-v2",
-            ),
-            device=os.getenv("SUPPORTFLOW_EMBEDDING_DEVICE", "cpu"),
-            local_files_only=True,
-        )
-        _set_profile(profile, "dense_model_initialization_ms", model_started)
-        _dense_model_initialization_ms = round(
-            (time.perf_counter() - model_started) * 1000,
-            3,
-        )
+        if embedding_model is None:
+            emit_progress("retrieval", "running", "正在加载语义检索模型…")
+            model_started = time.perf_counter()
+            embedding_model = SentenceTransformer(
+                os.getenv(
+                    "SUPPORTFLOW_EMBEDDING_MODEL",
+                    "paraphrase-multilingual-MiniLM-L12-v2",
+                ),
+                device=os.getenv("SUPPORTFLOW_EMBEDDING_DEVICE", "cpu"),
+                local_files_only=True,
+            )
+            _set_profile(profile, "dense_model_initialization_ms", model_started)
+            _dense_model_initialization_ms = round(
+                (time.perf_counter() - model_started) * 1000,
+                3,
+            )
+
+        if resources is not None:
+            emit_progress("retrieval", "running", "正在准备知识库向量…")
+            embedding_started = time.perf_counter()
+            resources.document_vectors = embedding_model.encode(
+                [index_text(document) for document in resources.documents]
+            )
+            _set_profile(profile, "kb_embedding_preparation_ms", embedding_started)
+            if profile is not None:
+                profile["dense_cache_hit"] = False
+                profile["dense_corpus"] = resources.corpus.value
+            return True
+
         emit_progress("retrieval", "running", "正在准备知识库向量…")
         embedding_started = time.perf_counter()
         document_vectors = embedding_model.encode(
@@ -214,8 +410,9 @@ def dense_search(
     top_k: int = 3,
     *,
     profile: dict[str, Any] | None = None,
+    resources: CorpusResources | None = None,
 ) -> list[dict[str, Any]]:
-    if not _ensure_dense_resources(profile):
+    if not _ensure_dense_resources(profile, resources=resources):
         return []
 
     emit_progress("retrieval", "running", "正在进行语义检索…")
@@ -224,7 +421,9 @@ def dense_search(
     _set_profile(profile, "query_embedding_ms", query_started)
     similarity_started = time.perf_counter()
     results = []
-    for document, document_vector in zip(documents, document_vectors):
+    active_documents = resources.documents if resources is not None else documents
+    active_vectors = resources.document_vectors if resources is not None else document_vectors
+    for document, document_vector in zip(active_documents, active_vectors):
         results.append(
             _result(
                 document,
@@ -275,6 +474,7 @@ def hybrid_candidates(
     *,
     require_dense: bool = False,
     profile: dict[str, Any] | None = None,
+    resources: CorpusResources | None = None,
 ) -> list[dict[str, Any]]:
     """Build the frozen Hybrid/RRF candidate set before reranking.
 
@@ -292,10 +492,20 @@ def hybrid_candidates(
                 "startup_profile": retriever_startup_profile(),
             }
         )
-    sparse_results = bm25_search(query, top_k=candidate_k, profile=profile)
-    if require_dense and not _ensure_dense_resources(profile):
+    sparse_results = bm25_search(
+        query,
+        top_k=candidate_k,
+        profile=profile,
+        resources=resources,
+    )
+    if require_dense and not _ensure_dense_resources(profile, resources=resources):
         raise RuntimeError("DENSE_RETRIEVAL_UNAVAILABLE")
-    dense_results = dense_search(query, top_k=candidate_k, profile=profile)
+    dense_results = dense_search(
+        query,
+        top_k=candidate_k,
+        profile=profile,
+        resources=resources,
+    )
     fused = reciprocal_rank_fusion(sparse_results, dense_results, profile=profile)
     preparation_started = time.perf_counter()
     candidates = fused[:candidate_k]
@@ -411,4 +621,48 @@ def retrieve_with_real_reranker(
     """Controlled-experiment path: frozen Hybrid/RRF followed by real reranking."""
     candidates = hybrid_candidates(query, candidate_k=candidate_k)
     return real_rerank(query, candidates, top_k=top_k)
+
+
+def retrieve_from_corpus(
+    query: str,
+    *,
+    corpus: CorpusName,
+    role: str,
+    candidate_k: int = 5,
+    top_k: int = 3,
+    require_dense: bool = True,
+    use_reranker: bool = True,
+    resources: CorpusResources | None = None,
+    profile: dict[str, Any] | None = None,
+) -> list[dict[str, Any]]:
+    """Retrieve from an explicitly selected, role-filtered Corpus.
+
+    The existing ``retrieve`` and ``hybrid_candidates`` functions remain the
+    compatibility path for the historical customer-support KB.  New callers
+    must pass ``corpus`` and ``role``.  A missing manufacturing Corpus raises
+    ``CorpusUnavailableError``; it never falls back to customer support.
+    """
+
+    if not isinstance(corpus, CorpusName):
+        raise ValueError("corpus must be an explicit CorpusName")
+    if not isinstance(role, str) or not role.strip():
+        raise ValueError("role must be a non-empty string")
+    normalized_role = role.strip()
+    if resources is None:
+        resources = _get_corpus_resources(corpus, normalized_role)
+    elif resources.corpus is not corpus or resources.role != normalized_role:
+        raise ValueError("resources do not match the requested corpus and role")
+
+    candidates = hybrid_candidates(
+        query,
+        candidate_k=candidate_k,
+        require_dense=require_dense,
+        profile=profile,
+        resources=resources,
+    )
+    if not candidates:
+        return []
+    if use_reranker:
+        return real_rerank(query, candidates, top_k=top_k)
+    return [dict(item, rank=index) for index, item in enumerate(candidates[:top_k], 1)]
 
