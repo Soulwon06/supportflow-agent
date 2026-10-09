@@ -64,7 +64,13 @@ def test_explicit_customer_support_corpus_returns_only_customer_documents(bm25_o
     assert all(item["chunk_id"] is None for item in results)
 
 
-def test_manufacturing_corpus_missing_fails_without_customer_fallback():
+def test_missing_manufacturing_corpus_fails_without_customer_fallback(monkeypatch):
+    monkeypatch.setattr(
+        retriever,
+        "_corpus_source_documents",
+        {CorpusName.customer_support: retriever._corpus_source_documents[CorpusName.customer_support]},
+    )
+    monkeypatch.setattr(retriever, "_manufacturing_demo_load_error", None)
     status = corpus_status(CorpusName.manufacturing_demo)
     assert status == {
         "corpus": "manufacturing_demo",

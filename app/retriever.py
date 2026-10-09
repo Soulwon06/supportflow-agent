@@ -18,6 +18,7 @@ from .rag_models import (
     RagChunk,
     RagDocument,
     filter_documents_for_role,
+    validate_unique_ids,
 )
 
 
@@ -46,6 +47,9 @@ CorpusContract = RagDocument | RagChunk
 
 
 DATA_PATH = Path(__file__).parent.parent / "data" / "knowledge_base.json"
+MANUFACTURING_DATA_PATH = (
+    Path(__file__).parent.parent / "data" / "manufacturing_knowledge_demo.json"
+)
 
 
 def load_knowledge_base() -> list[dict[str, Any]]:
@@ -111,8 +115,37 @@ def _legacy_customer_support_contracts() -> list[RagDocument]:
     ]
 
 
+_manufacturing_demo_load_error: str | None = None
+
+
+def _load_manufacturing_demo_contracts() -> list[RagDocument]:
+    """Load and validate the synthetic manufacturing Corpus only."""
+
+    global _manufacturing_demo_load_error
+    try:
+        with open(MANUFACTURING_DATA_PATH, "r", encoding="utf-8") as file:
+            raw_documents = json.load(file)
+        if not isinstance(raw_documents, list) or not raw_documents:
+            raise ValueError("manufacturing Corpus must be a non-empty list")
+        contracts = [RagDocument.model_validate(item) for item in raw_documents]
+        if any(item.corpus is not CorpusName.manufacturing_demo for item in contracts):
+            raise ValueError("manufacturing Corpus contains a different corpus")
+        return [
+            item
+            for item in validate_unique_ids(contracts)
+            if item.effective_status.value == "active"
+        ]
+    except Exception:
+        # Keep the failure observable through corpus_status/retrieve_from_corpus
+        # without exposing file contents or turning it into a support-Corpus
+        # fallback.
+        _manufacturing_demo_load_error = "CORPUS_INVALID"
+        return []
+
+
 _corpus_source_documents: dict[CorpusName, list[CorpusContract]] = {
     CorpusName.customer_support: _legacy_customer_support_contracts(),
+    CorpusName.manufacturing_demo: _load_manufacturing_demo_contracts(),
 }
 _corpus_resource_cache: dict[tuple[CorpusName, str], CorpusResources] = {}
 
@@ -185,6 +218,12 @@ def corpus_status(corpus: CorpusName) -> dict[str, Any]:
 
     if not isinstance(corpus, CorpusName):
         raise ValueError("corpus must be an explicit CorpusName")
+    if corpus is CorpusName.manufacturing_demo and _manufacturing_demo_load_error:
+        return {
+            "corpus": corpus.value,
+            "available": False,
+            "reason": _manufacturing_demo_load_error,
+        }
     source = _corpus_source_documents.get(corpus)
     if not source:
         return {
@@ -204,7 +243,9 @@ def _get_corpus_resources(corpus: CorpusName, role: str) -> CorpusResources:
         raise ValueError("corpus must be an explicit CorpusName")
     if not isinstance(role, str) or not role.strip():
         raise ValueError("role must be a non-empty string")
-    if corpus not in _corpus_source_documents:
+    if corpus is CorpusName.manufacturing_demo and _manufacturing_demo_load_error:
+        raise CorpusUnavailableError(corpus, _manufacturing_demo_load_error)
+    if corpus not in _corpus_source_documents or not _corpus_source_documents[corpus]:
         raise CorpusUnavailableError(corpus, "CORPUS_NOT_CONFIGURED")
     cache_key = (corpus, role.strip())
     if cache_key not in _corpus_resource_cache:

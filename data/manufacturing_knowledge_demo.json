@@ -1,0 +1,62 @@
+[
+  {
+    "corpus": "manufacturing_demo",
+    "document_id": "mfg_demo_production_sop_v1",
+    "source_version": "demo-1.0",
+    "source_section": "production_precheck",
+    "title": "生产前设备、物料与工单核对演示规范",
+    "content": "本演示规范用于说明生产开始前的核对顺序，不代表任何真实企业或正式行业标准。开始生产前，操作人员应确认设备处于可用状态，检查必要的安全防护和点检记录；核对当班物料名称、批次标识与领料记录；再核对工单号、产品型号、计划数量和版本信息。发现设备、物料或工单信息不一致时，应暂停开工并向负责人反馈，不能凭经验替换物料或自行修改工单。核对完成后按现有业务流程记录结果，生产报工只能填报实际完成数量。",
+    "synthetic": true,
+    "authority": "teaching_demo_only",
+    "allowed_roles": ["employee", "sales_employee", "production_employee", "quality_employee", "warehouse_employee", "admin"],
+    "effective_status": "active"
+  },
+  {
+    "corpus": "manufacturing_demo",
+    "document_id": "mfg_demo_quality_sop_v1",
+    "source_version": "demo-1.0",
+    "source_section": "quality_inspection",
+    "title": "质检检查、不合格品隔离与复检演示规范",
+    "content": "本演示规范用于说明质检记录的基本流程，不代表任何真实企业或正式质量标准。质检人员应依据当前有效的订单要求和内部检验项目进行检查，记录检验数量、合格数量与不合格数量。不合格品应做好标识并与合格品隔离，记录问题现象和关联工单，未经处理不得混入待出库产品。返工或纠正后，应按流程重新检验并保留复检记录。质检报工的数量必须满足后端对检验总量、合格量和不合格量的确定性校验。",
+    "synthetic": true,
+    "authority": "teaching_demo_only",
+    "allowed_roles": ["employee", "production_employee", "quality_employee", "warehouse_employee", "admin"],
+    "effective_status": "active"
+  },
+  {
+    "corpus": "manufacturing_demo",
+    "document_id": "mfg_demo_reel_packaging_v1",
+    "source_version": "demo-1.0",
+    "source_section": "product_specification_and_packaging",
+    "title": "塑胶载体卷轴规格字段与包装检查演示说明",
+    "content": "本演示说明用于帮助员工理解卷轴产品信息的记录方式，不代表真实企业规格或正式技术标准。订单和生产记录应至少能够追溯产品型号、卷轴尺寸或规格描述、材料或颜色描述、计划数量、批次标识和交期要求；具体数值以当前有效订单或受控技术文件为准。包装检查应确认产品数量与标签一致、包装无明显破损、批次和订单标识清晰，并按要求完成防尘、防潮或隔离措施。资料未写明的尺寸、材料性能或包装参数不得由系统或员工自行推断。",
+    "synthetic": true,
+    "authority": "teaching_demo_only",
+    "allowed_roles": ["employee", "sales_employee", "production_employee", "quality_employee", "warehouse_employee", "admin"],
+    "effective_status": "active"
+  },
+  {
+    "corpus": "manufacturing_demo",
+    "document_id": "mfg_demo_outbound_sop_v1",
+    "source_version": "demo-1.0",
+    "source_section": "outbound_handover",
+    "title": "出库前核对与产品交接演示规范",
+    "content": "本演示规范用于说明出库申请的核对和交接步骤，不代表任何真实企业或正式物流标准。提交出库申请前，应核对订单号、产品型号、批次、申请数量、包装状态和收货信息。仓库人员只能提交实际库存和业务状态允许的数量，系统应在申请和审批阶段重新校验可出库数量。管理员审批通过后，按实际发出数量完成出库记录，并保留申请人、审批人和交接信息。未审批、订单不匹配、批次不清晰或库存不足时，不得直接出库。",
+    "synthetic": true,
+    "authority": "teaching_demo_only",
+    "allowed_roles": ["employee", "warehouse_employee", "quality_employee", "admin"],
+    "effective_status": "active"
+  },
+  {
+    "corpus": "manufacturing_demo",
+    "document_id": "mfg_demo_approval_workflow_v1",
+    "source_version": "demo-1.0",
+    "source_section": "approval_workflow",
+    "title": "订单、报工、质检与出库申请审批演示流程",
+    "content": "本演示流程用于说明内部申请与审批的边界，不代表真实企业制度。业务员提交客户订单申请后，由管理员审核订单信息；生产员工提交生产完成数量后，由管理员审核报工；质检员工提交检验、合格和不合格数量后，由管理员审核质检记录；仓库员工提交出库申请后，由管理员审核出库条件。员工只有提交申请的权限，不能通过聊天、表单或文档内容直接修改已审批数据。管理员可以直接创建订单，也必须经过系统确定性校验。涉及数量、权限、订单状态和库存的判断以数据库和后端业务规则为准，不能由文档或语言模型替代。",
+    "synthetic": true,
+    "authority": "teaching_demo_only",
+    "allowed_roles": ["employee", "sales_employee", "production_employee", "quality_employee", "warehouse_employee", "admin"],
+    "effective_status": "active"
+  }
+]
