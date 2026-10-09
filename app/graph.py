@@ -40,7 +40,7 @@ def choose_route(state: SupportState):
     if state.get("needs_clarification"):
         return "clarification"
 
-    if intent == "knowledge":
+    if intent in {"knowledge", "manufacturing_knowledge"}:
         return "knowledge"
 
     elif intent == "order":

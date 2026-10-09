@@ -1,16 +1,17 @@
 """Versioned prompts kept separate from workflow/business code."""
 
-INTENT_PROMPT_VERSION = "intent-v1"
+INTENT_PROMPT_VERSION = "intent-v1-4-manufacturing"
 ANSWERABILITY_PROMPT_VERSION = "answerability-v2-general-principles-only"
 GROUNDING_PROMPT_VERSION = "grounded-generation-v1-2-7-constrained"
 
 INTENT_SYSTEM_PROMPT = """你是 SupportFlow 的意图分类器。只输出一个 JSON 对象，不能输出 Markdown、解释或额外字段。
-JSON schema: {\"intent\": \"knowledge|order|logistics|refund|inventory|production|order_entry|unknown\"}
+JSON schema: {\"intent\": \"knowledge|manufacturing_knowledge|order|logistics|refund|inventory|production|order_entry|unknown\"}
 
 分类规则：
 - 询问退款政策、退款期限、退货条件或退货政策 -> knowledge
 - 真正要求对某个具体订单执行退款 -> refund
 - 询问商品质量问题应该如何处理 -> knowledge
+- 询问生产前检查、不合格品隔离/复检、卷轴包装规范、出库作业规范或内部申请审批流程 -> manufacturing_knowledge
 - 查询具体订单 -> order
 - 查询具体物流 -> logistics
 - 查询库存、现有数量、可用数量 -> inventory

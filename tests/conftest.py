@@ -45,7 +45,10 @@ class SuiteFakeProvider:
             )
         else:
             content = json.dumps(
-                {"answer": "pytest fake grounded answer", "source_ids": ["pytest-evidence"]},
+                {
+                    "answer": "pytest fake grounded answer",
+                    "source_ids": ["quality_policy_01"],
+                },
                 ensure_ascii=False,
             )
         return LLMResponse(

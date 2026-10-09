@@ -9,10 +9,11 @@ from langgraph.types import interrupt
 from .state import SupportState
 from .config import get_settings
 from .retriever import (
-    hybrid_candidates,
+    CorpusName,
     load_real_reranker,
     real_rerank,
     real_reranker_status,
+    retrieve_from_corpus,
     retriever_startup_profile,
 )
 from .database import get_inventory, get_order, get_production
@@ -43,9 +44,11 @@ SAFE_ABSTENTION_MESSAGE = "当前知识库没有足够信息回答这个问题�
 SAFE_NO_EVIDENCE_MESSAGE = "当前没有找到足够相关资料可靠回答这个问题，建议联系人工客服进一步确认。"
 SAFE_RETRIEVAL_FAILURE_MESSAGE = "检索系统暂时不可用，未能完成资料检索，请稍后重试。"
 SAFE_PROVIDER_FAILURE_MESSAGE = "回答服务暂时不可用，未生成未经验证的回答，请稍后重试。"
+MANUFACTURING_DEMO_NOTICE = "（以下内容来自教学演示规范，不代表真实企业正式标准。）"
 
 INTENT_LABELS = {
     "knowledge": "知识咨询",
+    "manufacturing_knowledge": "制造规范咨询",
     "order": "订单查询",
     "logistics": "物流查询",
     "refund": "退款申请",
@@ -76,6 +79,8 @@ def _get_llm_service() -> LLMService:
 
 def _keyword_fallback_intent(message: str) -> str:
     """Small, explicit safety net used only when semantic classification fails."""
+    if _is_manufacturing_knowledge_query(message):
+        return "manufacturing_knowledge"
     if re.search(r"退款政策|退款期限|退货政策|退货条件", message):
         return "knowledge"
     if re.search(
@@ -102,6 +107,34 @@ def _keyword_fallback_intent(message: str) -> str:
     if re.search(r"质量问题|商品质量|瑕疵|损坏|坏了|售后", message):
         return "knowledge"
     return "unknown"
+
+
+def _is_manufacturing_knowledge_query(message: str) -> bool:
+    """Recognize stable manufacturing guidance without touching write flows."""
+
+    return bool(
+        (
+            re.search(r"生产前|开工前|产前", message)
+            and re.search(r"检查|核对|准备|需要", message)
+        )
+        or (
+            re.search(r"不合格品|不良品", message)
+            and re.search(r"隔离|记录|复检|处理|怎么|如何|规范", message)
+        )
+        or (
+            re.search(r"卷轴", message)
+            and re.search(r"包装|规格|标签|批次|核对", message)
+        )
+        or (
+            re.search(r"出库", message)
+            and re.search(r"规范|流程|核对|交接|审批|经过", message)
+            and not re.search(r"提交|申报|直接出库", message)
+        )
+        or (
+            re.search(r"订单|报工|质检|出库", message)
+            and re.search(r"审批流程|分别由谁审批|审批顺序|申请流程", message)
+        )
+    )
 
 
 def extract_order_ids(message: str) -> list[str]:
@@ -304,6 +337,7 @@ def router_node(state: SupportState):
             routing_source = "keyword_fallback"
             routing_error = "UNEXPECTED_ROUTING_ERROR"
 
+        manufacturing_knowledge_query = _is_manufacturing_knowledge_query(message)
         quality_query = (
             re.search(r"质检|检验|不良品|不合格率|合格率", message)
             or (
@@ -311,7 +345,10 @@ def router_node(state: SupportState):
                 and re.search(r"不合格", message)
             )
         )
-        if quality_query and not re.search(r"提交|申报|报工", message):
+        if manufacturing_knowledge_query:
+            intent = "manufacturing_knowledge"
+            routing_source = "deterministic_manufacturing_knowledge_override"
+        elif quality_query and not re.search(r"提交|申报|报工", message):
             intent = "quality"
             routing_source = "deterministic_manufacturing_override"
         elif (
@@ -378,6 +415,17 @@ def router_node(state: SupportState):
             "execution_log": state["execution_log"] + ["router_node"],
         }
 
+    rag_corpus = (
+        CorpusName.manufacturing_demo.value
+        if intent == "manufacturing_knowledge"
+        else CorpusName.customer_support.value
+        if intent == "knowledge"
+        else ""
+    )
+    trace = get_current_trace()
+    if trace is not None:
+        trace.metadata.update({"route": intent, "rag_corpus": rag_corpus or None})
+
     emit_progress(
         "intent",
         "completed",
@@ -427,6 +475,8 @@ def router_node(state: SupportState):
         "missing_fields": missing_fields,
         "refund_cancelled": False,
         "terminal_status": "",
+        "rag_corpus": rag_corpus,
+        "retrieved_source_ids": [],
         **refund_context,
         "routing_source": routing_source,
         "routing_error_classification": routing_error,
@@ -439,8 +489,13 @@ def router_node(state: SupportState):
 # 2. Knowledge Node
 # ============================================================
 
-def _retrieve_reranked(query: str) -> list[dict]:
-    """Run the frozen local-only Hybrid/RRF -> BGE reranker path."""
+def _retrieve_reranked(
+    query: str,
+    *,
+    corpus: CorpusName = CorpusName.customer_support,
+    role: str = "customer_service",
+) -> list[dict]:
+    """Run the frozen local-only Hybrid/RRF -> BGE path for one Corpus."""
     trace = get_current_trace()
     settings = get_settings()
     reranker_model_path = Path(settings.reranker_model_path)
@@ -484,20 +539,30 @@ def _retrieve_reranked(query: str) -> list[dict]:
         )
         raise
 
-    retrieval_span = trace.start_span("retrieval", metadata={"candidate_k": 5}) if trace else None
+    retrieval_span = trace.start_span(
+        "retrieval",
+        metadata={"candidate_k": 5, "rag_corpus": corpus.value},
+    ) if trace else None
     retrieval_profile = {}
     if trace is not None:
         trace.metadata["retriever_startup_profile"] = retriever_startup_profile()
     emit_progress("retrieval", "running", "正在搜索相关资料…")
     try:
-        candidates = hybrid_candidates(
+        candidates = retrieve_from_corpus(
             query,
+            corpus=corpus,
+            role=role,
             candidate_k=5,
+            top_k=5,
             require_dense=True,
+            use_reranker=False,
             profile=retrieval_profile,
         )
         if retrieval_span is not None:
             retrieval_span.metadata["candidate_ids"] = [item.get("id") for item in candidates]
+            retrieval_span.metadata["retrieved_source_ids"] = [
+                item.get("id") for item in candidates
+            ]
             retrieval_span.metadata["profile"] = retrieval_profile
             retrieval_span.finish(success=True)
         if trace is not None:
@@ -523,7 +588,11 @@ def _retrieve_reranked(query: str) -> list[dict]:
 
     rerank_span = trace.start_span(
         "rerank",
-        metadata={"candidate_k": 5, "model_path": str(reranker_model_path)},
+        metadata={
+            "candidate_k": 5,
+            "model_path": str(reranker_model_path),
+            "rag_corpus": corpus.value,
+        },
     ) if trace else None
     emit_progress("rerank", "running", "正在筛选最相关的资料…")
     try:
@@ -556,9 +625,13 @@ def _retrieve_reranked(query: str) -> list[dict]:
 def _rag_metadata(result: dict) -> dict:
     return {
         "retrieved_evidence_id": str(result.get("id") or ""),
+        "retrieved_evidence_corpus": str(result.get("corpus") or ""),
+        "retrieved_evidence_document_id": str(result.get("document_id") or ""),
+        "retrieved_evidence_chunk_id": result.get("chunk_id"),
         "retrieved_evidence_text": str(result.get("text") or result.get("content") or ""),
         "retrieved_evidence_title": str(result.get("title") or ""),
         "retrieved_evidence_category": str(result.get("category") or ""),
+        "retrieved_evidence_source_section": str(result.get("source_section") or ""),
         "retrieved_evidence_version": str(result.get("source_version") or ""),
         "rerank_score": result.get("rerank_score"),
     }
@@ -580,8 +653,11 @@ def _safe_rag_fallback(state: SupportState, reason: str) -> dict:
         "supported_facts": [],
         "missing_facts": [],
         "generation_skipped": True,
+        "generation_called": False,
         "safe_fallback_reason": reason,
         "terminal_status": "SAFE_FALLBACK",
+        "rag_corpus": state.get("rag_corpus") or "",
+        "retrieved_source_ids": [],
         "execution_log": state["execution_log"] + ["knowledge_node"],
     }
 
@@ -597,13 +673,25 @@ def knowledge_node(state: SupportState):
     query = state["user_message"]
 
     try:
-        results = _retrieve_reranked(query)
+        corpus = CorpusName(
+            state.get("rag_corpus") or CorpusName.customer_support.value
+        )
+        role = str(state.get("role") or "customer_service")
+        if corpus is CorpusName.customer_support:
+            # Preserve the historical one-argument test/embedding hook while
+            # the implementation itself uses the explicit customer Corpus.
+            results = _retrieve_reranked(query)
+        else:
+            results = _retrieve_reranked(query, corpus=corpus, role=role)
 
         if not results:
             return _safe_rag_fallback(state, "NO_EVIDENCE")
 
         top_result = results[0]
         metadata = _rag_metadata(top_result)
+        source_ids = [str(item.get("id") or "") for item in results if item.get("id")]
+        metadata["retrieved_source_ids"] = source_ids
+        metadata["rag_corpus"] = corpus.value
         trace = get_current_trace()
         generation_attempted = False
         if trace is not None:
@@ -611,6 +699,8 @@ def knowledge_node(state: SupportState):
                 **metadata,
                 "candidate_count": len(results),
             }
+            trace.metadata["route"] = state.get("intent")
+            trace.metadata["rag_corpus"] = corpus.value
 
         try:
             evidence_text = str(top_result.get("text") or top_result.get("content") or "")
@@ -636,7 +726,10 @@ def knowledge_node(state: SupportState):
                 "answerability_status": status,
                 "supported_facts": judgment.supported_facts,
                 "missing_facts": judgment.missing_facts,
+                "generation_called": False,
                 "safe_fallback_reason": "",
+                "rag_corpus": corpus.value,
+                "retrieved_source_ids": source_ids,
                 "terminal_status": "SUCCESS",
                 "error_log": "",
                 "rag_error_classification": "",
@@ -661,7 +754,15 @@ def knowledge_node(state: SupportState):
                 supported_facts=judgment.supported_facts,
                 missing_facts=judgment.missing_facts,
             )
+            allowed_source_ids = {str(top_result.get("id") or "")}
+            if any(source_id not in allowed_source_ids for source_id in generated.source_ids):
+                raise ProviderError(
+                    "SCHEMA_VALIDATION",
+                    "grounded answer referenced an unknown evidence id",
+                )
             result = generated.answer
+            if corpus is CorpusName.manufacturing_demo:
+                result = f"{MANUFACTURING_DEMO_NOTICE}\n{result}"
             if generated.source_ids:
                 result += "\n来源：" + "、".join(generated.source_ids)
             emit_progress("generation", "completed", "回答已生成")
@@ -670,6 +771,7 @@ def knowledge_node(state: SupportState):
                 "result": result,
                 "rag_source": "llm",
                 "generation_skipped": False,
+                "generation_called": True,
             }
         except ProviderError as exc:
             failed_stage = "generation" if generation_attempted else "judge"
@@ -686,6 +788,7 @@ def knowledge_node(state: SupportState):
                 "rag_source": "safe_fallback",
                 "rag_error_classification": exc.classification,
                 "generation_skipped": not generation_attempted,
+                "generation_called": generation_attempted,
                 "safe_fallback_reason": exc.classification,
                 "terminal_status": "SAFE_FALLBACK",
                 "execution_log": state["execution_log"] + ["knowledge_node"],

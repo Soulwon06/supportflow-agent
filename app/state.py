@@ -33,6 +33,8 @@ class SupportState(TypedDict):
     # not grant permission to call tools or bypass HITL.
     routing_source: str
     routing_error_classification: str
+    rag_corpus: str
+    retrieved_source_ids: List[str]
     rag_source: str
     rag_error_classification: str
     needs_clarification: bool
@@ -41,15 +43,20 @@ class SupportState(TypedDict):
     # Safe RAG answerability metadata. These are current-turn fields and are
     # reset by create_turn_input; they never alter business authorization state.
     retrieved_evidence_id: str
+    retrieved_evidence_corpus: str
+    retrieved_evidence_document_id: str
+    retrieved_evidence_chunk_id: str | None
     retrieved_evidence_text: str
     retrieved_evidence_title: str
     retrieved_evidence_category: str
+    retrieved_evidence_source_section: str
     retrieved_evidence_version: str
     rerank_score: float | None
     answerability_status: str
     supported_facts: List[str]
     missing_facts: List[str]
     generation_skipped: bool
+    generation_called: bool
     safe_fallback_reason: str
 
 
@@ -99,21 +106,28 @@ def create_initial_state(
 
         "routing_source": "",
         "routing_error_classification": "",
+        "rag_corpus": "customer_support",
+        "retrieved_source_ids": [],
         "rag_source": "",
         "rag_error_classification": "",
         "needs_clarification": False,
         "clarification_message": "",
 
         "retrieved_evidence_id": "",
+        "retrieved_evidence_corpus": "",
+        "retrieved_evidence_document_id": "",
+        "retrieved_evidence_chunk_id": None,
         "retrieved_evidence_text": "",
         "retrieved_evidence_title": "",
         "retrieved_evidence_category": "",
+        "retrieved_evidence_source_section": "",
         "retrieved_evidence_version": "",
         "rerank_score": None,
         "answerability_status": "",
         "supported_facts": [],
         "missing_facts": [],
         "generation_skipped": False,
+        "generation_called": False,
         "safe_fallback_reason": "",
     }
 

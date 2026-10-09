@@ -232,7 +232,9 @@ async def stream_agent(
                                 "route",
                                 {
                                     "intent": intent,
+                                    "route": intent,
                                     "source": state_update.get("routing_source", ""),
+                                    "rag_corpus": state_update.get("rag_corpus", ""),
                                     "error_classification": state_update.get(
                                         "routing_error_classification", ""
                                     ),
@@ -258,6 +260,8 @@ async def stream_agent(
                             for key in (
                                 "answerability_status",
                                 "retrieved_evidence_id",
+                                "rag_corpus",
+                                "retrieved_source_ids",
                                 "generation_skipped",
                                 "safe_fallback_reason",
                             )
@@ -266,6 +270,8 @@ async def stream_agent(
                                 "rag",
                                 {
                                     "evidence_id": state_update.get("retrieved_evidence_id"),
+                                    "source_ids": state_update.get("retrieved_source_ids", []),
+                                    "rag_corpus": state_update.get("rag_corpus", ""),
                                     "evidence_text": state_update.get("retrieved_evidence_text"),
                                     "evidence_title": state_update.get("retrieved_evidence_title"),
                                     "evidence_category": state_update.get("retrieved_evidence_category"),
@@ -273,6 +279,9 @@ async def stream_agent(
                                     "rerank_score": state_update.get("rerank_score"),
                                     "answerability_status": state_update.get("answerability_status"),
                                     "generation_skipped": state_update.get("generation_skipped", False),
+                                    "generation_called": bool(
+                                        state_update.get("generation_called", False)
+                                    ),
                                     "safe_fallback_reason": state_update.get("safe_fallback_reason", ""),
                                     "rag_source": state_update.get("rag_source", ""),
                                 },
