@@ -60,6 +60,8 @@ def build_trace_payload(trace: Trace, state: Mapping[str, Any]) -> dict[str, Any
         "routing_source": state.get("routing_source") or None,
         "rag_corpus": state.get("rag_corpus") or None,
         "retrieved_source_ids": list(state.get("retrieved_source_ids") or []),
+        "database_source_ids": list(state.get("database_source_ids") or []),
+        "sop_source_ids": list(state.get("sop_source_ids") or []),
         "evidence": {
             "id": state.get("retrieved_evidence_id") or None,
             "corpus": state.get("retrieved_evidence_corpus") or None,

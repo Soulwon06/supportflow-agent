@@ -25,6 +25,7 @@ const closeAdmin = document.getElementById("closeAdmin");
 const INTENT_LABELS = {
   knowledge: "知识咨询",
   manufacturing_knowledge: "制造规范咨询",
+  quality_mixed: "订单质检与处理建议",
   order: "订单查询",
   logistics: "物流查询",
   refund: "退款申请",

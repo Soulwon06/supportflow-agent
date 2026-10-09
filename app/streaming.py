@@ -271,6 +271,8 @@ async def stream_agent(
                                 {
                                     "evidence_id": state_update.get("retrieved_evidence_id"),
                                     "source_ids": state_update.get("retrieved_source_ids", []),
+                                    "database_source_ids": state_update.get("database_source_ids", []),
+                                    "sop_source_ids": state_update.get("sop_source_ids", []),
                                     "rag_corpus": state_update.get("rag_corpus", ""),
                                     "evidence_text": state_update.get("retrieved_evidence_text"),
                                     "evidence_title": state_update.get("retrieved_evidence_title"),

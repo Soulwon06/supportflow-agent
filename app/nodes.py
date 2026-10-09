@@ -10,6 +10,7 @@ from .state import SupportState
 from .config import get_settings
 from .retriever import (
     CorpusName,
+    CorpusUnavailableError,
     load_real_reranker,
     real_rerank,
     real_reranker_status,
@@ -49,6 +50,7 @@ MANUFACTURING_DEMO_NOTICE = "（以下内容来自教学演示规范，不代表
 INTENT_LABELS = {
     "knowledge": "知识咨询",
     "manufacturing_knowledge": "制造规范咨询",
+    "quality_mixed": "订单质检与处理建议",
     "order": "订单查询",
     "logistics": "物流查询",
     "refund": "退款申请",
@@ -79,6 +81,8 @@ def _get_llm_service() -> LLMService:
 
 def _keyword_fallback_intent(message: str) -> str:
     """Small, explicit safety net used only when semantic classification fails."""
+    if _is_quality_mixed_query(message):
+        return "quality_mixed"
     if _is_manufacturing_knowledge_query(message):
         return "manufacturing_knowledge"
     if re.search(r"退款政策|退款期限|退货政策|退货条件", message):
@@ -135,6 +139,19 @@ def _is_manufacturing_knowledge_query(message: str) -> bool:
             and re.search(r"审批流程|分别由谁审批|审批顺序|申请流程", message)
         )
     )
+
+
+def _is_quality_mixed_query(message: str) -> bool:
+    """Recognize only the narrow read-only order-quality-plus-SOP question."""
+    has_order = bool(
+        SF_ORDER_ID_PATTERN.search(message)
+        or NUMERIC_ORDER_ID_PATTERN.search(message)
+        or re.search(r"(?<![A-Za-z0-9])[A-Z]{1,4}\d{3,}(?![A-Za-z0-9])", message)
+    )
+    has_quality_fact = bool(re.search(r"质检|检验|不合格|不通过|合格", message))
+    asks_reason = bool(re.search(r"为什么|原因|未通过|不通过|不合格", message))
+    asks_treatment = bool(re.search(r"处理|怎么办|怎么做|如何|应该|隔离|记录|复检", message))
+    return has_order and has_quality_fact and asks_reason and asks_treatment
 
 
 def extract_order_ids(message: str) -> list[str]:
@@ -337,6 +354,7 @@ def router_node(state: SupportState):
             routing_source = "keyword_fallback"
             routing_error = "UNEXPECTED_ROUTING_ERROR"
 
+        quality_mixed_query = _is_quality_mixed_query(message)
         manufacturing_knowledge_query = _is_manufacturing_knowledge_query(message)
         quality_query = (
             re.search(r"质检|检验|不良品|不合格率|合格率", message)
@@ -345,7 +363,10 @@ def router_node(state: SupportState):
                 and re.search(r"不合格", message)
             )
         )
-        if manufacturing_knowledge_query:
+        if quality_mixed_query:
+            intent = "quality_mixed"
+            routing_source = "deterministic_mixed_quality_override"
+        elif manufacturing_knowledge_query:
             intent = "manufacturing_knowledge"
             routing_source = "deterministic_manufacturing_knowledge_override"
         elif quality_query and not re.search(r"提交|申报|报工", message):
@@ -417,7 +438,7 @@ def router_node(state: SupportState):
 
     rag_corpus = (
         CorpusName.manufacturing_demo.value
-        if intent == "manufacturing_knowledge"
+        if intent in {"manufacturing_knowledge", "quality_mixed"}
         else CorpusName.customer_support.value
         if intent == "knowledge"
         else ""
@@ -1025,6 +1046,159 @@ def quality_node(state: SupportState):
     for item in tool_result.data["items"]:
         lines.append(f"订单 {item['order_no']}（{item.get('sku') or '产品'}）：检验 {item['inspected_quantity']} 个，合格 {item['qualified_quantity']} 个，不合格 {item['rejected_quantity']} 个，日期 {item['report_date']}。")
     return {"result": "\n".join(lines), "error_log": "", "terminal_status": "SUCCESS", "execution_log": state["execution_log"] + ["quality_node"]}
+
+
+def _mixed_quality_order_id(state: SupportState) -> str:
+    """Resolve a mixed-query order without treating an amount as an order ID."""
+    resolved = _target_order_id(state, state["user_message"])
+    if resolved:
+        return resolved.upper()
+    match = re.search(
+        r"(?<![A-Za-z0-9])([A-Z]{1,4}\d{3,})(?![A-Za-z0-9])",
+        state["user_message"],
+        re.IGNORECASE,
+    )
+    return match.group(1).upper() if match else ""
+
+
+def _mixed_quality_db_text(order_id: str, items: list[dict]) -> tuple[str, list[str], list[str]]:
+    source_ids = []
+    facts = []
+    for item in items:
+        source_id = f"db:quality:{item['order_no']}:{item['report_date']}"
+        source_ids.append(source_id)
+        facts.append(
+            f"订单 {item['order_no']} 的质检记录：检验 {item['inspected_quantity']} 个，"
+            f"合格 {item['qualified_quantity']} 个，不合格 {item['rejected_quantity']} 个，"
+            f"记录日期 {item['report_date']}。"
+        )
+    rejected = sum(int(item.get("rejected_quantity") or 0) for item in items)
+    if rejected > 0:
+        facts.append(
+            f"数据库记录显示存在 {rejected} 个不合格品，因此不能把该批次描述为全部通过。"
+        )
+    else:
+        facts.append("数据库记录中的不合格数量为 0，未发现质检未通过事实。")
+    facts.append("当前 quality_reports 表没有独立的缺陷原因字段，不能从数据库判断具体失败原因。")
+    return "\n".join(facts), source_ids, facts
+
+
+def quality_mixed_node(state: SupportState):
+    """Read-only composition of trusted quality facts and manufacturing SOP evidence.
+
+    The database remains the only source for order-specific facts.  The SOP is
+    used only for general handling guidance.  No LLM generation or write tool
+    is invoked on this path.
+    """
+    order_id = _mixed_quality_order_id(state)
+    base = {
+        "intent": "quality_mixed",
+        "rag_corpus": CorpusName.manufacturing_demo.value,
+        "database_source_ids": [],
+        "sop_source_ids": [],
+        "retrieved_source_ids": [],
+        "generation_called": False,
+        "generation_skipped": True,
+        "answerability_status": "",
+        "execution_log": state["execution_log"] + ["quality_mixed_node"],
+    }
+    if not order_id:
+        return {
+            **base,
+            "result": "请提供明确订单号，我才能查询该订单的质检事实。",
+            "terminal_status": "NEED_USER_INPUT",
+            "error_log": "",
+            "rag_source": "database_plus_manufacturing_sop",
+        }
+
+    db_result = dispatch_tool(
+        "query_quality",
+        role=state["role"],
+        permissions=state.get("permissions"),
+        order_id=order_id,
+    )
+    if not db_result.success:
+        return {
+            **base,
+            "result": db_result.error_message,
+            "error_log": f"{db_result.error_code}: {db_result.error_message}",
+            "terminal_status": "PERMISSION_DENIED" if db_result.error_code == "PERMISSION_DENIED" else "FAILED",
+            "rag_source": "database",
+        }
+
+    db_text, db_source_ids, db_facts = _mixed_quality_db_text(
+        order_id,
+        db_result.data["items"],
+    )
+    common = {
+        **base,
+        "database_source_ids": db_source_ids,
+        "retrieved_source_ids": list(db_source_ids),
+        "supported_facts": db_facts,
+        "missing_facts": ["具体缺陷原因（数据库未记录）"],
+        "order_id": order_id,
+        "current_order_id": order_id,
+        "error_log": "",
+        "rag_source": "database",
+        "terminal_status": "SUCCESS",
+    }
+
+    try:
+        sop_results = _retrieve_reranked(
+            "不合格品隔离记录复检处理规范",
+            corpus=CorpusName.manufacturing_demo,
+            role=str(state.get("role") or "employee"),
+        )
+    except CorpusUnavailableError as exc:
+        if exc.reason == "NO_AUTHORIZED_ACTIVE_DOCUMENTS":
+            return {
+                **common,
+                "result": db_text + "\n当前账号无权访问制造质检 SOP，因此不提供处理建议。",
+                "rag_error_classification": "SOP_PERMISSION_DENIED",
+            }
+        return {
+            **common,
+            "result": db_text + "\n制造质检 SOP 当前不可用，未根据缺失资料推测处理方式。",
+            "rag_source": "safe_fallback",
+            "safe_fallback_reason": "SOP_RETRIEVAL_UNAVAILABLE",
+            "rag_error_classification": "SOP_RETRIEVAL_UNAVAILABLE",
+            "terminal_status": "SAFE_FALLBACK",
+        }
+    except Exception:
+        return {
+            **common,
+            "result": db_text + "\n制造质检 SOP 当前不可用，未根据缺失资料推测处理方式。",
+            "rag_source": "safe_fallback",
+            "safe_fallback_reason": "SOP_RETRIEVAL_UNAVAILABLE",
+            "rag_error_classification": "SOP_RETRIEVAL_UNAVAILABLE",
+            "terminal_status": "SAFE_FALLBACK",
+        }
+
+    if not sop_results:
+        return {
+            **common,
+            "result": db_text + "\n没有找到足够的制造质检 SOP 证据，未提供处理建议。",
+            "rag_source": "safe_fallback",
+            "safe_fallback_reason": "SOP_NO_EVIDENCE",
+            "rag_error_classification": "SOP_NO_EVIDENCE",
+            "terminal_status": "SAFE_FALLBACK",
+        }
+
+    top_sop = sop_results[0]
+    sop_source_ids = [str(item.get("id") or "") for item in sop_results if item.get("id")]
+    sop_text = str(top_sop.get("text") or top_sop.get("content") or "")
+    return {
+        **common,
+        **_rag_metadata(top_sop),
+        "retrieved_source_ids": db_source_ids + sop_source_ids,
+        "sop_source_ids": sop_source_ids,
+        "rag_source": "database_plus_manufacturing_sop",
+        "result": (
+            f"{db_text}\n"
+            "具体失败原因未记录在当前质检数据库中，不能据此猜测。\n"
+            f"根据制造质检演示规范《{top_sop.get('title') or '质检规范'}》：{sop_text}"
+        ),
+    }
 
 
 def _manufacturing_submission_error(state: SupportState, message: str, missing: list[str]):

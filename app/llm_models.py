@@ -8,6 +8,7 @@ from pydantic import BaseModel, ConfigDict, Field
 class IntentName(str, Enum):
     knowledge = "knowledge"
     manufacturing_knowledge = "manufacturing_knowledge"
+    quality_mixed = "quality_mixed"
     order = "order"
     logistics = "logistics"
     refund = "refund"

@@ -35,6 +35,8 @@ class SupportState(TypedDict):
     routing_error_classification: str
     rag_corpus: str
     retrieved_source_ids: List[str]
+    database_source_ids: List[str]
+    sop_source_ids: List[str]
     rag_source: str
     rag_error_classification: str
     needs_clarification: bool
@@ -108,6 +110,8 @@ def create_initial_state(
         "routing_error_classification": "",
         "rag_corpus": "customer_support",
         "retrieved_source_ids": [],
+        "database_source_ids": [],
+        "sop_source_ids": [],
         "rag_source": "",
         "rag_error_classification": "",
         "needs_clarification": False,

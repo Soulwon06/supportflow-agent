@@ -11,6 +11,7 @@ from .nodes import (
     inventory_node,
     production_node,
     quality_node,
+    quality_mixed_node,
     production_submit_node,
     outbound_submit_node,
     order_entry_node,
@@ -56,6 +57,8 @@ def choose_route(state: SupportState):
         return "production"
     elif intent == "quality":
         return "quality"
+    elif intent == "quality_mixed":
+        return "quality_mixed"
 
     elif intent == "production_submit":
         return "production_submit"
@@ -153,6 +156,7 @@ builder.add_node(
 )
 
 builder.add_node("quality", traced_node("quality", quality_node))
+builder.add_node("quality_mixed", traced_node("quality_mixed", quality_mixed_node))
 
 builder.add_node("production_submit", traced_node("production_submit", production_submit_node))
 builder.add_node("outbound_submit", traced_node("outbound_submit", outbound_submit_node))
@@ -230,6 +234,7 @@ builder.add_conditional_edges(
         "inventory": "inventory",
         "production": "production",
         "quality": "quality",
+        "quality_mixed": "quality_mixed",
         "production_submit": "production_submit",
         "outbound_submit": "outbound_submit",
         "order_entry": "order_entry",
@@ -276,6 +281,7 @@ builder.add_edge(
 )
 
 builder.add_edge("quality", END)
+builder.add_edge("quality_mixed", END)
 builder.add_edge("production_submit", END)
 builder.add_edge("outbound_submit", END)
 
