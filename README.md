@@ -179,6 +179,83 @@ FastAPI 后端
 - Cloudflare Workers
 - Docker CPU-only
 
+## 制造运营 Agent 架构
+
+SupportFlow 当前把“实时业务事实”和“稳定业务知识”分开处理：
+
+```text
+用户问题
+  ↓
+LangGraph 路由
+  ├── 订单 / 库存 / 生产 / 质检 / 审批状态
+  │     └── SQLite + 确定性业务工具
+  ├── 制造 SOP / 质检处理规范 / 包装 / 出库规范
+  │     └── manufacturing_demo Hybrid RAG
+  └── 写操作
+        └── 权限 → 参数校验 → 申请 → 管理员审批 → 执行时重新校验
+```
+
+### 双 Corpus 边界
+
+系统有两个互相隔离的检索 Corpus：
+
+| Corpus | 内容 | 当前用途 |
+| --- | --- | --- |
+| `customer_support` | 历史客服知识，例如退款、退货、物流和售后 | 保留原有客服知识问答 |
+| `manufacturing_demo` | 5 份明确标记为 synthetic/demo 的制造演示规范 | 生产前核对、质检处理、卷轴包装、出库和审批流程问答 |
+
+制造 Corpus 不包含订单数量、库存、报工数量或审批结果等实时事实；这些信息只能从 SQLite 和确定性工具读取。制造查询必须显式指定 `manufacturing_demo`，不会缺失时回退到客服 Corpus。文档检索还会按 `allowed_roles` 和 `effective_status=active` 做确定性过滤。
+
+### Hybrid RAG 流程
+
+制造稳定知识问题沿用现有检索链：
+
+```text
+指定 Corpus
+  → BM25 关键词检索
+  → Dense Embedding 语义检索
+  → RRF 融合
+  → 本地 BGE Reranker 重排
+  → Evidence Judge
+  → Grounded Generation 或 Safe Fallback
+```
+
+Evidence 会保留 `corpus`、`document_id`、`chunk_id`、`source_version`、`source_section` 等来源信息。当前制造 Demo 是文档级检索，5 份文档尚未切分，因此 `chunk_id=None` 是当前真实状态，不代表已经实现了细粒度 chunk 检索。
+
+### 三个验收场景
+
+- **场景 A：制造 SOP 问答**：只从 `manufacturing_demo` 读取稳定规范；证据不足、文档无权限或模型失败时安全兜底。
+- **场景 B：质检混合查询**：SQLite 提供某个订单的质检事实，制造 SOP 只提供通用处理规范；两类来源在 Trace 中分开记录。当前 `quality_reports` 没有独立缺陷原因字段，因此系统不会凭 SOP 编造具体原因。
+- **场景 C：出库申请与审批**：员工聊天或表单提交申请，后端校验订单剩余数量和库存，申请先进入 `SUBMITTED`；审批前不扣库存，管理员批准时再次校验并执行，拒绝或条件变化时不执行。
+
+### 权限、审批和 Trace
+
+- 权限由后端登录身份和确定性 Python 逻辑决定，LLM、用户文本、RAG 文档和前端字段都不能授予权限。
+- 员工拥有相应的查询或提交权限，但不能直接审批或修改订单、库存和报工数据；管理员负责审批和管理员看板。
+- 申请、审批、执行分离；审批时重新检查订单、数量、库存和审批人权限。
+- `/chat` 与 `/chat/stream` 共用 LangGraph 主链，Trace 记录路由、Corpus、来源 ID、Answerability、Generation/Fallback 和阶段耗时；制造混合质检额外区分数据库来源和 SOP 来源。
+- 当前 Graph 使用 `InMemorySaver`，会话检查点只存在进程内，服务重启后不会持久化。
+
+## B4.1 历史真实 Hybrid RAG 证据
+
+以下是 B4.1 已完成的本地离线烟雾测试记录，不是本次 B6-A 新执行，也不是生产准确率评估：
+
+- Dense：`paraphrase-multilingual-MiniLM-L12-v2`，本地缓存，CPU，`local_files_only=True`。
+- BGE：`BAAI/bge-reranker-v2-m3`，本地 `D:\models\bge-reranker-v2-m3`，CPU，未联网下载。
+- 5 个固定 Gold 查询分别覆盖生产前核对、质检隔离复检、卷轴包装、出库交接、审批流程；BGE Top-1 均命中人工预先定义的 Gold 文档。
+- 该结果只能说明这 5 个 Demo 查询在当时本地环境完成了真实 BM25 → Dense → RRF → BGE 路径烟雾验证，不能称为生产环境准确率或真实客户指标。
+- BGE CPU 推理是主要延迟来源：历史单查询 BGE 重排约 1.28–2.10 秒，首次模型加载还存在冷启动成本。
+
+## Demo 数据与真实性边界
+
+- `data/manufacturing_knowledge_demo.json` 只有 5 份制造文档，全部 `synthetic=true`、`authority=teaching_demo_only`；它们是教学/作品集演示规则，不是永好塑胶的正式制度，也不代表国家或行业标准。
+- 文档当前按文档级返回，`chunk_id=None`；不要在简历中描述为已经完成细粒度知识库切片。
+- 订单、库存、生产、质检、出库和审批数据是虚构 SQLite 演示数据；不会把真实客户数据或公司机密提交到仓库。
+- 5 个制造 Gold 查询只是本地 Smoke Test，不能代表生产准确率、召回率或真实客户效果。
+- 质检数据库当前没有独立的缺陷原因字段；没有记录时，系统必须明确说明未知，不能从 SOP 推断具体订单原因。
+- 出库审批当前按现有业务规则重新校验订单剩余数量、当前库存和审批权限；它不是完整 ERP，也没有宣称覆盖所有企业订单状态规则。
+- 当前 SQLite、进程内检查点和单级管理员审批适合本地/小规模演示，不宣称生产级部署、高并发能力或真实客户指标。
+
 ## 本地运行
 
 ### 环境要求
@@ -279,8 +356,10 @@ pytest -q
 自动化测试使用 Fake/Mock Provider，不调用真实 DeepSeek。当前版本完整测试结果为：
 
 ```text
-89 passed
+137 passed
 ```
+
+B6-A 最终验收时的实测结果为 `137 passed in 38.52s`；其中 A/B/C 相关回归测试为 `22 passed in 3.12s`。测试套件不触发真实 DeepSeek，也不下载模型。
 
 真实 DeepSeek Smoke Test 是单独的显式操作：
 
@@ -300,6 +379,7 @@ python scripts/smoke_test_deepseek.py
 - 订单、库存、权限和审批状态以后端数据库为准；
 - 所有写入操作都经过后端权限、参数、状态和幂等校验；
 - 拒绝非法请求时不返回 API Key、环境变量或堆栈信息。
+- B0 架构审计和 B1-B6 实施计划保存在 `docs/` 中，属于阶段性历史规划文档；它们记录过时计划时，以当前代码和本 README 为准，不应当被当作全部已实现功能。
 
 ## 项目目录
 
@@ -321,6 +401,12 @@ Dockerfile           CPU-only 后端镜像
 - 当前管理员审批是单级审批；
 - Cloudflare Worker 依赖单独运行且可公网访问的 FastAPI 后端；
 - 当前是阶段事件流，不是逐 Token 的生成流；
+- InMemorySaver 不提供跨进程或重启后的持久化会话；
+- 制造 Demo Corpus 只有 5 份 synthetic 文档，且当前 `chunk_id=None`；
+- QA 数据没有独立缺陷原因字段，混合查询不能凭空补充具体缺陷；
+- BGE 在 CPU 上推理有明显冷启动和单次重排延迟；
+- 出库审批只实现当前演示业务规则，不宣称替代完整 ERP/MES/WMS；
+- 5 个 Gold 查询只用于本地 Smoke Test，不是生产准确率或客户指标；
 - LLM 只提供自然语言理解和回答组织能力，系统不宣称零幻觉或百分之百自动化。
 
 ## 项目状态

@@ -8,8 +8,16 @@
 .venv
 venv
 __pycache__
+**/__pycache__
 *.pyc
 .pytest_cache
+*.log
+
+# Local runtime/test artifacts; never copy demo state into an image.
+data/*.db
+data/*.sqlite
+.local
+.local/
 
 .idea
 .vscode
